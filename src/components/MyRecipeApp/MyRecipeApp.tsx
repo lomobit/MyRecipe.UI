@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainMenu from "../MainMenu/MainMenu";
 import Home from '../Home/Home';
 import Schedules from '../Schedules/Schedules';
@@ -12,18 +12,22 @@ import './MyRecipeApp.css';
 function MyRecipeApp() {
     return (
         <div className="myRecipeApp">
-            <MainMenu />
-            <div className="pageContent">
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/schedules" element={<Schedules />} />
-                    <Route path="/meals" element={<Meals />} />
-                    <Route path="/dishes" element={<Dishes />} />
-                    <Route path="/ingredients" element={<Ingredients />} />
-                    <Route path="/settings" element={<Settings />} />
-                    <Route path="*" element={<NotFoundPage />} />
-                </Routes>
-            </div>
+            <BrowserRouter>
+                <div className="menuContent">
+                    <MainMenu />
+                </div>
+                <div className="pageContent">
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/schedules" element={<Schedules />} />
+                        <Route path="/meals" element={<Meals />} />
+                        <Route path="/dishes" element={<Dishes />} />
+                        <Route path="/ingredients" element={<Ingredients />} />
+                        <Route path="/settings" element={<Settings />} />
+                        <Route path="*" element={<NotFoundPage />} />
+                    </Routes>
+                </div>
+            </BrowserRouter>
         </div>
     );
 }

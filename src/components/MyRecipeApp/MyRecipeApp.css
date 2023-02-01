@@ -1,0 +1,15 @@
+.myRecipeApp {
+    margin-left: auto;
+    margin-right: auto;
+    width: 1000px;
+    border: 5px solid #ff0000;
+}
+
+.pageContent {
+    padding: 20px;
+    border: 5px solid #1900ff;
+    background: #fff;
+    border-radius: 5px;
+    font-family: 'Roboto', sans-serif;
+    width: auto;
+}

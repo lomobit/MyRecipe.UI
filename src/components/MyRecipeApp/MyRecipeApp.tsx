@@ -11,8 +11,8 @@ import './MyRecipeApp.css';
 
 function MyRecipeApp() {
     return (
-        <div className="myRecipeApp">
-            <BrowserRouter>
+        <BrowserRouter>
+            <div className="myRecipeApp">
                 <div className="menuContent">
                     <MainMenu />
                 </div>
@@ -27,8 +27,8 @@ function MyRecipeApp() {
                         <Route path="*" element={<NotFoundPage />} />
                     </Routes>
                 </div>
-            </BrowserRouter>
-        </div>
+            </div>
+        </BrowserRouter>
     );
 }
 

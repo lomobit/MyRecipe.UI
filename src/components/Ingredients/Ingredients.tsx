@@ -33,7 +33,7 @@ const columns: GridColDef[] = [
 function Ingredients() {
     return (
         <div className="ingredients">
-            <h1>Ингридиенты</h1>
+            <h1>Ингредиенты</h1>
             <Stack direction="row-reverse" spacing={1}>
                 <Button variant="outlined" startIcon={<DeleteIcon />} color="error">Удалить</Button>
                 <Button variant="outlined" startIcon={<EditIcon />}>Изменить</Button>

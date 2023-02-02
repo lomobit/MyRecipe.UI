@@ -35,7 +35,6 @@ function Ingredients() {
         <div className="ingredients">
             <h1>Ингредиенты</h1>
             <Stack direction="row-reverse" spacing={1}>
-                <Button variant="outlined" startIcon={<DeleteIcon />} color="error">Удалить</Button>
                 <Button variant="outlined" startIcon={<EditIcon />}>Изменить</Button>
                 <Button
                     variant="contained"

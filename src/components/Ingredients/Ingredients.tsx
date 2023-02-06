@@ -13,7 +13,11 @@ import {
     useGridSelector
 } from '@mui/x-data-grid';
 import { styled } from '@mui/material/styles';
+import { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { getIngredients as getIngredientsAction } from '../../app/modules/ingredients';
 import './Ingredients.css';
+import { Console } from 'console';
 
 const columns: GridColDef[] = [
     {
@@ -166,8 +170,14 @@ function CustomPagination() {
     );
 }
 
-function Ingredients() {
-    return (
+/* Compomnent with props */
+const Ingredients = ({ ingredients, getIngredients }: any) => {
+
+    useEffect(() => {
+        getIngredients();
+    }, []);
+
+    return (() => {console.log(ingredients); return 1;}) && (
         <div className="ingredients">
             <h1>Ингредиенты</h1>
             <Stack direction="row-reverse" spacing={1}>
@@ -198,7 +208,7 @@ function Ingredients() {
                         NoRowsOverlay: CustomNoRowsOverlay,
                         Pagination: CustomPagination,
                     }}
-                    rows={rows}
+                    rows={ingredients}
                     columns={columns}
                     disableColumnMenu
                 />
@@ -207,4 +217,9 @@ function Ingredients() {
     );
 }
 
-export default Ingredients;
+export default connect(
+    ({ ingredients }) => ({ ingredients: ingredients.ingredients }),
+    {
+        getIngredients: getIngredientsAction
+    }
+)(Ingredients);

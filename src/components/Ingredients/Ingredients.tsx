@@ -13,11 +13,9 @@ import {
     useGridSelector
 } from '@mui/x-data-grid';
 import { styled } from '@mui/material/styles';
-import { useEffect } from 'react';
-import { connect } from 'react-redux';
-import { getIngredients as getIngredientsAction } from '../../app/modules/ingredients';
 import './Ingredients.css';
-import { Console } from 'console';
+import { useAppDispatch } from '../../app/hooks';
+import { getAllIngredientsAsync } from './ingredientSlice';
 
 const columns: GridColDef[] = [
     {
@@ -171,22 +169,20 @@ function CustomPagination() {
 }
 
 /* Compomnent with props */
-const Ingredients = ({ ingredients, getIngredients }: any) => {
+const Ingredients = () => {
+    const dispatch = useAppDispatch();
 
-    useEffect(() => {
-        getIngredients();
-    }, []);
-
-    return (() => {console.log(ingredients); return 1;}) && (
+    return (
         <div className="ingredients">
             <h1>Ингредиенты</h1>
             <Stack direction="row-reverse" spacing={1}>
                 <Button
                     variant="outlined"
                     startIcon={<EditIcon />}
-                    disabled
+                    onClick={() => dispatch(getAllIngredientsAsync(1))}
+                    //disabled
                 >
-                    Изменить
+                    (Обновить)Изменить
                 </Button>
                 <Button
                     variant="contained"
@@ -208,7 +204,7 @@ const Ingredients = ({ ingredients, getIngredients }: any) => {
                         NoRowsOverlay: CustomNoRowsOverlay,
                         Pagination: CustomPagination,
                     }}
-                    rows={ingredients}
+                    rows={[]}
                     columns={columns}
                     disableColumnMenu
                 />
@@ -217,9 +213,4 @@ const Ingredients = ({ ingredients, getIngredients }: any) => {
     );
 }
 
-export default connect(
-    ({ ingredients }) => ({ ingredients: ingredients.ingredients }),
-    {
-        getIngredients: getIngredientsAction
-    }
-)(Ingredients);
+export default Ingredients;

@@ -14,8 +14,8 @@ import {
 } from '@mui/x-data-grid';
 import { styled } from '@mui/material/styles';
 import './Ingredients.css';
-import { useAppDispatch } from '../../app/hooks';
-import { getAllIngredientsAsync } from './ingredientSlice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { getAllIngredientsAsync, selectIngredients } from './ingredientSlice';
 
 const columns: GridColDef[] = [
     {
@@ -170,6 +170,7 @@ function CustomPagination() {
 
 /* Compomnent with props */
 const Ingredients = () => {
+    const ingredients = useAppSelector(selectIngredients);
     const dispatch = useAppDispatch();
 
     return (
@@ -204,7 +205,7 @@ const Ingredients = () => {
                         NoRowsOverlay: CustomNoRowsOverlay,
                         Pagination: CustomPagination,
                     }}
-                    rows={[]}
+                    rows={ingredients.ingredients}
                     columns={columns}
                     disableColumnMenu
                 />

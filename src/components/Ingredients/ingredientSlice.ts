@@ -1,4 +1,5 @@
 import {  createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { RootState } from "../../app/store";
 import { GetAllIngredients } from "./ingredientApi";
 
 class Ingredient {
@@ -59,5 +60,8 @@ export const ingredientReducer = createSlice({
         });
     },
 });
+
+
+export const selectIngredients = (state: RootState) => state.ingredient;
 
 export default ingredientReducer.reducer;

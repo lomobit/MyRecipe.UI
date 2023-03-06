@@ -12,100 +12,13 @@ import {
     useGridApiContext,
     useGridSelector
 } from '@mui/x-data-grid';
-import { styled } from '@mui/material/styles';
+
 import './Ingredients.css';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { getAllIngredientsAsync, selectIngredients } from './ingredientSlice';
+import { columns, StyledGridOverlay } from './ingredientConstants';
 
-const columns: GridColDef[] = [
-    {
-        field: 'id',
-        headerName: 'Id',
-        width: 70,
-        sortable: false,
-        filterable: false,
-        hideable: false,
-    },
-    {
-        field: 'name',
-        headerName: 'Название',
-        width: 250,
-        sortable: false,
-        filterable: false,
-        hideable: false,
-    },
-    {
-        field: 'description',
-        headerName: 'Описание',
-        sortable: false,
-        filterable: false,
-        hideable: false,
-    },
-];
-  
-const rows = [
-    { id: 1, name: 'Snow', description: 'Jon' },
-    { id: 2, name: 'Snow', description: 'Jon' },
-    { id: 3, name: 'Snow', description: 'Jon' },
-    { id: 4, name: 'Snow', description: 'Jon' },
-    { id: 5, name: 'Snow', description: 'Jon' },
-    { id: 6, name: 'Snow', description: 'Jon' },
-    { id: 7, name: 'Snow', description: 'Jon' },
-    { id: 8, name: 'Snow', description: 'Jon' },
-    { id: 9, name: 'Snow', description: 'Jon' },
-    { id: 10, name: 'Snow', description: 'Jon' },
-    { id: 11, name: 'Snow', description: 'Jon' },
-    { id: 12, name: 'Snow', description: 'Jon' },
-    { id: 13, name: 'Snow', description: 'Jon' },
-    { id: 14, name: 'Snow', description: 'Jon' },
-    { id: 15, name: 'Snow', description: 'Jon' },
-    { id: 16, name: 'Snow', description: 'Jon' },
-    { id: 17, name: 'Snow', description: 'Jon' },
-    { id: 18, name: 'Snow', description: 'Jon' },
-    { id: 19, name: 'Snow', description: 'Jon' },
-    { id: 20, name: 'Snow', description: 'Jon' },
-    { id: 21, name: 'Snow', description: 'Jon' },
-    { id: 22, name: 'Snow', description: 'Jon' },
-    { id: 23, name: 'Snow', description: 'Jon' },
-    { id: 24, name: 'Snow', description: 'Jon' },
-    { id: 25, name: 'Snow', description: 'Jon' },
-    { id: 26, name: 'Snow', description: 'Jon' },
-    { id: 27, name: 'Snow', description: 'Jon' },
-    { id: 28, name: 'Snow', description: 'Jon' },
-    { id: 29, name: 'Snow', description: 'Jon' },
-    { id: 30, name: 'Snow', description: 'Jon' },
-    { id: 31, name: 'Snow', description: 'Jon' },
-    { id: 32, name: 'Snow', description: 'Jon' },
-    { id: 33, name: 'Snow', description: 'Jon' },
-    { id: 34, name: 'Snow', description: 'Jon' },
-    { id: 35, name: 'Snow', description: 'Jon' },
-    { id: 36, name: 'Snow', description: 'Jon' },
-];
-
-const StyledGridOverlay = styled('div')(({ theme }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100%',
-    '& .ant-empty-img-1': {
-      fill: theme.palette.mode === 'light' ? '#aeb8c2' : '#262626',
-    },
-    '& .ant-empty-img-2': {
-      fill: theme.palette.mode === 'light' ? '#f5f5f7' : '#595959',
-    },
-    '& .ant-empty-img-3': {
-      fill: theme.palette.mode === 'light' ? '#dce0e6' : '#434343',
-    },
-    '& .ant-empty-img-4': {
-      fill: theme.palette.mode === 'light' ? '#fff' : '#1c1c1c',
-    },
-    '& .ant-empty-img-5': {
-      fillOpacity: theme.palette.mode === 'light' ? '0.8' : '0.08',
-      fill: theme.palette.mode === 'light' ? '#f5f5f5' : '#fff',
-    },
-  }));
-  
+// TODO: Вынести эти 2 функции в отдельные компоненты
 function CustomNoRowsOverlay() {
     return (
       <StyledGridOverlay>
@@ -168,7 +81,6 @@ function CustomPagination() {
     );
 }
 
-/* Compomnent with props */
 const Ingredients = () => {
     const ingredients = useAppSelector(selectIngredients);
     const dispatch = useAppDispatch();

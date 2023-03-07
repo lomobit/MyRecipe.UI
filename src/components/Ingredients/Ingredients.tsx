@@ -1,40 +1,80 @@
+import { ChangeEvent, useEffect, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import UpdateIcon from '@mui/icons-material/Update';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton/IconButton';
 import Stack from '@mui/material/Stack';
 import { DataGrid } from '@mui/x-data-grid';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions } from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { getAllIngredientsAsync, selectIngredients } from './ingredientSlice';
+import { addNewIngredientAsync, getAllIngredientsAsync, selectIngredients } from './ingredientSlice';
 import { columns } from './ingredientConstants';
 import NoRowsGridOverlay from '../NoRowsGridOverlay/NoRowsGridOverlay';
 import MuiGridPagination from '../MuiGridPagination/MuiGridPagination';
 
 import './Ingredients.css';
-import IconButton from '@mui/material/IconButton/IconButton';
-import { useState } from 'react';
+import { Ingredient } from '../../contracts/ingredients/IngredientDto';
 
 
 const Ingredients = () => {
+    const tempVariable = 1;
+
     const ingredients = useAppSelector(selectIngredients);
     const dispatch = useAppDispatch();
 
     const [openAddDialog, setOpenAddDialog] = useState(false);
+    const [nameNewIngredient, setNameNewIngredient] = useState("");
+    const [errorNameNewIngredient, setErrorNameNewIngredient] = useState(false);
+    const [helperTextNameNewIngredient, setHelperTextNameNewIngredient] = useState("");
+    const [descriptionNewIngredient, setDescriptionNewIngredient] = useState("");
 
+    useEffect(() => {
+        dispatch(getAllIngredientsAsync(tempVariable));
+    }, [])
 
     const handleClickAddButton = () => {
         setOpenAddDialog(true);
     };
-    
-    const handleCancelInAddButtonDialog = () => {
+
+    const handleCloseAddButtonDialog = () => {
         setOpenAddDialog(false);
     };
 
-    const handleAddInAddButtonDialog = () => {
+    const closeAndClearFieldsInAddButtonDialog = () => {
         setOpenAddDialog(false);
+        setNameNewIngredient("");
+        setDescriptionNewIngredient("");
+        setErrorNameNewIngredient(false);
+        setHelperTextNameNewIngredient("");
+    }
+    
+    const handleCancelInAddButtonDialog = () => {
+        closeAndClearFieldsInAddButtonDialog();
     };
+
+    const handleAddInAddButtonDialog = () => {
+        if (typeof nameNewIngredient == undefined || !nameNewIngredient) {
+            setErrorNameNewIngredient(true);
+            setHelperTextNameNewIngredient("Необходимо ввести имя");
+
+            return;
+        }
+
+        dispatch(addNewIngredientAsync(new Ingredient(-1, nameNewIngredient, descriptionNewIngredient)))
+            .then(() => dispatch(getAllIngredientsAsync(tempVariable)));
+
+        closeAndClearFieldsInAddButtonDialog();
+    };
+
+    const changeNewIngredientName = (event: ChangeEvent<HTMLInputElement>) => {
+        setNameNewIngredient(event.target.value);
+    }
+
+    const changeNewIngredientDescription = (event: ChangeEvent<HTMLInputElement>) => {
+        setDescriptionNewIngredient(event.target.value);
+    }
 
     return (
         <div className="ingredients">
@@ -56,13 +96,12 @@ const Ingredients = () => {
                 </Button>
                 <IconButton
                     color="primary"
-                    onClick={() => dispatch(getAllIngredientsAsync(1))}
-                    style={{marginLeft: 0}}
+                    onClick={() => dispatch(getAllIngredientsAsync(tempVariable))}
                 >
                     <UpdateIcon />
                 </IconButton>
             </Stack>
-            <Dialog open={openAddDialog} onClose={handleCancelInAddButtonDialog}>
+            <Dialog open={openAddDialog} onClose={handleCloseAddButtonDialog}>
                 <DialogTitle>Добавить ингредиент</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
@@ -73,19 +112,24 @@ const Ingredients = () => {
                         margin="dense"
                         id="Name"
                         label="Название"
+                        value={nameNewIngredient}
                         variant="outlined"
                         fullWidth
                         required
-                        // error
-                        // helperText="Необходимо ввести имя"
+                        onChange={changeNewIngredientName}
+                        error={errorNameNewIngredient}
+                        helperText={helperTextNameNewIngredient}
                     />
                     <TextField
                         autoFocus
                         margin="dense"
                         id="Description"
                         label="Описание"
+                        value={descriptionNewIngredient}
                         variant="outlined"
                         fullWidth
+                        multiline
+                        onChange={changeNewIngredientDescription}
                     />
                 </DialogContent>
                 <DialogActions>
@@ -103,7 +147,7 @@ const Ingredients = () => {
                         NoRowsOverlay: NoRowsGridOverlay,
                         Pagination: MuiGridPagination,
                     }}
-                    rows={ingredients.ingredients}
+                    rows={ingredients}
                     columns={columns}
                     disableColumnMenu
                 />

@@ -5,7 +5,7 @@ import UpdateIcon from '@mui/icons-material/Update';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton/IconButton';
 import Stack from '@mui/material/Stack';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridSelectionModel } from '@mui/x-data-grid';
 import { Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions } from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
@@ -29,6 +29,8 @@ const Ingredients = () => {
     const [errorNameNewIngredient, setErrorNameNewIngredient] = useState(false);
     const [helperTextNameNewIngredient, setHelperTextNameNewIngredient] = useState("");
     const [descriptionNewIngredient, setDescriptionNewIngredient] = useState("");
+    const [gridSelectionModel, setGridSelectionModel] = useState<GridSelectionModel>([]);
+    const [disableEditButton, setDisableEditButton] = useState(true);
 
     useEffect(() => {
         dispatch(getAllIngredientsAsync(tempVariable));
@@ -55,7 +57,7 @@ const Ingredients = () => {
     };
 
     const handleAddInAddButtonDialog = () => {
-        if (typeof nameNewIngredient == undefined || !nameNewIngredient) {
+        if (nameNewIngredient == undefined || !nameNewIngredient) {
             setErrorNameNewIngredient(true);
             setHelperTextNameNewIngredient("Необходимо ввести имя");
 
@@ -76,6 +78,17 @@ const Ingredients = () => {
         setDescriptionNewIngredient(event.target.value);
     }
 
+    const handleSelectionModelChange = (newSelectionModel: GridSelectionModel) => {
+        if (newSelectionModel == undefined || newSelectionModel.length == 0) {
+            setDisableEditButton(true);
+        }
+        else {
+            setDisableEditButton(false);
+        }
+
+        setGridSelectionModel(newSelectionModel);
+    }
+
     return (
         <div className="ingredients">
             <h1>Ингредиенты</h1>
@@ -83,7 +96,7 @@ const Ingredients = () => {
                 <Button
                     variant="outlined"
                     startIcon={<EditIcon />}
-                    disabled
+                    disabled={disableEditButton}
                 >
                     Изменить
                 </Button>
@@ -150,6 +163,8 @@ const Ingredients = () => {
                     rows={ingredients}
                     columns={columns}
                     disableColumnMenu
+                    onSelectionModelChange={handleSelectionModelChange}
+                    selectionModel={gridSelectionModel}
                 />
             </div>
         </div>

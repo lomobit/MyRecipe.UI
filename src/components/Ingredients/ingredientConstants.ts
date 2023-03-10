@@ -20,6 +20,7 @@ export const columns: GridColDef[] = [
     {
         field: 'description',
         headerName: 'Описание',
+        width: 380,
         sortable: false,
         filterable: false,
         hideable: false,

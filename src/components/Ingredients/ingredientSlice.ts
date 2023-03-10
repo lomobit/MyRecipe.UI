@@ -8,6 +8,7 @@ import { AddNewIngredient, GetAllIngredients } from "./ingredientApi";
 const initialState: IngredientState = {
     ingredientsSlice: [],
     ingredientsCount: 0,
+    ingredientsItemsPerPage: 10,
     ingredientsStatus: 'idle',
 
     lastAddedIngredientId: -1,
@@ -39,6 +40,9 @@ export const ingredientReducer = createSlice({
             state.ingredientsSlice.push(action.payload);
             state.ingredientsCount++;
         },
+        setItemsPerPage: (state, action: PayloadAction<number>) => {
+            state.ingredientsItemsPerPage = action.payload;
+        }
     },
     extraReducers: (builder) => {
         addCasesFor_getAllIngredientsAsync(builder);
@@ -75,8 +79,11 @@ const addCasesFor_addNewIngredientAsync = (builder: ActionReducerMapBuilder<Ingr
         });
 }
 
+export const { setItemsPerPage } = ingredientReducer.actions;
+
 export const selectIngredientsSlice = (state: RootState) => state.ingredient.ingredientsSlice;
 export const selectIngredientsCount = (state: RootState) => state.ingredient.ingredientsCount;
+export const selectItemsPerPage = (state: RootState) => state.ingredient.ingredientsItemsPerPage;
 export const selectLastAddedIngredientId = (state: RootState) => state.ingredient.lastAddedIngredientId;
 
 export default ingredientReducer.reducer;

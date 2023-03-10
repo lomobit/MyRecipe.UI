@@ -6,21 +6,22 @@ import {
     useGridApiContext,
     useGridSelector
 } from '@mui/x-data-grid';
-import React, { useEffect, useState } from 'react';
-import { useAppSelector } from '../../app/hooks';
-import { selectIngredientsCount } from '../Ingredients/ingredientSlice';
+import { ChangeEvent } from 'react';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { selectIngredientsCount, selectItemsPerPage, setItemsPerPage } from '../Ingredients/ingredientSlice';
 
 import './MuiGridPagination.css';
 
 const MuiGridPagination = () => {
+    const ingredientsCount = useAppSelector(selectIngredientsCount);
+    const itemsPerPage = useAppSelector(selectItemsPerPage);
+    const dispatch = useAppDispatch();
+
     const apiRef = useGridApiContext();
     const gridPaginationModel = useGridSelector(apiRef, gridPaginationModelSelector);
     const gridPageSize = useGridSelector(apiRef, gridPageSizeSelector);
-    const ingredientsCount = useAppSelector(selectIngredientsCount);
-
-    const [itemsPerPage, setItemsPerPage] = useState(10);
     
-    const handlePaginationChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    const handlePaginationChange = (event: ChangeEvent<unknown>, value: number) => {
         apiRef.current.setPage(value - 1);
     }
 
@@ -28,7 +29,7 @@ const MuiGridPagination = () => {
         let newItemsPerPage: number = event.target.value as number;
 
         apiRef.current.setPageSize(newItemsPerPage);
-        setItemsPerPage(newItemsPerPage);
+        dispatch(setItemsPerPage(newItemsPerPage));
     }
 
     return (
@@ -48,7 +49,7 @@ const MuiGridPagination = () => {
                     value={itemsPerPage}
                     onChange={handleSelectItemPerPageChange}
                     displayEmpty
-                    inputProps={{ 'aria-label': 'Without label' }}
+                    inputProps={{ 'aria-label': 'Количество элементов' }}
                 >
                     <MenuItem value={10}>10</MenuItem>
                     <MenuItem value={20}>20</MenuItem>

@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { addNewIngredientAsync, getAllIngredientsAsync, selectIngredientsCount, selectIngredientsSlice } from './ingredientSlice';
+import { addNewIngredientAsync, getAllIngredientsAsync, selectIngredientsCount, selectIngredientsSlice, selectItemsPerPage } from './ingredientSlice';
 import { columns } from './ingredientConstants';
 import NoRowsGridOverlay from '../NoRowsGridOverlay/NoRowsGridOverlay';
 import MuiGridPagination from '../MuiGridPagination/MuiGridPagination';
@@ -28,6 +28,7 @@ import { GetAllIngredientsAsyncQuery } from '../../contracts/ingredients/GetAllI
 const Ingredients = () => {
     const ingredientsSlice = useAppSelector(selectIngredientsSlice);
     const ingredientsCount = useAppSelector(selectIngredientsCount);
+    const itemsPerPage = useAppSelector(selectItemsPerPage);
     const dispatch = useAppDispatch();
 
     const [openAddDialog, setOpenAddDialog] = useState(false);
@@ -40,7 +41,7 @@ const Ingredients = () => {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const [paginationModel, setPaginationModel] = useState({
         page: 0,
-        pageSize: 10,
+        pageSize: itemsPerPage,
     });
 
     useEffect(() => {

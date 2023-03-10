@@ -18,8 +18,8 @@ const showError = async (error: any) => {
     alert(`${error}`);
 }
 
-export async function GetAllIngredients(amount = 1) {
-    return await fetch(`${apiUri}/${moduleName}/Get?PageNumber=${1}`)
+export async function GetAllIngredients(pageNumber: number, pageSize: number) {
+    return await fetch(`${apiUri}/${moduleName}/Get?PageNumber=${pageNumber}&PageSize=${pageSize}`)
         .then(checkSuccess)
         .catch(showError);
 }

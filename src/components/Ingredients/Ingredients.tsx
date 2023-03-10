@@ -2,11 +2,19 @@ import { ChangeEvent, useEffect, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import UpdateIcon from '@mui/icons-material/Update';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton/IconButton';
-import Stack from '@mui/material/Stack';
-import { DataGrid, GridSelectionModel } from '@mui/x-data-grid';
-import { Dialog, DialogTitle, DialogContent, DialogContentText, TextField, DialogActions } from '@mui/material';
+import { DataGrid, GridRowSelectionModel } from '@mui/x-data-grid';
+import {
+    Button,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    IconButton,
+    LinearProgress,
+    Stack,
+    TextField
+} from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { addNewIngredientAsync, getAllIngredientsAsync, selectIngredients } from './ingredientSlice';
@@ -16,11 +24,11 @@ import MuiGridPagination from '../MuiGridPagination/MuiGridPagination';
 
 import './Ingredients.css';
 import { Ingredient } from '../../contracts/ingredients/IngredientDto';
+import { GetAllIngredientsAsyncQuery } from '../../contracts/ingredients/GetAllIngredientsAsyncQuery';
+
 
 
 const Ingredients = () => {
-    const tempVariable = 1;
-
     const ingredients = useAppSelector(selectIngredients);
     const dispatch = useAppDispatch();
 
@@ -29,12 +37,34 @@ const Ingredients = () => {
     const [errorNameNewIngredient, setErrorNameNewIngredient] = useState(false);
     const [helperTextNameNewIngredient, setHelperTextNameNewIngredient] = useState("");
     const [descriptionNewIngredient, setDescriptionNewIngredient] = useState("");
-    const [gridSelectionModel, setGridSelectionModel] = useState<GridSelectionModel>([]);
     const [disableEditButton, setDisableEditButton] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
+    const [paginationModel, setPaginationModel] = useState({
+        page: 0,
+        pageSize: 5,
+    });
 
     useEffect(() => {
-        dispatch(getAllIngredientsAsync(tempVariable));
-    }, [])
+        let active = true;
+
+        (async () => {
+            setLoading(true);
+            await dispatch(getAllIngredientsAsync(new GetAllIngredientsAsyncQuery(paginationModel.page + 1, paginationModel.pageSize)));
+
+            if (!active) {
+                return;
+            }
+
+            setLoading(false);
+        })();
+    
+        return () => {
+            active = false;
+        };
+
+        ;
+    }, [paginationModel])
 
     const handleClickAddButton = () => {
         setOpenAddDialog(true);
@@ -65,7 +95,7 @@ const Ingredients = () => {
         }
 
         dispatch(addNewIngredientAsync(new Ingredient(-1, nameNewIngredient, descriptionNewIngredient)))
-            .then(() => dispatch(getAllIngredientsAsync(tempVariable)));
+            .then(() => dispatch(getAllIngredientsAsync(new GetAllIngredientsAsyncQuery(paginationModel.page + 1, paginationModel.pageSize))));
 
         closeAndClearFieldsInAddButtonDialog();
     };
@@ -76,17 +106,6 @@ const Ingredients = () => {
 
     const changeNewIngredientDescription = (event: ChangeEvent<HTMLInputElement>) => {
         setDescriptionNewIngredient(event.target.value);
-    }
-
-    const handleSelectionModelChange = (newSelectionModel: GridSelectionModel) => {
-        if (newSelectionModel == undefined || newSelectionModel.length == 0) {
-            setDisableEditButton(true);
-        }
-        else {
-            setDisableEditButton(false);
-        }
-
-        setGridSelectionModel(newSelectionModel);
     }
 
     return (
@@ -109,7 +128,7 @@ const Ingredients = () => {
                 </Button>
                 <IconButton
                     color="primary"
-                    onClick={() => dispatch(getAllIngredientsAsync(tempVariable))}
+                    onClick={() => dispatch(getAllIngredientsAsync(new GetAllIngredientsAsyncQuery(paginationModel.page + 1, paginationModel.pageSize)))}
                 >
                     <UpdateIcon />
                 </IconButton>
@@ -150,21 +169,28 @@ const Ingredients = () => {
                     <Button onClick={handleAddInAddButtonDialog}>Добавить</Button>
                 </DialogActions>
             </Dialog>
-            <div style={{ marginTop: 20, height: 994, width: '100%' }}>
+            <div style={{ marginTop: 20, height: 300, width: '100%' }}>
                 <DataGrid
-                    pagination
-                    pageSize={25}
-                    rowsPerPageOptions={[25, 50]}
+                    paginationMode="server"
+                    pageSizeOptions={[5]}
+                    rowCount={ingredients.count}
+                    loading={loading}
+                    paginationModel={paginationModel}
+                    keepNonExistentRowsSelected
                     density='compact'
-                    components={{
-                        NoRowsOverlay: NoRowsGridOverlay,
-                        Pagination: MuiGridPagination,
-                    }}
-                    rows={ingredients}
+                    rows={ingredients.itemsSlice}
                     columns={columns}
                     disableColumnMenu
-                    onSelectionModelChange={handleSelectionModelChange}
-                    selectionModel={gridSelectionModel}
+                    rowSelectionModel={rowSelectionModel}
+                    onPaginationModelChange={setPaginationModel}
+                    onRowSelectionModelChange={(newRowSelectionModel) => {
+                        setRowSelectionModel(newRowSelectionModel);
+                    }}
+                    slots={{
+                        pagination: MuiGridPagination,
+                        noRowsOverlay: NoRowsGridOverlay,
+                        // loadingOverlay: LinearProgress,
+                    }}
                 />
             </div>
         </div>

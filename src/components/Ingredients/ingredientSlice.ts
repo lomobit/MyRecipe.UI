@@ -1,11 +1,12 @@
 import {  ActionReducerMapBuilder, createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { IngredientState } from "../../contracts/ingredients/IIngredientState";
+import { GetAllIngredientsAsyncQuery } from "../../contracts/ingredients/GetAllIngredientsAsyncQuery";
+import { IngredientState, PaginatedItems } from "../../contracts/ingredients/IIngredientState";
 import { Ingredient } from "../../contracts/ingredients/IngredientDto";
 import { AddNewIngredient, GetAllIngredients } from "./ingredientApi";
   
 const initialState: IngredientState = {
-    ingredients: [],
+    ingredients: new PaginatedItems<Ingredient>([], 0),
     ingredientsStatus: 'idle',
 
     lastAddedIngredientId: -1,
@@ -15,8 +16,8 @@ const initialState: IngredientState = {
 
 export const getAllIngredientsAsync = createAsyncThunk(
     'ingredient/getAll',
-    async (amount: number) => {
-        const response = await GetAllIngredients(amount);
+    async (query: GetAllIngredientsAsyncQuery) => {
+        const response = await GetAllIngredients(query.pageNumber, query.pageSize);
         return response.data;
     }
 );
@@ -36,7 +37,8 @@ export const ingredientReducer = createSlice({
     reducers: {
         // Use the PayloadAction type to declare the contents of `action.payload`
         addNewIngredient: (state, action: PayloadAction<Ingredient>) => {
-            state.ingredients.push(action.payload);
+            state.ingredients.itemsSlice.push(action.payload);
+            state.ingredients.count++;
         },
     },
     // The `extraReducers` field lets the slice handle actions defined elsewhere,

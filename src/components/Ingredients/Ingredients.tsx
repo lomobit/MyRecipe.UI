@@ -22,6 +22,7 @@ import MuiGridPagination from '../MuiGridPagination/MuiGridPagination';
 import './Ingredients.css';
 import { Ingredient } from '../../contracts/ingredients/IngredientDto';
 import { GetAllIngredientsAsyncQuery } from '../../contracts/ingredients/GetAllIngredientsAsyncQuery';
+import DialogAddIngrediant from './DialogAddIngredient';
 
 
 
@@ -32,10 +33,6 @@ const Ingredients = () => {
     const dispatch = useAppDispatch();
 
     const [openAddDialog, setOpenAddDialog] = useState(false);
-    const [nameNewIngredient, setNameNewIngredient] = useState("");
-    const [errorNameNewIngredient, setErrorNameNewIngredient] = useState(false);
-    const [helperTextNameNewIngredient, setHelperTextNameNewIngredient] = useState("");
-    const [descriptionNewIngredient, setDescriptionNewIngredient] = useState("");
     const [disableEditButton, setDisableEditButton] = useState(true);
     const [loading, setLoading] = useState(false);
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
@@ -69,44 +66,6 @@ const Ingredients = () => {
         setOpenAddDialog(true);
     };
 
-    const handleCloseAddButtonDialog = () => {
-        setOpenAddDialog(false);
-    };
-
-    const closeAndClearFieldsInAddButtonDialog = () => {
-        setOpenAddDialog(false);
-        setNameNewIngredient("");
-        setDescriptionNewIngredient("");
-        setErrorNameNewIngredient(false);
-        setHelperTextNameNewIngredient("");
-    }
-    
-    const handleCancelInAddButtonDialog = () => {
-        closeAndClearFieldsInAddButtonDialog();
-    };
-
-    const handleAddInAddButtonDialog = () => {
-        if (nameNewIngredient == undefined || !nameNewIngredient) {
-            setErrorNameNewIngredient(true);
-            setHelperTextNameNewIngredient("Необходимо ввести имя");
-
-            return;
-        }
-
-        dispatch(addNewIngredientAsync(new Ingredient(-1, nameNewIngredient, descriptionNewIngredient)))
-            .then(() => dispatch(getAllIngredientsAsync(new GetAllIngredientsAsyncQuery(paginationModel.page + 1, paginationModel.pageSize))));
-
-        closeAndClearFieldsInAddButtonDialog();
-    };
-
-    const changeNewIngredientName = (event: ChangeEvent<HTMLInputElement>) => {
-        setNameNewIngredient(event.target.value);
-    }
-
-    const changeNewIngredientDescription = (event: ChangeEvent<HTMLInputElement>) => {
-        setDescriptionNewIngredient(event.target.value);
-    }
-
     const handleRowSelectionModelChange = (newRowSelectionModel: GridRowSelectionModel) => {
         if (newRowSelectionModel.length > 0) {
             setDisableEditButton(false);
@@ -135,6 +94,10 @@ const Ingredients = () => {
         }
     }
 
+    const handleClickEditButton = () => {
+        // setOpenEditDialog(true);
+    }
+
     return (
         <div className="ingredients">
             <h1>Ингредиенты</h1>
@@ -143,6 +106,7 @@ const Ingredients = () => {
                     variant="outlined"
                     startIcon={<EditIcon />}
                     disabled={disableEditButton}
+                    onClick={handleClickEditButton}
                 >
                     Изменить
                 </Button>
@@ -154,42 +118,11 @@ const Ingredients = () => {
                     Добавить
                 </Button>
             </Stack>
-            <Dialog open={openAddDialog} onClose={handleCloseAddButtonDialog}>
-                <DialogTitle>Добавить ингредиент</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Для добавление ингредиента введите данные:
-                    </DialogContentText>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="Name"
-                        label="Название"
-                        value={nameNewIngredient}
-                        variant="outlined"
-                        fullWidth
-                        required
-                        onChange={changeNewIngredientName}
-                        error={errorNameNewIngredient}
-                        helperText={helperTextNameNewIngredient}
-                    />
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="Description"
-                        label="Описание"
-                        value={descriptionNewIngredient}
-                        variant="outlined"
-                        fullWidth
-                        multiline
-                        onChange={changeNewIngredientDescription}
-                    />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCancelInAddButtonDialog}>Отмена</Button>
-                    <Button onClick={handleAddInAddButtonDialog}>Добавить</Button>
-                </DialogActions>
-            </Dialog>
+            <DialogAddIngrediant
+                open={openAddDialog}
+                setOpen={setOpenAddDialog}
+                pageNumber={paginationModel.page + 1}
+                pageSize={paginationModel.pageSize}/>
             <div
                 className="ingredientsGrid"
                 style={{height: getIngredientsGridHeightByPageSize()}}>

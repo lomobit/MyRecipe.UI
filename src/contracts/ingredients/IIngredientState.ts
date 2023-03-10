@@ -4,8 +4,9 @@ export interface IngredientState {
     ingredientsSlice: Array<Ingredient>;
     ingredientsCount: number;
     ingredientsItemsPerPage: number;
-    ingredientsStatus: 'idle' | 'loading' | 'failed';
+    getIngredientsStatus: 'idle' | 'loading' | 'failed';
 
-    lastAddedIngredientId: number;
-    lastAddedIngredientIdStatus: 'idle' | 'loading' | 'failed';
+    addIngredientIdStatus: 'idle' | 'loading' | 'failed';
+    
+    editIngredientIdStatus: 'idle' | 'loading' | 'failed';
 }

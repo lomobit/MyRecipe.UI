@@ -17,13 +17,13 @@ const showError = async (error: any) => {
     alert(`${error}`);
 }
 
-export async function GetAllIngredients(pageNumber: number, pageSize: number) {
+export async function GetIngredients(pageNumber: number, pageSize: number) {
     return await fetch(`${apiUri}/${moduleName}/Get?PageNumber=${pageNumber}&PageSize=${pageSize}`)
         .then(checkSuccess)
         .catch(showError);
 }
 
-export async function AddNewIngredient(ingredient: Ingredient) {
+export async function AddIngredient(ingredient: Ingredient) {
     let bodyQuery = {
         name: ingredient.name,
         description: ingredient.description,
@@ -38,6 +38,26 @@ export async function AddNewIngredient(ingredient: Ingredient) {
     };
 
     return await fetch(`${apiUri}/${moduleName}/Add`, queryOptions)
+        .then(checkSuccess)
+        .catch(showError);
+}
+
+export async function EditIngredient(ingredient: Ingredient) {
+    let bodyQuery = {
+        id: ingredient.id,
+        name: ingredient.name,
+        description: ingredient.description,
+    };
+
+    let queryOptions = {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bodyQuery),
+    };
+
+    return await fetch(`${apiUri}/${moduleName}/Edit`, queryOptions)
         .then(checkSuccess)
         .catch(showError);
 }

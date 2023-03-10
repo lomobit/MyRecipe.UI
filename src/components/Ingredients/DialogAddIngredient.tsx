@@ -9,9 +9,9 @@ import {
 } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 import { useAppDispatch } from '../../app/hooks';
-import { GetAllIngredientsAsyncQuery } from '../../contracts/ingredients/GetAllIngredientsAsyncQuery';
+import { GetIngredientsAsyncQuery } from '../../contracts/ingredients/GetAllIngredientsAsyncQuery';
 import { Ingredient } from '../../contracts/ingredients/IngredientDto';
-import { addNewIngredientAsync, getAllIngredientsAsync } from './ingredientSlice';
+import { addIngredientAsync, getIngredientsAsync } from './ingredientSlice';
 
 export declare interface DialogAddIngrediantProps {
     open: boolean;
@@ -20,7 +20,7 @@ export declare interface DialogAddIngrediantProps {
     setOpen: (open: boolean) => void;
 }
 
-const DialogAddIngrediant = (props: DialogAddIngrediantProps) => {
+const DialogAddIngredient = (props: DialogAddIngrediantProps) => {
     const dispatch = useAppDispatch();
 
     const [nameNewIngredient, setNameNewIngredient] = useState("");
@@ -37,15 +37,15 @@ const DialogAddIngrediant = (props: DialogAddIngrediantProps) => {
     };
 
     const handleAddInAddButtonDialog = () => {
-        if (nameNewIngredient == undefined || !nameNewIngredient) {
+        if (nameNewIngredient === undefined || !nameNewIngredient) {
             setErrorNameNewIngredient(true);
             setHelperTextNameNewIngredient("Необходимо ввести имя");
 
             return;
         }
 
-        dispatch(addNewIngredientAsync(new Ingredient(-1, nameNewIngredient, descriptionNewIngredient)))
-            .then(() => dispatch(getAllIngredientsAsync(new GetAllIngredientsAsyncQuery(props.pageNumber, props.pageSize))));
+        dispatch(addIngredientAsync(new Ingredient(-1, nameNewIngredient, descriptionNewIngredient)))
+            .then(() => dispatch(getIngredientsAsync(new GetIngredientsAsyncQuery(props.pageNumber, props.pageSize))));
 
         closeAndClearFieldsInAddButtonDialog();
     };
@@ -106,4 +106,4 @@ const DialogAddIngrediant = (props: DialogAddIngrediantProps) => {
     );
 }
 
-export default DialogAddIngrediant;
+export default DialogAddIngredient;

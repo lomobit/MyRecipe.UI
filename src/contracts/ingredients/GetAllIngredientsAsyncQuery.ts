@@ -1,4 +1,4 @@
-export class GetAllIngredientsAsyncQuery {
+export class GetIngredientsAsyncQuery {
     pageNumber: number;
     pageSize: number;
 

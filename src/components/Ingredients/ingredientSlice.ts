@@ -1,33 +1,42 @@
 import {  ActionReducerMapBuilder, createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { GetAllIngredientsAsyncQuery } from "../../contracts/ingredients/GetAllIngredientsAsyncQuery";
+import { GetIngredientsAsyncQuery } from "../../contracts/ingredients/GetAllIngredientsAsyncQuery";
 import { IngredientState } from "../../contracts/ingredients/IIngredientState";
 import { Ingredient } from "../../contracts/ingredients/IngredientDto";
-import { AddNewIngredient, GetAllIngredients } from "./ingredientApi";
+import { AddIngredient, EditIngredient, GetIngredients } from "./ingredientApi";
   
 const initialState: IngredientState = {
     ingredientsSlice: [],
     ingredientsCount: 0,
     ingredientsItemsPerPage: 10,
-    ingredientsStatus: 'idle',
+    getIngredientsStatus: 'idle',
 
-    lastAddedIngredientId: -1,
-    lastAddedIngredientIdStatus: 'idle',
+    addIngredientIdStatus: 'idle',
+
+    editIngredientIdStatus: 'idle',
 };
 
 
-export const getAllIngredientsAsync = createAsyncThunk(
-    'ingredient/getAll',
-    async (query: GetAllIngredientsAsyncQuery) => {
-        const response = await GetAllIngredients(query.pageNumber, query.pageSize);
+export const getIngredientsAsync = createAsyncThunk(
+    'ingredient/get',
+    async (query: GetIngredientsAsyncQuery) => {
+        const response = await GetIngredients(query.pageNumber, query.pageSize);
         return response.data;
     }
 );
 
-export const addNewIngredientAsync = createAsyncThunk(
+export const addIngredientAsync = createAsyncThunk(
     'ingredient/add',
     async (ingredient: Ingredient) => {
-        const response = await AddNewIngredient(ingredient);
+        const response = await AddIngredient(ingredient);
+        return response.data;
+    }
+);
+
+export const editIngredientAsync = createAsyncThunk(
+    'ingredient/edit',
+    async (ingredient: Ingredient) => {
+        const response = await EditIngredient(ingredient);
         return response.data;
     }
 );
@@ -36,54 +45,61 @@ export const ingredientReducer = createSlice({
     name: 'ingredient',
     initialState,
     reducers: {
-        addNewIngredient: (state, action: PayloadAction<Ingredient>) => {
-            state.ingredientsSlice.push(action.payload);
-            state.ingredientsCount++;
-        },
         setItemsPerPage: (state, action: PayloadAction<number>) => {
             state.ingredientsItemsPerPage = action.payload;
         }
     },
     extraReducers: (builder) => {
-        addCasesFor_getAllIngredientsAsync(builder);
-        addCasesFor_addNewIngredientAsync(builder);
+        addCasesFor_getIngredientsAsync(builder);
+        addCasesFor_addIngredientAsync(builder);
+        addCasesFor_editIngredientAsync(builder);
     },
 });
 
-const addCasesFor_getAllIngredientsAsync = (builder: ActionReducerMapBuilder<IngredientState>) => {
+const addCasesFor_getIngredientsAsync = (builder: ActionReducerMapBuilder<IngredientState>) => {
     builder
-        .addCase(getAllIngredientsAsync.pending, (state) => {
-            state.ingredientsStatus = 'loading';
+        .addCase(getIngredientsAsync.pending, (state) => {
+            state.getIngredientsStatus = 'loading';
         })
-        .addCase(getAllIngredientsAsync.fulfilled, (state, action) => {
-            state.ingredientsStatus = 'idle';
+        .addCase(getIngredientsAsync.fulfilled, (state, action) => {
+            state.getIngredientsStatus = 'idle';
             state.ingredientsSlice = action.payload.itemsSlice;
             state.ingredientsCount = action.payload.count;
         })
-        .addCase(getAllIngredientsAsync.rejected, (state) => {
-            state.ingredientsStatus = 'failed';
+        .addCase(getIngredientsAsync.rejected, (state) => {
+            state.getIngredientsStatus = 'failed';
         });
 }
 
-const addCasesFor_addNewIngredientAsync = (builder: ActionReducerMapBuilder<IngredientState>) => {
+const addCasesFor_addIngredientAsync = (builder: ActionReducerMapBuilder<IngredientState>) => {
     builder
-        .addCase(addNewIngredientAsync.pending, (state) => {
-            state.lastAddedIngredientIdStatus = 'loading';
+        .addCase(addIngredientAsync.pending, (state) => {
+            state.addIngredientIdStatus = 'loading';
         })
-        .addCase(addNewIngredientAsync.fulfilled, (state, action) => {
-            state.lastAddedIngredientIdStatus = 'idle';
-            state.lastAddedIngredientId = action.payload;
+        .addCase(addIngredientAsync.fulfilled, (state, action) => {
+            state.addIngredientIdStatus = 'idle';
         })
-        .addCase(addNewIngredientAsync.rejected, (state) => {
-            state.lastAddedIngredientIdStatus = 'failed';
+        .addCase(addIngredientAsync.rejected, (state) => {
+            state.addIngredientIdStatus = 'failed';
         });
 }
 
+const addCasesFor_editIngredientAsync = (builder: ActionReducerMapBuilder<IngredientState>) => {
+    builder
+        .addCase(editIngredientAsync.pending, (state) => {
+            state.editIngredientIdStatus = 'loading';
+        })
+        .addCase(editIngredientAsync.fulfilled, (state, action) => {
+            state.editIngredientIdStatus = 'idle';
+        })
+        .addCase(editIngredientAsync.rejected, (state) => {
+            state.editIngredientIdStatus = 'failed';
+        });
+}
 export const { setItemsPerPage } = ingredientReducer.actions;
 
 export const selectIngredientsSlice = (state: RootState) => state.ingredient.ingredientsSlice;
 export const selectIngredientsCount = (state: RootState) => state.ingredient.ingredientsCount;
 export const selectItemsPerPage = (state: RootState) => state.ingredient.ingredientsItemsPerPage;
-export const selectLastAddedIngredientId = (state: RootState) => state.ingredient.lastAddedIngredientId;
 
 export default ingredientReducer.reducer;

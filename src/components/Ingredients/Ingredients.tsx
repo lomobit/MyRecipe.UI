@@ -1,28 +1,23 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import { DataGrid, GridPaginationModel, GridRowSelectionModel } from '@mui/x-data-grid';
 import {
     Button,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    Stack,
-    TextField
+    Stack
 } from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { addNewIngredientAsync, getAllIngredientsAsync, selectIngredientsCount, selectIngredientsSlice, selectItemsPerPage } from './ingredientSlice';
+import { getIngredientsAsync, selectIngredientsCount, selectIngredientsSlice, selectItemsPerPage } from './ingredientSlice';
 import { columns } from './ingredientConstants';
 import NoRowsGridOverlay from '../NoRowsGridOverlay/NoRowsGridOverlay';
 import MuiGridPagination from '../MuiGridPagination/MuiGridPagination';
 
 import './Ingredients.css';
+import { GetIngredientsAsyncQuery } from '../../contracts/ingredients/GetAllIngredientsAsyncQuery';
+import DialogAddIngredient from './DialogAddIngredient';
+import DialogEditIngredient from './DialogEditIngrediant';
 import { Ingredient } from '../../contracts/ingredients/IngredientDto';
-import { GetAllIngredientsAsyncQuery } from '../../contracts/ingredients/GetAllIngredientsAsyncQuery';
-import DialogAddIngrediant from './DialogAddIngredient';
 
 
 
@@ -33,6 +28,10 @@ const Ingredients = () => {
     const dispatch = useAppDispatch();
 
     const [openAddDialog, setOpenAddDialog] = useState(false);
+    const [openEditDialog, setOpenEditDialog] = useState(false);
+    const [editedIngredientId, setEditedIngredientId] = useState(-1);
+    const [editedIngredientName, setEditedIngredientName] = useState("");
+    const [editedIngredientDescription, setEditedIngredientDescription] = useState("");
     const [disableEditButton, setDisableEditButton] = useState(true);
     const [loading, setLoading] = useState(false);
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
@@ -46,7 +45,7 @@ const Ingredients = () => {
 
         (async () => {
             setLoading(true);
-            await dispatch(getAllIngredientsAsync(new GetAllIngredientsAsyncQuery(paginationModel.page + 1, paginationModel.pageSize)));
+            await dispatch(getIngredientsAsync(new GetIngredientsAsyncQuery(paginationModel.page + 1, paginationModel.pageSize)));
 
             if (!active) {
                 return;
@@ -66,11 +65,26 @@ const Ingredients = () => {
         setOpenAddDialog(true);
     };
 
+    const handleClickEditButton = () => {
+        setOpenEditDialog(true);
+    }
+
     const handleRowSelectionModelChange = (newRowSelectionModel: GridRowSelectionModel) => {
         if (newRowSelectionModel.length > 0) {
+            let newEditedIngredientId: number = newRowSelectionModel[0] as number;
+            let newEditedIngredient: Ingredient = ingredientsSlice.filter(x => x.id === newEditedIngredientId)[0];
+
+            setEditedIngredientId(newEditedIngredientId);
+            setEditedIngredientName(newEditedIngredient.name);
+            setEditedIngredientDescription(newEditedIngredient.description ?? "");
+
             setDisableEditButton(false);
         }
         else {
+            setEditedIngredientId(-1);
+            setEditedIngredientName("");
+            setEditedIngredientDescription("");
+
             setDisableEditButton(true);
         }
 
@@ -94,10 +108,6 @@ const Ingredients = () => {
         }
     }
 
-    const handleClickEditButton = () => {
-        // setOpenEditDialog(true);
-    }
-
     return (
         <div className="ingredients">
             <h1>Ингредиенты</h1>
@@ -118,11 +128,21 @@ const Ingredients = () => {
                     Добавить
                 </Button>
             </Stack>
-            <DialogAddIngrediant
+            <DialogAddIngredient
                 open={openAddDialog}
                 setOpen={setOpenAddDialog}
                 pageNumber={paginationModel.page + 1}
-                pageSize={paginationModel.pageSize}/>
+                pageSize={paginationModel.pageSize}
+            />
+            <DialogEditIngredient
+                editedIngredientId={editedIngredientId}
+                open={openEditDialog}
+                setOpen={setOpenEditDialog}
+                pageNumber={paginationModel.page + 1}
+                pageSize={paginationModel.pageSize}
+                editedIngredientName={editedIngredientName}
+                editedIngredientDescription={editedIngredientDescription}
+            />
             <div
                 className="ingredientsGrid"
                 style={{height: getIngredientsGridHeightByPageSize()}}>
@@ -130,7 +150,6 @@ const Ingredients = () => {
                     paginationMode="server"
                     rowCount={ingredientsCount}
                     loading={loading}
-                    keepNonExistentRowsSelected
                     density='compact'
                     rows={ingredientsSlice}
                     columns={columns}

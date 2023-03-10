@@ -6,7 +6,7 @@ import { Ingredient } from "../../contracts/ingredients/IngredientDto";
 import { AddNewIngredient, GetAllIngredients } from "./ingredientApi";
   
 const initialState: IngredientState = {
-    ingredients: new PaginatedItems<Ingredient>([], 0),
+    ingredients: new PaginatedItems<Ingredient>(0, []),
     ingredientsStatus: 'idle',
 
     lastAddedIngredientId: -1,

@@ -4,9 +4,9 @@ export class PaginatedItems<T> {
     itemsSlice: Array<T>;
     count: number;
 
-    constructor(itemsSlice: Array<T>, count: number) {
-        this.itemsSlice = itemsSlice;
+    constructor(count: number, itemsSlice: Array<T>) {
         this.count = count;
+        this.itemsSlice = itemsSlice;
     }
 }
 

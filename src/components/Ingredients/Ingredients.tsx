@@ -1,7 +1,6 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
-import UpdateIcon from '@mui/icons-material/Update';
 import { DataGrid, GridRowSelectionModel } from '@mui/x-data-grid';
 import {
     Button,
@@ -127,12 +126,6 @@ const Ingredients = () => {
                 >
                     Добавить
                 </Button>
-                <IconButton
-                    color="primary"
-                    onClick={() => dispatch(getAllIngredientsAsync(new GetAllIngredientsAsyncQuery(paginationModel.page + 1, paginationModel.pageSize)))}
-                >
-                    <UpdateIcon />
-                </IconButton>
             </Stack>
             <Dialog open={openAddDialog} onClose={handleCloseAddButtonDialog}>
                 <DialogTitle>Добавить ингредиент</DialogTitle>

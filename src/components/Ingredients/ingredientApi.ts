@@ -1,6 +1,5 @@
 import { Ingredient } from "../../contracts/ingredients/IngredientDto";
 
-//'https://localhost:32768/api/v1/Ingredient/Get?PageNumber=1
 const apiUri = `https://localhost:32768/api/v1`;
 const moduleName = "Ingredient";
 

@@ -142,6 +142,7 @@ const Ingredients = () => {
                 pageSize={paginationModel.pageSize}
                 editedIngredientName={editedIngredientName}
                 editedIngredientDescription={editedIngredientDescription}
+                setRowSelectionModel={handleRowSelectionModelChange}
             />
             <div
                 className="ingredientsGrid"

@@ -7,7 +7,8 @@ import {
     DialogTitle,
     TextField
 } from '@mui/material';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { GridRowSelectionModel } from '@mui/x-data-grid';
+import { ChangeEvent, SetStateAction, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../app/hooks';
 import { GetIngredientsAsyncQuery } from '../../contracts/ingredients/GetIngredientsAsyncQuery';
 import { Ingredient } from '../../contracts/ingredients/IngredientDto';
@@ -21,6 +22,7 @@ export declare interface DialogEditIngrediantProps {
     editedIngredientName: string;
     editedIngredientDescription: string;
     setOpen: (open: boolean) => void;
+    setRowSelectionModel: (newRowSelectionModel: GridRowSelectionModel) => void;
 }
 
 const DialogEditIngredient = (props: DialogEditIngrediantProps) => {
@@ -41,12 +43,11 @@ const DialogEditIngredient = (props: DialogEditIngrediantProps) => {
     };
 
     const handleCancelInEditButtonDialog = () => {
-        closeAndClearFieldsInEditButtonDialog();
-        setNameEditedIngredient(props.editedIngredientName);
-        setDescriptionEditedIngredient(props.editedIngredientDescription);
+        closeAndClearValidationFieldsInEditButtonDialog();
+        clearFieldsInEditButtonDialog();
     };
 
-    const handleEditInEditButtonDialog = () => {
+    const handleEditInEditButtonDialog = async () => {
         if (nameEditedIngredient === undefined || !nameEditedIngredient) {
             setErrorNameEditedIngredient(true);
             setHelperTextNameEditedIngredient("Необходимо ввести имя");
@@ -54,16 +55,23 @@ const DialogEditIngredient = (props: DialogEditIngrediantProps) => {
             return;
         }
 
+        closeAndClearValidationFieldsInEditButtonDialog();
+
         dispatch(editIngredientAsync(new Ingredient(props.editedIngredientId, nameEditedIngredient, descriptionEditedIngredient)))
             .then(() => dispatch(getIngredientsAsync(new GetIngredientsAsyncQuery(props.pageNumber, props.pageSize))));
 
-        closeAndClearFieldsInEditButtonDialog();
+        props.setRowSelectionModel([]);
     };
 
-    const closeAndClearFieldsInEditButtonDialog = () => {
+    const closeAndClearValidationFieldsInEditButtonDialog = () => {
         props.setOpen(false);
         setErrorNameEditedIngredient(false);
         setHelperTextNameEditedIngredient("");
+    }
+
+    const clearFieldsInEditButtonDialog = () => {
+        setNameEditedIngredient(props.editedIngredientName);
+        setDescriptionEditedIngredient(props.editedIngredientDescription);
     }
 
     const changeEditedIngredientName = (event: ChangeEvent<HTMLInputElement>) => {

@@ -33,7 +33,8 @@ const DialogAddIngredient = (props: DialogAddIngrediantProps) => {
     };
 
     const handleCancelInAddButtonDialog = () => {
-        closeAndClearFieldsInAddButtonDialog();
+        closeAndClearValidationFieldsInAddButtonDialog();
+        clearFieldsInAddButtonDialog();
     };
 
     const handleAddInAddButtonDialog = () => {
@@ -44,10 +45,12 @@ const DialogAddIngredient = (props: DialogAddIngrediantProps) => {
             return;
         }
 
+        closeAndClearValidationFieldsInAddButtonDialog();
+
         dispatch(addIngredientAsync(new Ingredient(-1, nameNewIngredient, descriptionNewIngredient)))
             .then(() => dispatch(getIngredientsAsync(new GetIngredientsAsyncQuery(props.pageNumber, props.pageSize))));
 
-        closeAndClearFieldsInAddButtonDialog();
+        clearFieldsInAddButtonDialog();
     };
 
     const changeNewIngredientName = (event: ChangeEvent<HTMLInputElement>) => {
@@ -58,12 +61,15 @@ const DialogAddIngredient = (props: DialogAddIngrediantProps) => {
         setDescriptionNewIngredient(event.target.value);
     }
 
-    const closeAndClearFieldsInAddButtonDialog = () => {
+    const closeAndClearValidationFieldsInAddButtonDialog = () => {
         props.setOpen(false);
-        setNameNewIngredient("");
-        setDescriptionNewIngredient("");
         setErrorNameNewIngredient(false);
         setHelperTextNameNewIngredient("");
+    }
+
+    const clearFieldsInAddButtonDialog = () => {
+        setNameNewIngredient("");
+        setDescriptionNewIngredient("");
     }
 
     return (

@@ -1,12 +1,13 @@
 import {  ActionReducerMapBuilder, createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import { GetAllIngredientsAsyncQuery } from "../../contracts/ingredients/GetAllIngredientsAsyncQuery";
-import { IngredientState, PaginatedItems } from "../../contracts/ingredients/IIngredientState";
+import { IngredientState } from "../../contracts/ingredients/IIngredientState";
 import { Ingredient } from "../../contracts/ingredients/IngredientDto";
 import { AddNewIngredient, GetAllIngredients } from "./ingredientApi";
   
 const initialState: IngredientState = {
-    ingredients: new PaginatedItems<Ingredient>(0, []),
+    ingredientsSlice: [],
+    ingredientsCount: 0,
     ingredientsStatus: 'idle',
 
     lastAddedIngredientId: -1,
@@ -37,8 +38,8 @@ export const ingredientReducer = createSlice({
     reducers: {
         // Use the PayloadAction type to declare the contents of `action.payload`
         addNewIngredient: (state, action: PayloadAction<Ingredient>) => {
-            state.ingredients.itemsSlice.push(action.payload);
-            state.ingredients.count++;
+            state.ingredientsSlice.push(action.payload);
+            state.ingredientsCount++;
         },
     },
     // The `extraReducers` field lets the slice handle actions defined elsewhere,
@@ -56,7 +57,8 @@ const addCasesFor_getAllIngredientsAsync = (builder: ActionReducerMapBuilder<Ing
         })
         .addCase(getAllIngredientsAsync.fulfilled, (state, action) => {
             state.ingredientsStatus = 'idle';
-            state.ingredients = action.payload;
+            state.ingredientsSlice = action.payload.itemsSlice;
+            state.ingredientsCount = action.payload.count;
         })
         .addCase(getAllIngredientsAsync.rejected, (state) => {
             state.ingredientsStatus = 'failed';
@@ -77,7 +79,8 @@ const addCasesFor_addNewIngredientAsync = (builder: ActionReducerMapBuilder<Ingr
         });
 }
 
-export const selectIngredients = (state: RootState) => state.ingredient.ingredients;
+export const selectIngredientsSlice = (state: RootState) => state.ingredient.ingredientsSlice;
+export const selectIngredientsCount = (state: RootState) => state.ingredient.ingredientsCount;
 export const selectLastAddedIngredientId = (state: RootState) => state.ingredient.lastAddedIngredientId;
 
 export default ingredientReducer.reducer;

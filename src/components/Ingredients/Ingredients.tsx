@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { addNewIngredientAsync, getAllIngredientsAsync, selectIngredients } from './ingredientSlice';
+import { addNewIngredientAsync, getAllIngredientsAsync, selectIngredientsCount, selectIngredientsSlice } from './ingredientSlice';
 import { columns } from './ingredientConstants';
 import NoRowsGridOverlay from '../NoRowsGridOverlay/NoRowsGridOverlay';
 import MuiGridPagination from '../MuiGridPagination/MuiGridPagination';
@@ -29,7 +29,8 @@ import { GetAllIngredientsAsyncQuery } from '../../contracts/ingredients/GetAllI
 
 
 const Ingredients = () => {
-    const ingredients = useAppSelector(selectIngredients);
+    const ingredientsSlice = useAppSelector(selectIngredientsSlice);
+    const ingredientsCount = useAppSelector(selectIngredientsCount);
     const dispatch = useAppDispatch();
 
     const [openAddDialog, setOpenAddDialog] = useState(false);
@@ -173,12 +174,12 @@ const Ingredients = () => {
                 <DataGrid
                     paginationMode="server"
                     pageSizeOptions={[5]}
-                    rowCount={ingredients.count}
+                    rowCount={ingredientsCount}
                     loading={loading}
                     paginationModel={paginationModel}
                     keepNonExistentRowsSelected
                     density='compact'
-                    rows={ingredients.itemsSlice}
+                    rows={ingredientsSlice}
                     columns={columns}
                     disableColumnMenu
                     rowSelectionModel={rowSelectionModel}

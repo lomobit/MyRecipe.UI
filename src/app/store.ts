@@ -7,9 +7,7 @@ export const store = configureStore({
         ingredient: ingredientReducer,
     },
     devTools: true,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-            serializableCheck: false
-        })
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware()
         .concat(reduxLogger),
 });
 

@@ -8,7 +8,7 @@ import {
     TextField
 } from '@mui/material';
 import { GridRowSelectionModel } from '@mui/x-data-grid';
-import { ChangeEvent, SetStateAction, useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../app/hooks';
 import { GetIngredientsAsyncQuery } from '../../contracts/ingredients/GetIngredientsAsyncQuery';
 import { Ingredient } from '../../contracts/ingredients/IngredientDto';
@@ -22,7 +22,7 @@ export declare interface DialogEditIngrediantProps {
     editedIngredientName: string;
     editedIngredientDescription: string;
     setOpen: (open: boolean) => void;
-    setRowSelectionModel: (newRowSelectionModel: GridRowSelectionModel) => void;
+    handleRowSelectionModelChange: (newRowSelectionModel: GridRowSelectionModel) => void;
 }
 
 const DialogEditIngredient = (props: DialogEditIngrediantProps) => {
@@ -60,7 +60,7 @@ const DialogEditIngredient = (props: DialogEditIngrediantProps) => {
         dispatch(editIngredientAsync(new Ingredient(props.editedIngredientId, nameEditedIngredient, descriptionEditedIngredient)))
             .then(() => dispatch(getIngredientsAsync(new GetIngredientsAsyncQuery(props.pageNumber, props.pageSize))));
 
-        props.setRowSelectionModel([]);
+        props.handleRowSelectionModelChange([]);
     };
 
     const closeAndClearValidationFieldsInEditButtonDialog = () => {

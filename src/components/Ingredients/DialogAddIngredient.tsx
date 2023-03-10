@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 import { useAppDispatch } from '../../app/hooks';
-import { GetIngredientsAsyncQuery } from '../../contracts/ingredients/GetAllIngredientsAsyncQuery';
+import { GetIngredientsAsyncQuery } from '../../contracts/ingredients/GetIngredientsAsyncQuery';
 import { Ingredient } from '../../contracts/ingredients/IngredientDto';
 import { addIngredientAsync, getIngredientsAsync } from './ingredientSlice';
 

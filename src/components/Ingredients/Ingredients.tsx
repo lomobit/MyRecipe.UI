@@ -14,7 +14,7 @@ import NoRowsGridOverlay from '../NoRowsGridOverlay/NoRowsGridOverlay';
 import MuiGridPagination from '../MuiGridPagination/MuiGridPagination';
 
 import './Ingredients.css';
-import { GetIngredientsAsyncQuery } from '../../contracts/ingredients/GetAllIngredientsAsyncQuery';
+import { GetIngredientsAsyncQuery } from '../../contracts/ingredients/GetIngredientsAsyncQuery';
 import DialogAddIngredient from './DialogAddIngredient';
 import DialogEditIngredient from './DialogEditIngrediant';
 import { Ingredient } from '../../contracts/ingredients/IngredientDto';

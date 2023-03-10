@@ -1,6 +1,6 @@
 import {  ActionReducerMapBuilder, createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { GetIngredientsAsyncQuery } from "../../contracts/ingredients/GetAllIngredientsAsyncQuery";
+import { GetIngredientsAsyncQuery } from "../../contracts/ingredients/GetIngredientsAsyncQuery";
 import { IngredientState } from "../../contracts/ingredients/IIngredientState";
 import { Ingredient } from "../../contracts/ingredients/IngredientDto";
 import { AddIngredient, EditIngredient, GetIngredients } from "./ingredientApi";

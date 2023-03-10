@@ -1,19 +1,21 @@
+@import "../../root.css";
+
 .myRecipeApp {
     margin-left: auto;
     margin-right: auto;
     width: 1000px;
-    border: 5px solid #ff0000;
+    border: var(--border-width) solid #ff0000;
     display: flex;
 }
 
 .menuContent {
-    border: 5px solid #00ff40;
+    border: var(--border-width) solid #00ff40;
     border-radius: 5px;
     width: 250px;
 }
 
 .pageContent {
-    border: 5px solid #1900ff;
+    border: var(--border-width) solid #1900ff;
     border-radius: 5px;
     width: 750px;
 }

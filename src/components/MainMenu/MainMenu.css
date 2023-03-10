@@ -1,10 +1,12 @@
+@import "../../root.css";
 
 .mainMenu {
   padding: 20px;
   background: #fff;
   font-family: 'Roboto', sans-serif;
-  border: 5px solid #fffb00;
+  border: var(--border-width) solid #fffb00;
   border-radius: 5px;
+  margin-top: 40px;
 }
 
 .mainMenu ul {

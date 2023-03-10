@@ -1,4 +1,6 @@
+@import "../../root.css";
+
 .ingredients {
     padding: 20px;
-    border: 5px solid rgb(254, 0, 199);
+    border: var(--border-width) solid rgb(254, 0, 199);
 }

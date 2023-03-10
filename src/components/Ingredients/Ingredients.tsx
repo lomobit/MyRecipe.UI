@@ -112,7 +112,7 @@ const Ingredients = () => {
     return (
         <div className="ingredients">
             <h1>Ингредиенты</h1>
-            <Stack direction="row-reverse" spacing={1} style={{ borderStyle: 'solid', border: '2px' }}>
+            <Stack direction="row-reverse" spacing={1}>
                 <Button
                     variant="outlined"
                     startIcon={<EditIcon />}

@@ -1,7 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
-import { DataGrid, GridRowSelectionModel } from '@mui/x-data-grid';
+import { DataGrid, GridPaginationModel, GridRowSelectionModel } from '@mui/x-data-grid';
 import {
     Button,
     Dialog,
@@ -9,8 +9,6 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    IconButton,
-    LinearProgress,
     Stack,
     TextField
 } from '@mui/material';
@@ -42,7 +40,7 @@ const Ingredients = () => {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const [paginationModel, setPaginationModel] = useState({
         page: 0,
-        pageSize: 5,
+        pageSize: 10,
     });
 
     useEffect(() => {
@@ -108,6 +106,34 @@ const Ingredients = () => {
         setDescriptionNewIngredient(event.target.value);
     }
 
+    const handleRowSelectionModelChange = (newRowSelectionModel: GridRowSelectionModel) => {
+        if (newRowSelectionModel.length > 0) {
+            setDisableEditButton(false);
+        }
+        else {
+            setDisableEditButton(true);
+        }
+
+        setRowSelectionModel(newRowSelectionModel);
+    }
+
+    const handlePaginationModelChange = (newPaginationModel: GridPaginationModel) => {
+        setPaginationModel(newPaginationModel);
+    }
+
+    const getIngredientsGridHeightByPageSize = () => {
+        switch (paginationModel.pageSize) {
+            case 10:
+                return 454;
+            case 20:
+                return 814;
+            case 30:
+                return 1174;
+            default:
+                return 454;
+        }
+    }
+
     return (
         <div className="ingredients">
             <h1>Ингредиенты</h1>
@@ -163,27 +189,26 @@ const Ingredients = () => {
                     <Button onClick={handleAddInAddButtonDialog}>Добавить</Button>
                 </DialogActions>
             </Dialog>
-            <div style={{ marginTop: 20, height: 300, width: '100%' }}>
+            <div
+                className="ingredientsGrid"
+                style={{height: getIngredientsGridHeightByPageSize()}}>
                 <DataGrid
                     paginationMode="server"
-                    pageSizeOptions={[5]}
                     rowCount={ingredientsCount}
                     loading={loading}
-                    paginationModel={paginationModel}
                     keepNonExistentRowsSelected
                     density='compact'
                     rows={ingredientsSlice}
                     columns={columns}
-                    disableColumnMenu
                     rowSelectionModel={rowSelectionModel}
-                    onPaginationModelChange={setPaginationModel}
-                    onRowSelectionModelChange={(newRowSelectionModel) => {
-                        setRowSelectionModel(newRowSelectionModel);
-                    }}
+                    onRowSelectionModelChange={handleRowSelectionModelChange}
+                    paginationModel={paginationModel}
+                    onPaginationModelChange={handlePaginationModelChange}
+                    disableColumnMenu={true}
+                    hideFooterSelectedRowCount={true}
                     slots={{
                         pagination: MuiGridPagination,
                         noRowsOverlay: NoRowsGridOverlay,
-                        // loadingOverlay: LinearProgress,
                     }}
                 />
             </div>

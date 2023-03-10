@@ -4,3 +4,8 @@
     padding: 20px;
     border: var(--border-width) solid rgb(254, 0, 199);
 }
+
+.ingredientsGrid {
+    margin-top: 20px;
+    width: 100%;
+}

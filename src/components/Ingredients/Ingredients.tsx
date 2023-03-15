@@ -8,7 +8,6 @@ import {
 } from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { getIngredientsAsync, selectIngredientsCount, selectIngredientsSlice, selectItemsPerPage } from './ingredientSlice';
 import { columns } from './ingredientConstants';
 import NoRowsGridOverlay from '../NoRowsGridOverlay/NoRowsGridOverlay';
 import MuiGridPagination from '../MuiGridPagination/MuiGridPagination';
@@ -18,6 +17,8 @@ import { GetIngredientsAsyncQuery } from '../../contracts/ingredients/GetIngredi
 import DialogAddIngredient from './DialogAddIngredient';
 import DialogEditIngredient from './DialogEditIngrediant';
 import { Ingredient } from '../../contracts/ingredients/IngredientDto';
+import { selectIngredientsCount, selectIngredientsSlice, selectItemsPerPage } from '../../app/ingredients/slice';
+import { getIngredientsAsync } from '../../app/ingredients/thunks';
 
 
 

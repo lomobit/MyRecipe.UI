@@ -9,9 +9,9 @@ import {
 } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 import { useAppDispatch } from '../../app/hooks';
+import { addIngredientAsync, getIngredientsAsync } from '../../app/ingredients/thunks';
 import { GetIngredientsAsyncQuery } from '../../contracts/ingredients/GetIngredientsAsyncQuery';
 import { Ingredient } from '../../contracts/ingredients/IngredientDto';
-import { addIngredientAsync, getIngredientsAsync } from './ingredientSlice';
 
 export declare interface DialogAddIngrediantProps {
     open: boolean;

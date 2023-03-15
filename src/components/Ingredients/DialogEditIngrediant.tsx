@@ -10,9 +10,9 @@ import {
 import { GridRowSelectionModel } from '@mui/x-data-grid';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../app/hooks';
+import { editIngredientAsync, getIngredientsAsync } from '../../app/ingredients/thunks';
 import { GetIngredientsAsyncQuery } from '../../contracts/ingredients/GetIngredientsAsyncQuery';
 import { Ingredient } from '../../contracts/ingredients/IngredientDto';
-import { editIngredientAsync, getIngredientsAsync } from './ingredientSlice';
 
 export declare interface DialogEditIngrediantProps {
     open: boolean;

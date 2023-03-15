@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 
-export declare interface DialogAddIngrediantProps {
+export declare interface DialogAddIngredientProps {
     open: boolean;
     setOpen: (open: boolean) => void;
 
@@ -22,7 +22,7 @@ export declare interface DialogAddIngrediantProps {
     onAddIngredientClick: () => void;
 }
 
-const DialogAddIngredient = (props: DialogAddIngrediantProps) => {
+const DialogAddIngredient = (props: DialogAddIngredientProps) => {
     const [isValidationNameError, setIsValidationNameError] = useState(false);
     const [helperTextErrorForName, setHelperTextErrorForName] = useState("");
 

@@ -1,8 +1,8 @@
 import { ActionReducerMapBuilder } from "@reduxjs/toolkit";
-import { IngredientState } from "../../contracts/ingredients/IIngredientState";
+import { IIngredientState } from "../../contracts/ingredients/interface/IIngredientState";
 import { addIngredientAsync, editIngredientAsync, getIngredientsAsync } from "./thunks";
 
-export const addCasesFor_getIngredientsAsync = (builder: ActionReducerMapBuilder<IngredientState>) => {
+export const addCasesFor_getIngredientsAsync = (builder: ActionReducerMapBuilder<IIngredientState>) => {
     builder
         .addCase(getIngredientsAsync.pending, (state) => {
             state.getIngredientsStatus = 'loading';
@@ -17,7 +17,7 @@ export const addCasesFor_getIngredientsAsync = (builder: ActionReducerMapBuilder
         });
 }
 
-export const addCasesFor_addIngredientAsync = (builder: ActionReducerMapBuilder<IngredientState>) => {
+export const addCasesFor_addIngredientAsync = (builder: ActionReducerMapBuilder<IIngredientState>) => {
     builder
         .addCase(addIngredientAsync.pending, (state) => {
             state.addIngredientIdStatus = 'loading';
@@ -30,7 +30,7 @@ export const addCasesFor_addIngredientAsync = (builder: ActionReducerMapBuilder<
         });
 }
 
-export const addCasesFor_editIngredientAsync = (builder: ActionReducerMapBuilder<IngredientState>) => {
+export const addCasesFor_editIngredientAsync = (builder: ActionReducerMapBuilder<IIngredientState>) => {
     builder
         .addCase(editIngredientAsync.pending, (state) => {
             state.editIngredientIdStatus = 'loading';

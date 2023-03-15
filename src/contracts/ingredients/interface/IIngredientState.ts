@@ -1,7 +1,7 @@
-import { Ingredient } from "./IngredientDto";
+import { IngredientDto } from "../IngredientDto";
 
-export interface IngredientState {
-    ingredientsSlice: Array<Ingredient>;
+export interface IIngredientState {
+    ingredientsSlice: Array<IngredientDto>;
     ingredientsCount: number;
     ingredientsItemsPerPage: number;
     getIngredientsStatus: 'idle' | 'loading' | 'failed';

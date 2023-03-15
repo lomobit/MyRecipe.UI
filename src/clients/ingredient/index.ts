@@ -1,4 +1,4 @@
-import { Ingredient } from "../../contracts/ingredients/IngredientDto";
+import { IngredientDto } from "../../contracts/ingredients/IngredientDto";
 
 const apiUri = `https://localhost:32768/api/v1`;
 const moduleName = "Ingredient";
@@ -23,7 +23,7 @@ export async function GetIngredients(pageNumber: number, pageSize: number) {
         .catch(showError);
 }
 
-export async function AddIngredient(ingredient: Ingredient) {
+export async function AddIngredient(ingredient: IngredientDto) {
     let bodyQuery = {
         name: ingredient.name,
         description: ingredient.description,
@@ -42,7 +42,7 @@ export async function AddIngredient(ingredient: Ingredient) {
         .catch(showError);
 }
 
-export async function EditIngredient(ingredient: Ingredient) {
+export async function EditIngredient(ingredient: IngredientDto) {
     let bodyQuery = {
         id: ingredient.id,
         name: ingredient.name,

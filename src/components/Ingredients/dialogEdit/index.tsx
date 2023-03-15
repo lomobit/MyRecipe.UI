@@ -10,7 +10,7 @@ import {
 import { GridRowSelectionModel } from '@mui/x-data-grid';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { GetIngredientsAsyncQuery } from '../../../contracts/ingredients/GetIngredientsAsyncQuery';
-import { Ingredient } from '../../../contracts/ingredients/IngredientDto';
+import { IngredientDto } from '../../../contracts/ingredients/IngredientDto';
 import { useAppDispatch } from '../../../store/hooks';
 import { editIngredientAsync, getIngredientsAsync } from '../../../store/ingredients/thunks';
 
@@ -57,7 +57,7 @@ const DialogEditIngredient = (props: DialogEditIngrediantProps) => {
 
         closeAndClearValidationFieldsInEditButtonDialog();
 
-        dispatch(editIngredientAsync(new Ingredient(props.editedIngredientId, nameEditedIngredient, descriptionEditedIngredient)))
+        dispatch(editIngredientAsync(new IngredientDto(props.editedIngredientId, nameEditedIngredient, descriptionEditedIngredient)))
             .then(() => dispatch(getIngredientsAsync(new GetIngredientsAsyncQuery(props.pageNumber, props.pageSize))));
 
         props.handleRowSelectionModelChange([]);

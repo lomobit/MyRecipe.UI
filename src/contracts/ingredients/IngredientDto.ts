@@ -1,4 +1,4 @@
-export class Ingredient {
+export class IngredientDto {
     id: number;
     name: string;
     description?: string;

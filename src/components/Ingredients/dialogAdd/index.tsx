@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
 import { GetIngredientsAsyncQuery } from '../../../contracts/ingredients/GetIngredientsAsyncQuery';
-import { Ingredient } from '../../../contracts/ingredients/IngredientDto';
+import { IngredientDto } from '../../../contracts/ingredients/IngredientDto';
 import { useAppDispatch } from '../../../store/hooks';
 import { addIngredientAsync, getIngredientsAsync } from '../../../store/ingredients/thunks';
 
@@ -47,7 +47,7 @@ const DialogAddIngredient = (props: DialogAddIngrediantProps) => {
 
         closeAndClearValidationFieldsInAddButtonDialog();
 
-        dispatch(addIngredientAsync(new Ingredient(-1, nameNewIngredient, descriptionNewIngredient)))
+        dispatch(addIngredientAsync(new IngredientDto(-1, nameNewIngredient, descriptionNewIngredient)))
             .then(() => dispatch(getIngredientsAsync(new GetIngredientsAsyncQuery(props.pageNumber, props.pageSize))));
 
         clearFieldsInAddButtonDialog();

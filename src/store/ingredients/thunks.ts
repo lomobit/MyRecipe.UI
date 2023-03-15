@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AddIngredient, EditIngredient, GetIngredients } from "../../clients/ingredient";
 import { GetIngredientsAsyncQuery } from "../../contracts/ingredients/GetIngredientsAsyncQuery";
-import { Ingredient } from "../../contracts/ingredients/IngredientDto";
+import { IngredientDto } from "../../contracts/ingredients/IngredientDto";
 
 export const getIngredientsAsync = createAsyncThunk(
     'ingredient/get',
@@ -13,7 +13,7 @@ export const getIngredientsAsync = createAsyncThunk(
 
 export const addIngredientAsync = createAsyncThunk(
     'ingredient/add',
-    async (ingredient: Ingredient) => {
+    async (ingredient: IngredientDto) => {
         const response = await AddIngredient(ingredient);
         return response.data;
     }
@@ -21,7 +21,7 @@ export const addIngredientAsync = createAsyncThunk(
 
 export const editIngredientAsync = createAsyncThunk(
     'ingredient/edit',
-    async (ingredient: Ingredient) => {
+    async (ingredient: IngredientDto) => {
         const response = await EditIngredient(ingredient);
         return response.data;
     }

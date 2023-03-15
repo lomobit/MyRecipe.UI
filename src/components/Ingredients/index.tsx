@@ -16,7 +16,7 @@ import './index.css';
 import { GetIngredientsAsyncQuery } from '../../contracts/ingredients/GetIngredientsAsyncQuery';
 import DialogAddIngredient from './dialogAdd';
 import DialogEditIngredient from './dialogEdit';
-import { Ingredient } from '../../contracts/ingredients/IngredientDto';
+import { IngredientDto } from '../../contracts/ingredients/IngredientDto';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectIngredientsCount, selectIngredientsSlice, selectItemsPerPage } from '../../store/ingredients/reducers';
 import { getIngredientsAsync } from '../../store/ingredients/thunks';
@@ -74,7 +74,7 @@ const Ingredients = () => {
     const handleRowSelectionModelChange = (newRowSelectionModel: GridRowSelectionModel) => {
         if (newRowSelectionModel.length > 0) {
             let newEditedIngredientId: number = newRowSelectionModel[0] as number;
-            let newEditedIngredient: Ingredient = ingredientsSlice.filter(x => x.id === newEditedIngredientId)[0];
+            let newEditedIngredient: IngredientDto = ingredientsSlice.filter(x => x.id === newEditedIngredientId)[0];
 
             setEditedIngredientId(newEditedIngredientId);
             setEditedIngredientName(newEditedIngredient.name);

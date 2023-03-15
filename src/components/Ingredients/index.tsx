@@ -7,7 +7,7 @@ import {
     Stack
 } from '@mui/material';
 
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+
 import { ingredientsMuiDataGridColumns } from './constants';
 import NoRowsMuiDataGridOverlay from '../muiDataGridSlots/noRowsOverlay';
 import MuiDataGridPagination from '../muiDataGridSlots/pagination';
@@ -17,8 +17,9 @@ import { GetIngredientsAsyncQuery } from '../../contracts/ingredients/GetIngredi
 import DialogAddIngredient from './DialogAddIngredient';
 import DialogEditIngredient from './DialogEditIngrediant';
 import { Ingredient } from '../../contracts/ingredients/IngredientDto';
-import { selectIngredientsCount, selectIngredientsSlice, selectItemsPerPage } from '../../app/ingredients/reducers';
-import { getIngredientsAsync } from '../../app/ingredients/thunks';
+import { useAppDispatch, useAppSelector } from '../../store/hooks';
+import { selectIngredientsCount, selectIngredientsSlice, selectItemsPerPage } from '../../store/ingredients/reducers';
+import { getIngredientsAsync } from '../../store/ingredients/thunks';
 
 
 

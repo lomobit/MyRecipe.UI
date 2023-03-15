@@ -7,8 +7,8 @@ import {
     useGridSelector
 } from '@mui/x-data-grid';
 import { ChangeEvent } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { selectIngredientsCount, selectItemsPerPage, setItemsPerPage } from '../../../app/ingredients/reducers';
+import { useAppDispatch, useAppSelector } from '../../../store/hooks';
+import { selectIngredientsCount, selectItemsPerPage, setItemsPerPage } from '../../../store/ingredients/reducers';
 
 import './index.css';
 

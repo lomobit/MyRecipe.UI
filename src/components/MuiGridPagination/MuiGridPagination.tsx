@@ -8,7 +8,7 @@ import {
 } from '@mui/x-data-grid';
 import { ChangeEvent } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectIngredientsCount, selectItemsPerPage, setItemsPerPage } from '../../app/ingredients/slice';
+import { selectIngredientsCount, selectItemsPerPage, setItemsPerPage } from '../../app/ingredients/reducers';
 
 import './MuiGridPagination.css';
 

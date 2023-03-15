@@ -17,7 +17,7 @@ import { GetIngredientsAsyncQuery } from '../../contracts/ingredients/GetIngredi
 import DialogAddIngredient from './DialogAddIngredient';
 import DialogEditIngredient from './DialogEditIngrediant';
 import { Ingredient } from '../../contracts/ingredients/IngredientDto';
-import { selectIngredientsCount, selectIngredientsSlice, selectItemsPerPage } from '../../app/ingredients/slice';
+import { selectIngredientsCount, selectIngredientsSlice, selectItemsPerPage } from '../../app/ingredients/reducers';
 import { getIngredientsAsync } from '../../app/ingredients/thunks';
 
 

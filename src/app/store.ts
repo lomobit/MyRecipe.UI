@@ -1,10 +1,10 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import reduxLogger from 'redux-logger';
-import ingredientSlice from './ingredients/slice';
+import ingredientReducer from './ingredients/reducers';
 
 export const store = configureStore({
     reducer: {
-        ingredient: ingredientSlice,
+        ingredient: ingredientReducer,
     },
     devTools: true,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware()

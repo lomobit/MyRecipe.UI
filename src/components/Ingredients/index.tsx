@@ -14,7 +14,8 @@ import DialogAddIngredient from './dialogAdd';
 import DialogEditIngredient from './dialogEdit';
 import { IngredientDto } from '../../contracts/ingredients/IngredientDto';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { selectIngredientsCount, selectIngredientsSlice, selectItemsPerPage } from '../../store/ingredients/reducers';
+import { selectIngredientsCount, selectIngredientsSlice } from '../../store/ingredients/reducers';
+import { selectItemsPerPage } from '../../store/grid/reducers';
 import { addIngredientAsync, editIngredientAsync, getIngredientsAsync } from '../../store/ingredients/thunks';
 
 const Ingredients = () => {

@@ -26,13 +26,13 @@ const DialogAddIngredient = (props: DialogAddIngredientProps) => {
     const [isValidationNameError, setIsValidationNameError] = useState(false);
     const [helperTextErrorForName, setHelperTextErrorForName] = useState("");
 
-    const handleCloseAddButtonDialog = () => {
+    const handleCloseDialog = () => {
         props.setOpen(false);
     };
 
     const handleCancelButtonClick = () => {
-        closeAndClearValidationFieldsInAddButtonDialog();
-        clearFieldsInAddButtonDialog();
+        closeDialogAndDisableValidationError();
+        clearFields();
     };
 
     const handleAddButtonClick = () => {
@@ -43,9 +43,9 @@ const DialogAddIngredient = (props: DialogAddIngredientProps) => {
             return;
         }
 
-        closeAndClearValidationFieldsInAddButtonDialog();
+        closeDialogAndDisableValidationError();
         props.onAddIngredientClick();
-        clearFieldsInAddButtonDialog();
+        clearFields();
     };
 
     const onChangeIngredientName = (event: ChangeEvent<HTMLInputElement>) => {
@@ -56,19 +56,20 @@ const DialogAddIngredient = (props: DialogAddIngredientProps) => {
         props.setDescriptionIngredient(event.target.value);
     }
 
-    const closeAndClearValidationFieldsInAddButtonDialog = () => {
+    const closeDialogAndDisableValidationError = () => {
         props.setOpen(false);
+
         setIsValidationNameError(false);
         setHelperTextErrorForName("");
     }
 
-    const clearFieldsInAddButtonDialog = () => {
+    const clearFields = () => {
         props.setNameIngredient("");
         props.setDescriptionIngredient("");
     }
 
     return (
-        <Dialog open={props.open} onClose={handleCloseAddButtonDialog}>
+        <Dialog open={props.open} onClose={handleCloseDialog}>
             <DialogTitle>Добавить ингредиент</DialogTitle>
             <DialogContent>
                 <DialogContentText>

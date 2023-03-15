@@ -7,83 +7,69 @@ import {
     DialogTitle,
     TextField
 } from '@mui/material';
-import { GridRowSelectionModel } from '@mui/x-data-grid';
-import { ChangeEvent, useEffect, useState } from 'react';
-import { GetIngredientsAsyncQuery } from '../../../contracts/ingredients/GetIngredientsAsyncQuery';
-import { IngredientDto } from '../../../contracts/ingredients/IngredientDto';
-import { useAppDispatch } from '../../../store/hooks';
-import { editIngredientAsync, getIngredientsAsync } from '../../../store/ingredients/thunks';
+import { ChangeEvent, useState } from 'react';
 
 export declare interface DialogEditIngrediantProps {
     open: boolean;
-    pageNumber: number;
-    pageSize: number;
-    editedIngredientId: number;
-    editedIngredientName: string;
-    editedIngredientDescription: string;
     setOpen: (open: boolean) => void;
-    handleRowSelectionModelChange: (newRowSelectionModel: GridRowSelectionModel) => void;
+
+    nameIngredient: string;
+    setNameIngredient: (name: string) => void;
+
+    descriptionIngredient: string;
+    setDescriptionIngredient: (description: string) => void;
+
+    onEditIngredientClick: () => void;
 }
 
 const DialogEditIngredient = (props: DialogEditIngrediantProps) => {
-    const dispatch = useAppDispatch();
+    const [isValidationNameError, setIsValidationNameError] = useState(false);
+    const [helperTextErrorForName, setHelperTextErrorForName] = useState("");
 
-    const [nameEditedIngredient, setNameEditedIngredient] = useState("");
-    const [errorNameEditedIngredient, setErrorNameEditedIngredient] = useState(false);
-    const [helperTextNameEditedIngredient, setHelperTextNameEditedIngredient] = useState("");
-    const [descriptionEditedIngredient, setDescriptionEditedIngredient] = useState("");
-
-    useEffect(() => {
-        setNameEditedIngredient(props.editedIngredientName);
-        setDescriptionEditedIngredient(props.editedIngredientDescription);
-    }, [props.editedIngredientName, props.editedIngredientDescription]);
-
-    const handleCloseEditButtonDialog = () => {
+    const handleCloseDialog = () => {
         props.setOpen(false);
     };
 
-    const handleCancelInEditButtonDialog = () => {
-        closeAndClearValidationFieldsInEditButtonDialog();
-        clearFieldsInEditButtonDialog();
+    const handleCancel = () => {
+        closeDialogAndDisableValidationError();
+        clearFields();
     };
 
-    const handleEditInEditButtonDialog = async () => {
-        if (nameEditedIngredient === undefined || !nameEditedIngredient) {
-            setErrorNameEditedIngredient(true);
-            setHelperTextNameEditedIngredient("Необходимо ввести имя");
+    const handleEdit = async () => {
+        if (props.nameIngredient === undefined || !props.nameIngredient) {
+            setIsValidationNameError(true);
+            setHelperTextErrorForName("Необходимо ввести имя");
 
             return;
         }
 
-        closeAndClearValidationFieldsInEditButtonDialog();
-
-        dispatch(editIngredientAsync(new IngredientDto(nameEditedIngredient, descriptionEditedIngredient, props.editedIngredientId)))
-            .then(() => dispatch(getIngredientsAsync(new GetIngredientsAsyncQuery(props.pageNumber, props.pageSize))));
-
-        props.handleRowSelectionModelChange([]);
+        closeDialogAndDisableValidationError();
+        props.onEditIngredientClick();
+        clearFields();
     };
 
-    const closeAndClearValidationFieldsInEditButtonDialog = () => {
+    const closeDialogAndDisableValidationError = () => {
         props.setOpen(false);
-        setErrorNameEditedIngredient(false);
-        setHelperTextNameEditedIngredient("");
+
+        setIsValidationNameError(false);
+        setHelperTextErrorForName("");
     }
 
-    const clearFieldsInEditButtonDialog = () => {
-        setNameEditedIngredient(props.editedIngredientName);
-        setDescriptionEditedIngredient(props.editedIngredientDescription);
+    const clearFields = () => {
+        props.setNameIngredient("");
+        props.setDescriptionIngredient("");
     }
 
-    const changeEditedIngredientName = (event: ChangeEvent<HTMLInputElement>) => {
-        setNameEditedIngredient(event.target.value);
+    const onChangeIngredientName = (event: ChangeEvent<HTMLInputElement>) => {
+        props.setNameIngredient(event.target.value);
     }
 
-    const changeEditedIngredientDescription = (event: ChangeEvent<HTMLInputElement>) => {
-        setDescriptionEditedIngredient(event.target.value);
+    const onChangeIngredientDescription = (event: ChangeEvent<HTMLInputElement>) => {
+        props.setDescriptionIngredient(event.target.value);
     }
 
     return (
-        <Dialog open={props.open} onClose={handleCloseEditButtonDialog}>
+        <Dialog open={props.open} onClose={handleCloseDialog}>
             <DialogTitle>Изменить ингредиент</DialogTitle>
             <DialogContent>
                 <DialogContentText>
@@ -94,29 +80,29 @@ const DialogEditIngredient = (props: DialogEditIngrediantProps) => {
                     margin="dense"
                     id="Name"
                     label="Название"
-                    value={nameEditedIngredient}
+                    value={props.nameIngredient}
                     variant="outlined"
                     fullWidth
                     required
-                    onChange={changeEditedIngredientName}
-                    error={errorNameEditedIngredient}
-                    helperText={helperTextNameEditedIngredient}
+                    onChange={onChangeIngredientName}
+                    error={isValidationNameError}
+                    helperText={helperTextErrorForName}
                 />
                 <TextField
                     autoFocus
                     margin="dense"
                     id="Description"
                     label="Описание"
-                    value={descriptionEditedIngredient}
+                    value={props.descriptionIngredient}
                     variant="outlined"
                     fullWidth
                     multiline
-                    onChange={changeEditedIngredientDescription}
+                    onChange={onChangeIngredientDescription}
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleCancelInEditButtonDialog}>Отмена</Button>
-                <Button onClick={handleEditInEditButtonDialog}>Изменить</Button>
+                <Button onClick={handleCancel}>Отмена</Button>
+                <Button onClick={handleEdit}>Изменить</Button>
             </DialogActions>
         </Dialog>
     );

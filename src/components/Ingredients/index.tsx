@@ -15,7 +15,7 @@ import DialogEditIngredient from './dialogEdit';
 import { IngredientDto } from '../../contracts/ingredients/IngredientDto';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectIngredientsCount, selectIngredientsSlice, selectItemsPerPage } from '../../store/ingredients/reducers';
-import { addIngredientAsync, getIngredientsAsync } from '../../store/ingredients/thunks';
+import { addIngredientAsync, editIngredientAsync, getIngredientsAsync } from '../../store/ingredients/thunks';
 
 const Ingredients = () => {
     const ingredientsSlice = useAppSelector(selectIngredientsSlice);
@@ -30,9 +30,9 @@ const Ingredients = () => {
 
     // dialogEdit
     const [openEditDialog, setOpenEditDialog] = useState(false);
-    const [editedIngredientId, setEditedIngredientId] = useState(-1);
-    const [editedIngredientName, setEditedIngredientName] = useState("");
-    const [editedIngredientDescription, setEditedIngredientDescription] = useState("");
+    const [idIngredientEditDialog, setIdIngredientEditDialog] = useState(-1);
+    const [nameIngredientEditDialog, setNameIngredientEditDialog] = useState("");
+    const [descriptionIngredientEditDialog, setDescriptionIngredientEditDialog] = useState("");
 
     // dataGrid
     const [disableEditButton, setDisableEditButton] = useState(true);
@@ -68,7 +68,7 @@ const Ingredients = () => {
 
     const handleClickAddButton = () => {
         setOpenAddDialog(true);
-    };
+    }
 
     const handleClickEditButton = () => {
         setOpenEditDialog(true);
@@ -79,21 +79,28 @@ const Ingredients = () => {
             .then(() => updateIngredients());
     }
 
+    const onEditIngredientClick = () => {
+        dispatch(editIngredientAsync(new IngredientDto(nameIngredientEditDialog, descriptionIngredientEditDialog, idIngredientEditDialog)))
+            .then(() => updateIngredients());
+        
+        handleRowSelectionModelChange([]);
+    }
+
     const handleRowSelectionModelChange = (newRowSelectionModel: GridRowSelectionModel) => {
         if (newRowSelectionModel.length > 0) {
             let newEditedIngredientId: number = newRowSelectionModel[0] as number;
             let newEditedIngredient: IngredientDto = ingredientsSlice.filter(x => x.id === newEditedIngredientId)[0];
 
-            setEditedIngredientId(newEditedIngredientId);
-            setEditedIngredientName(newEditedIngredient.name);
-            setEditedIngredientDescription(newEditedIngredient.description ?? "");
+            setIdIngredientEditDialog(newEditedIngredientId);
+            setNameIngredientEditDialog(newEditedIngredient.name);
+            setDescriptionIngredientEditDialog(newEditedIngredient.description ?? "");
 
             setDisableEditButton(false);
         }
         else {
-            setEditedIngredientId(-1);
-            setEditedIngredientName("");
-            setEditedIngredientDescription("");
+            setIdIngredientEditDialog(-1);
+            setNameIngredientEditDialog("");
+            setDescriptionIngredientEditDialog("");
 
             setDisableEditButton(true);
         }
@@ -144,31 +151,30 @@ const Ingredients = () => {
                 onAddIngredientClick={onAddIngredientClick}
             />
             <DialogEditIngredient
-                editedIngredientId={editedIngredientId}
                 open={openEditDialog}
                 setOpen={setOpenEditDialog}
-                pageNumber={paginationModel.page + 1}
-                pageSize={paginationModel.pageSize}
-                editedIngredientName={editedIngredientName}
-                editedIngredientDescription={editedIngredientDescription}
-                handleRowSelectionModelChange={handleRowSelectionModelChange}
+                nameIngredient={nameIngredientEditDialog}
+                setNameIngredient={setNameIngredientEditDialog}
+                descriptionIngredient={descriptionIngredientEditDialog}
+                setDescriptionIngredient={setDescriptionIngredientEditDialog}
+                onEditIngredientClick={onEditIngredientClick}
             />
             <div
                 className="ingredientsGrid"
                 style={{height: getIngredientsGridHeightByPageSize()}}>
                 <DataGrid
+                    density='compact'
                     paginationMode="server"
                     rowCount={ingredientsCount}
                     loading={loading}
-                    density='compact'
                     rows={ingredientsSlice}
                     columns={ingredientsMuiDataGridColumns}
                     rowSelectionModel={rowSelectionModel}
                     onRowSelectionModelChange={handleRowSelectionModelChange}
                     paginationModel={paginationModel}
                     onPaginationModelChange={setPaginationModel}
-                    disableColumnMenu={true}
-                    hideFooterSelectedRowCount={true}
+                    disableColumnMenu
+                    hideFooterSelectedRowCount
                     slots={{
                         pagination: MuiDataGridPagination,
                         noRowsOverlay: NoRowsMuiDataGridOverlay,

@@ -3,23 +3,21 @@ import Pagination from '@mui/material/Pagination';
 import {
     gridPageSizeSelector,
     gridPaginationModelSelector,
+    gridRowCountSelector,
     useGridApiContext,
     useGridSelector
 } from '@mui/x-data-grid';
-import { ChangeEvent } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { selectIngredientsCount, selectItemsPerPage, setItemsPerPage } from '../../../store/ingredients/reducers';
+import { ChangeEvent, useState } from 'react';
 
 import './index.css';
 
 const MuiDataGridPagination = () => {
-    const ingredientsCount = useAppSelector(selectIngredientsCount);
-    const itemsPerPage = useAppSelector(selectItemsPerPage);
-    const dispatch = useAppDispatch();
-
     const apiRef = useGridApiContext();
     const gridPaginationModel = useGridSelector(apiRef, gridPaginationModelSelector);
     const gridPageSize = useGridSelector(apiRef, gridPageSizeSelector);
+    const gridRowCount = useGridSelector(apiRef, gridRowCountSelector);
+
+    const [itemsPerPage, setItemsPerPage] = useState(10);
     
     const handlePaginationChange = (event: ChangeEvent<unknown>, value: number) => {
         apiRef.current.setPage(value - 1);
@@ -29,14 +27,14 @@ const MuiDataGridPagination = () => {
         let newItemsPerPage: number = event.target.value as number;
 
         apiRef.current.setPageSize(newItemsPerPage);
-        dispatch(setItemsPerPage(newItemsPerPage));
+        setItemsPerPage(newItemsPerPage);
     }
 
     return (
         <Stack direction="row-reverse" spacing={1}>
             <Pagination
                 color="primary"
-                count={Math.ceil(ingredientsCount / gridPageSize)}
+                count={Math.ceil(gridRowCount / gridPageSize)}
                 page={gridPaginationModel.page + 1}
                 onChange={handlePaginationChange}
                 className="paginationPanel"

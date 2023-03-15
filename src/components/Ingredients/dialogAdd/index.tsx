@@ -8,68 +8,63 @@ import {
     TextField
 } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
-import { GetIngredientsAsyncQuery } from '../../../contracts/ingredients/GetIngredientsAsyncQuery';
-import { IngredientDto } from '../../../contracts/ingredients/IngredientDto';
-import { useAppDispatch } from '../../../store/hooks';
-import { addIngredientAsync, getIngredientsAsync } from '../../../store/ingredients/thunks';
 
 export declare interface DialogAddIngrediantProps {
     open: boolean;
-    pageNumber: number;
-    pageSize: number;
     setOpen: (open: boolean) => void;
+
+    nameIngredient: string;
+    setNameIngredient: (name: string) => void;
+
+    descriptionIngredient: string;
+    setDescriptionIngredient: (description: string) => void;
+
+    onAddIngredientClick: () => void;
 }
 
 const DialogAddIngredient = (props: DialogAddIngrediantProps) => {
-    const dispatch = useAppDispatch();
-
-    const [nameNewIngredient, setNameNewIngredient] = useState("");
-    const [errorNameNewIngredient, setErrorNameNewIngredient] = useState(false);
-    const [helperTextNameNewIngredient, setHelperTextNameNewIngredient] = useState("");
-    const [descriptionNewIngredient, setDescriptionNewIngredient] = useState("");
+    const [isValidationNameError, setIsValidationNameError] = useState(false);
+    const [helperTextErrorForName, setHelperTextErrorForName] = useState("");
 
     const handleCloseAddButtonDialog = () => {
         props.setOpen(false);
     };
 
-    const handleCancelInAddButtonDialog = () => {
+    const handleCancelButtonClick = () => {
         closeAndClearValidationFieldsInAddButtonDialog();
         clearFieldsInAddButtonDialog();
     };
 
-    const handleAddInAddButtonDialog = () => {
-        if (nameNewIngredient === undefined || !nameNewIngredient) {
-            setErrorNameNewIngredient(true);
-            setHelperTextNameNewIngredient("Необходимо ввести имя");
+    const handleAddButtonClick = () => {
+        if (props.nameIngredient === undefined || !props.nameIngredient) {
+            setIsValidationNameError(true);
+            setHelperTextErrorForName("Необходимо ввести имя");
 
             return;
         }
 
         closeAndClearValidationFieldsInAddButtonDialog();
-
-        dispatch(addIngredientAsync(new IngredientDto(-1, nameNewIngredient, descriptionNewIngredient)))
-            .then(() => dispatch(getIngredientsAsync(new GetIngredientsAsyncQuery(props.pageNumber, props.pageSize))));
-
+        props.onAddIngredientClick();
         clearFieldsInAddButtonDialog();
     };
 
-    const changeNewIngredientName = (event: ChangeEvent<HTMLInputElement>) => {
-        setNameNewIngredient(event.target.value);
+    const onChangeIngredientName = (event: ChangeEvent<HTMLInputElement>) => {
+        props.setNameIngredient(event.target.value);
     }
 
-    const changeNewIngredientDescription = (event: ChangeEvent<HTMLInputElement>) => {
-        setDescriptionNewIngredient(event.target.value);
+    const onChangeIngredientDescription = (event: ChangeEvent<HTMLInputElement>) => {
+        props.setDescriptionIngredient(event.target.value);
     }
 
     const closeAndClearValidationFieldsInAddButtonDialog = () => {
         props.setOpen(false);
-        setErrorNameNewIngredient(false);
-        setHelperTextNameNewIngredient("");
+        setIsValidationNameError(false);
+        setHelperTextErrorForName("");
     }
 
     const clearFieldsInAddButtonDialog = () => {
-        setNameNewIngredient("");
-        setDescriptionNewIngredient("");
+        props.setNameIngredient("");
+        props.setDescriptionIngredient("");
     }
 
     return (
@@ -84,29 +79,29 @@ const DialogAddIngredient = (props: DialogAddIngrediantProps) => {
                     margin="dense"
                     id="Name"
                     label="Название"
-                    value={nameNewIngredient}
+                    value={props.nameIngredient}
                     variant="outlined"
                     fullWidth
                     required
-                    onChange={changeNewIngredientName}
-                    error={errorNameNewIngredient}
-                    helperText={helperTextNameNewIngredient}
+                    onChange={onChangeIngredientName}
+                    error={isValidationNameError}
+                    helperText={helperTextErrorForName}
                 />
                 <TextField
                     autoFocus
                     margin="dense"
                     id="Description"
                     label="Описание"
-                    value={descriptionNewIngredient}
+                    value={props.descriptionIngredient}
                     variant="outlined"
                     fullWidth
                     multiline
-                    onChange={changeNewIngredientDescription}
+                    onChange={onChangeIngredientDescription}
                 />
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleCancelInAddButtonDialog}>Отмена</Button>
-                <Button onClick={handleAddInAddButtonDialog}>Добавить</Button>
+                <Button onClick={handleCancelButtonClick}>Отмена</Button>
+                <Button onClick={handleAddButtonClick}>Добавить</Button>
             </DialogActions>
         </Dialog>
     );

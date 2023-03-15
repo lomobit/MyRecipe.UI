@@ -1,11 +1,11 @@
 export class IngredientDto {
-    id: number;
     name: string;
     description?: string;
+    id?: number;
 
-    constructor(id: number, name: string, description?: string) {
-        this.id = id;
+    constructor(name: string, description?: string, id?: number) {
         this.name = name;
         this.description = description;
+        this.id = id;
     }
 }

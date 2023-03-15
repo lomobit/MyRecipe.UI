@@ -57,7 +57,7 @@ const DialogEditIngredient = (props: DialogEditIngrediantProps) => {
 
         closeAndClearValidationFieldsInEditButtonDialog();
 
-        dispatch(editIngredientAsync(new IngredientDto(props.editedIngredientId, nameEditedIngredient, descriptionEditedIngredient)))
+        dispatch(editIngredientAsync(new IngredientDto(nameEditedIngredient, descriptionEditedIngredient, props.editedIngredientId)))
             .then(() => dispatch(getIngredientsAsync(new GetIngredientsAsyncQuery(props.pageNumber, props.pageSize))));
 
         props.handleRowSelectionModelChange([]);

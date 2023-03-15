@@ -7,12 +7,12 @@ import {
     useGridSelector
 } from '@mui/x-data-grid';
 import { ChangeEvent } from 'react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { selectIngredientsCount, selectItemsPerPage, setItemsPerPage } from '../../app/ingredients/reducers';
+import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { selectIngredientsCount, selectItemsPerPage, setItemsPerPage } from '../../../app/ingredients/reducers';
 
-import './MuiGridPagination.css';
+import './index.css';
 
-const MuiGridPagination = () => {
+const MuiDataGridPagination = () => {
     const ingredientsCount = useAppSelector(selectIngredientsCount);
     const itemsPerPage = useAppSelector(selectItemsPerPage);
     const dispatch = useAppDispatch();
@@ -60,4 +60,4 @@ const MuiGridPagination = () => {
     );
 }
 
-export default MuiGridPagination;
+export default MuiDataGridPagination;

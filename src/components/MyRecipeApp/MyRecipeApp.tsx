@@ -4,7 +4,7 @@ import Home from '../Home/Home';
 import Schedules from '../Schedules/Schedules';
 import Meals from '../Meals/Meals';
 import Dishes from '../Dishes/Dishes';
-import Ingredients from '../Ingredients/Ingredients';
+import Ingredients from '../ingredients';
 import Settings from '../Settings/Settings';
 import NotFoundPage from '../NotFoundPage/NotFoundPage';
 import './MyRecipeApp.css';

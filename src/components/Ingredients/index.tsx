@@ -8,11 +8,11 @@ import {
 } from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { columns } from './ingredientConstants';
-import NoRowsGridOverlay from '../NoRowsGridOverlay/NoRowsGridOverlay';
-import MuiGridPagination from '../MuiGridPagination/MuiGridPagination';
+import { ingredientsMuiDataGridColumns } from './constants';
+import NoRowsMuiDataGridOverlay from '../muiDataGridSlots/noRowsOverlay';
+import MuiDataGridPagination from '../muiDataGridSlots/pagination';
 
-import './Ingredients.css';
+import './index.css';
 import { GetIngredientsAsyncQuery } from '../../contracts/ingredients/GetIngredientsAsyncQuery';
 import DialogAddIngredient from './DialogAddIngredient';
 import DialogEditIngredient from './DialogEditIngrediant';
@@ -154,7 +154,7 @@ const Ingredients = () => {
                     loading={loading}
                     density='compact'
                     rows={ingredientsSlice}
-                    columns={columns}
+                    columns={ingredientsMuiDataGridColumns}
                     rowSelectionModel={rowSelectionModel}
                     onRowSelectionModelChange={handleRowSelectionModelChange}
                     paginationModel={paginationModel}
@@ -162,8 +162,8 @@ const Ingredients = () => {
                     disableColumnMenu={true}
                     hideFooterSelectedRowCount={true}
                     slots={{
-                        pagination: MuiGridPagination,
-                        noRowsOverlay: NoRowsGridOverlay,
+                        pagination: MuiDataGridPagination,
+                        noRowsOverlay: NoRowsMuiDataGridOverlay,
                     }}
                 />
             </div>

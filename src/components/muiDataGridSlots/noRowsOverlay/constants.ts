@@ -1,6 +1,6 @@
 import { styled } from '@mui/material/styles';
 
-export const StyledGridOverlay = styled('div')(({ theme }) => ({
+export const StyledMuiDataGridOverlay = styled('div')(({ theme }) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',

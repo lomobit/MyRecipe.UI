@@ -1,9 +1,9 @@
 import Box from '@mui/material/Box';
-import { StyledGridOverlay } from './constants';
+import { StyledMuiDataGridOverlay } from './constants';
 
-const NoRowsGridOverlay = () => {
+const NoRowsMuiDataGridOverlay = () => {
     return (
-      <StyledGridOverlay>
+      <StyledMuiDataGridOverlay>
         <svg
           width="120"
           height="100"
@@ -44,8 +44,8 @@ const NoRowsGridOverlay = () => {
           </g>
         </svg>
         <Box sx={{ mt: 1 }}>Нет записей</Box>
-      </StyledGridOverlay>
+      </StyledMuiDataGridOverlay>
     );
 }
 
-export default NoRowsGridOverlay;
+export default NoRowsMuiDataGridOverlay;

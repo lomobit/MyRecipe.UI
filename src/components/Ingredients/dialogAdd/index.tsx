@@ -8,10 +8,10 @@ import {
     TextField
 } from '@mui/material';
 import { ChangeEvent, useState } from 'react';
-import { GetIngredientsAsyncQuery } from '../../contracts/ingredients/GetIngredientsAsyncQuery';
-import { Ingredient } from '../../contracts/ingredients/IngredientDto';
-import { useAppDispatch } from '../../store/hooks';
-import { addIngredientAsync, getIngredientsAsync } from '../../store/ingredients/thunks';
+import { GetIngredientsAsyncQuery } from '../../../contracts/ingredients/GetIngredientsAsyncQuery';
+import { Ingredient } from '../../../contracts/ingredients/IngredientDto';
+import { useAppDispatch } from '../../../store/hooks';
+import { addIngredientAsync, getIngredientsAsync } from '../../../store/ingredients/thunks';
 
 export declare interface DialogAddIngrediantProps {
     open: boolean;

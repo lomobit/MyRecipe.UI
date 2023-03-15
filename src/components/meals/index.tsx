@@ -1,4 +1,4 @@
-import './Meals.css';
+import './index.css';
 
 function Meals() {
     return (

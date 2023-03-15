@@ -14,8 +14,8 @@ import MuiDataGridPagination from '../muiDataGridSlots/pagination';
 
 import './index.css';
 import { GetIngredientsAsyncQuery } from '../../contracts/ingredients/GetIngredientsAsyncQuery';
-import DialogAddIngredient from './DialogAddIngredient';
-import DialogEditIngredient from './DialogEditIngrediant';
+import DialogAddIngredient from './dialogAdd';
+import DialogEditIngredient from './dialogEdit';
 import { Ingredient } from '../../contracts/ingredients/IngredientDto';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { selectIngredientsCount, selectIngredientsSlice, selectItemsPerPage } from '../../store/ingredients/reducers';

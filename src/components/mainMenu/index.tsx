@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import './MainMenu.css';
+import './index.css';
 
 function MainMenu() {
     return (

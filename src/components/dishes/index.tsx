@@ -1,4 +1,4 @@
-import './Dishes.css';
+import './index.css';
 
 function Dishes() {
     return (

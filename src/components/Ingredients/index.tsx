@@ -83,10 +83,10 @@ const Ingredients = () => {
         dispatch(editIngredientAsync(new IngredientDto(nameIngredientEditDialog, descriptionIngredientEditDialog, idIngredientEditDialog)))
             .then(() => updateIngredients());
         
-        handleRowSelectionModelChange([]);
+        onRowSelectionModelChange([]);
     }
 
-    const handleRowSelectionModelChange = (newRowSelectionModel: GridRowSelectionModel) => {
+    const onRowSelectionModelChange = (newRowSelectionModel: GridRowSelectionModel) => {
         if (newRowSelectionModel.length > 0) {
             let newEditedIngredientId: number = newRowSelectionModel[0] as number;
             let newEditedIngredient: IngredientDto = ingredientsSlice.filter(x => x.id === newEditedIngredientId)[0];
@@ -170,7 +170,7 @@ const Ingredients = () => {
                     rows={ingredientsSlice}
                     columns={ingredientsMuiDataGridColumns}
                     rowSelectionModel={rowSelectionModel}
-                    onRowSelectionModelChange={handleRowSelectionModelChange}
+                    onRowSelectionModelChange={onRowSelectionModelChange}
                     paginationModel={paginationModel}
                     onPaginationModelChange={setPaginationModel}
                     disableColumnMenu

@@ -15,6 +15,7 @@ const initialState: IIngredientState = {
     // editIngredientAsync
     editIngredientIdStatus: 'idle',
 
+    // setGridPageSize
     gridPageSize: 10,
 };
 

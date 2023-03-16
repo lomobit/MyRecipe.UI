@@ -7,21 +7,16 @@ import {
     useGridApiContext,
     useGridSelector
 } from '@mui/x-data-grid';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent } from 'react';
 
 import './index.css';
-import {useAppDispatch, useAppSelector} from "../../../store/hooks";
-import {selectItemsPerPage, setItemsPerPage} from "../../../store/grid/reducers";
 
 const MuiDataGridPagination = () => {
-    const itemsPerPage = useAppSelector(selectItemsPerPage);
-    const dispatch = useAppDispatch();
-
     const apiRef = useGridApiContext();
     const gridPaginationModel = useGridSelector(apiRef, gridPaginationModelSelector);
     const gridPageSize = useGridSelector(apiRef, gridPageSizeSelector);
     const gridRowCount = useGridSelector(apiRef, gridRowCountSelector);
-    
+
     const handlePaginationChange = (event: ChangeEvent<unknown>, value: number) => {
         apiRef.current.setPage(value - 1);
     }
@@ -30,7 +25,6 @@ const MuiDataGridPagination = () => {
         let newItemsPerPage: number = event.target.value as number;
 
         apiRef.current.setPageSize(newItemsPerPage);
-        dispatch(setItemsPerPage(newItemsPerPage));
     }
 
     return (
@@ -47,7 +41,7 @@ const MuiDataGridPagination = () => {
                 size="small"
             >
                 <Select
-                    value={itemsPerPage}
+                    value={gridPageSize}
                     onChange={handleSelectItemPerPageChange}
                     displayEmpty
                     inputProps={{ 'aria-label': 'Количество элементов' }}

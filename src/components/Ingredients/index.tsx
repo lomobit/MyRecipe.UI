@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState } from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
-import { DataGrid, GridRowSelectionModel } from '@mui/x-data-grid';
+import {DataGrid, GridPaginationModel, GridRowSelectionModel} from '@mui/x-data-grid';
 import { Button, Stack } from '@mui/material';
 
 import { ingredientsMuiDataGridColumns } from './constants';
@@ -14,14 +14,13 @@ import DialogAddIngredient from './dialogAdd';
 import DialogEditIngredient from './dialogEdit';
 import { IngredientDto } from '../../contracts/ingredients/IngredientDto';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { selectIngredientsCount, selectIngredientsSlice } from '../../store/ingredients/reducers';
-import { selectItemsPerPage } from '../../store/grid/reducers';
+import {selectGridPageSize, selectIngredientsCount, selectIngredientsSlice, setGridPageSize} from '../../store/ingredients/reducers';
 import { addIngredientAsync, editIngredientAsync, getIngredientsAsync } from '../../store/ingredients/thunks';
 
 const Ingredients = () => {
     const ingredientsSlice = useAppSelector(selectIngredientsSlice);
     const ingredientsCount = useAppSelector(selectIngredientsCount);
-    const itemsPerPage = useAppSelector(selectItemsPerPage);
+    const gridPageSize = useAppSelector(selectGridPageSize);
     const dispatch = useAppDispatch();
 
     // dialogAdd
@@ -41,7 +40,7 @@ const Ingredients = () => {
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
     const [paginationModel, setPaginationModel] = useState({
         page: 0,
-        pageSize: itemsPerPage,
+        pageSize: gridPageSize,
     });
 
     useEffect(() => {
@@ -61,7 +60,7 @@ const Ingredients = () => {
 
             setLoading(false);
         })();
-    
+
         return () => {
             active = false;
         };
@@ -122,6 +121,14 @@ const Ingredients = () => {
         }
     }
 
+    const onPaginationModelChange = (model: GridPaginationModel) => {
+        if (model.pageSize !== gridPageSize) {
+            dispatch(setGridPageSize(model.pageSize));
+        }
+
+        setPaginationModel(model);
+    }
+
     return (
         <div className="ingredients">
             <h1>Ингредиенты</h1>
@@ -173,7 +180,7 @@ const Ingredients = () => {
                     rowSelectionModel={rowSelectionModel}
                     onRowSelectionModelChange={onRowSelectionModelChange}
                     paginationModel={paginationModel}
-                    onPaginationModelChange={setPaginationModel}
+                    onPaginationModelChange={onPaginationModelChange}
                     disableColumnMenu
                     hideFooterSelectedRowCount
                     slots={{

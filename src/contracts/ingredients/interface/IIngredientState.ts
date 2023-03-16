@@ -8,4 +8,6 @@ export interface IIngredientState {
     addIngredientIdStatus: 'idle' | 'loading' | 'failed';
     
     editIngredientIdStatus: 'idle' | 'loading' | 'failed';
+
+    gridPageSize: number;
 }

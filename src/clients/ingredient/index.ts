@@ -1,6 +1,6 @@
 import { IngredientDto } from "../../contracts/ingredients/IngredientDto";
 
-const apiUri = `https://localhost:32768/api/v1`;
+const apiUri = `https://localhost:32771/api/v1`;
 const moduleName = "Ingredient";
 
 const checkSuccess = async (res: Response) => {

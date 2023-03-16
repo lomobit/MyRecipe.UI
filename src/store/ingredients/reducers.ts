@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import { RootState } from "..";
 import { IIngredientState } from "../../contracts/ingredients/interface/IIngredientState";
 import { addCasesFor_addIngredientAsync, addCasesFor_editIngredientAsync, addCasesFor_getIngredientsAsync } from "./extraReducers";
@@ -14,13 +14,17 @@ const initialState: IIngredientState = {
 
     // editIngredientAsync
     editIngredientIdStatus: 'idle',
+
+    gridPageSize: 10,
 };
 
 const ingredientSlice = createSlice({
     name: 'ingredient',
     initialState,
     reducers: {
-        
+        setGridPageSize: (state, action: PayloadAction<number>) => {
+            state.gridPageSize = action.payload;
+        }
     },
     extraReducers: (builder) => {
         addCasesFor_getIngredientsAsync(builder);
@@ -29,6 +33,9 @@ const ingredientSlice = createSlice({
     },
 });
 
+export const { setGridPageSize } = ingredientSlice.actions;
+
+export const selectGridPageSize = (state: RootState) => state.ingredient.gridPageSize;
 export const selectIngredientsSlice = (state: RootState) => state.ingredient.ingredientsSlice;
 export const selectIngredientsCount = (state: RootState) => state.ingredient.ingredientsCount;
 

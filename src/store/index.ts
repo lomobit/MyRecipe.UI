@@ -1,12 +1,10 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import reduxLogger from 'redux-logger';
 import ingredientReducer from './ingredients/reducers';
-import gridReducer from './grid/reducers';
 
 export const store = configureStore({
     reducer: {
         ingredient: ingredientReducer,
-        grid: gridReducer,
     },
     devTools: true,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware()

@@ -9,8 +9,8 @@ const checkSuccess = async (res: Response) => {
         return result;
     }
 
-    let messages = await result;
-    throw new Error(`${messages.messages[0].value}`);
+    let errorResult = await result;
+    throw new Error(`${errorResult.messages[0].value}`);
 }
 
 const showError = async (error: any) => {

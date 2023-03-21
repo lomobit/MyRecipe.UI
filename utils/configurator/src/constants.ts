@@ -14,6 +14,7 @@ export const errorValidationIncorrectUsingParameter = (parameter: string): strin
 export const errorsOutput = (errors: Array<string>): string =>
     `[Ошибки]:\n\t- ${errors.join("\n\t- ")}`;
 
+export const successMessage = `Трансформация конфигурации успешно завершена.`;
 export const helpSummary: string = `Примеры использования:
     1) node configurator ${configPathParameter}"configs/.env.debug" ${destinationPathParameter}"../../../.env" [${notUseParentConfigsParameter}]
     2) node configurator ${needHelpParameter}\n

@@ -28,6 +28,7 @@ import {
     errorValidationIncorrectUsingParameter,
     errorValidationRequiredParameters, errorValidationUnknownParameters,
     helpSummary,
+    successMessage,
 } from "./constants";
 
 
@@ -118,7 +119,7 @@ if (emptyRequiredParameters.length > 0) {
 if (notUseParentConfigs) {
     try {
         fs.copyFileSync(configPath, destinationPath);
-        console.log("Трансформация конфигурации успешно завершена.");
+        console.info(successMessage);
         process.exit(0);
     }
     catch (ex) {

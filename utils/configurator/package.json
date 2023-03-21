@@ -7,7 +7,8 @@
     "start": "node dist/app.js",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
-    "rebuild": "tsc --build --clean && tsc --build"
+    "rebuild": "tsc --build --clean && tsc --build",
+    "rebuild-start": "tsc --build --clean && tsc --build && node dist/app.js"
   },
   "keywords": [],
   "author": "",

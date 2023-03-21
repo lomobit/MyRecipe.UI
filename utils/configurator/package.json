@@ -2,13 +2,13 @@
   "name": "configurator",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/app.js",
+  "main": "dist/configurator.js",
   "scripts": {
-    "start": "node dist/app.js",
+    "start": "node dist/configurator.js",
     "build": "tsc --build",
     "clean": "tsc --build --clean",
     "rebuild": "tsc --build --clean && tsc --build",
-    "rebuild-start": "tsc --build --clean && tsc --build && node dist/app.js"
+    "rebuild-start": "tsc --build --clean && tsc --build && node dist/configurator.js"
   },
   "keywords": [],
   "author": "",

@@ -32,8 +32,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "debug": "copy c:\\myfile.txt e:",
-    "configurator-build": ""
+    "debug": "node utils/configurator/dist/configurator --configPath=\"D:\\Projects\\MyRecipe.UI\\src\\configs\\.env.debug\" --destinationPath=\"D:\\Projects\\MyRecipe.UI\\.env\" && react-scripts start"
   },
   "eslintConfig": {
     "extends": [

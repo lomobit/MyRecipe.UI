@@ -9,7 +9,6 @@
 /coverage
 
 # production
-/build
 /.idea
 
 # misc
@@ -17,7 +16,8 @@
 
 # My ignores
 /.env
-/utils/configurator/dist
+utils/configurator/node_modules
+utils/configurator/dist
 
 npm-debug.log*
 yarn-debug.log*

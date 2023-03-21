@@ -2,16 +2,16 @@
   "name": "configurator",
   "version": "1.0.0",
   "description": "",
-  "main": "bin/app.js",
+  "main": "dist/app.js",
   "scripts": {
-	"start": "tsc && node bin/app.js",
-    "lint": "eslint . --ext .ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "tsc && node dist/app.js",
+    "lint": "eslint . --ext .ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/node": "^18.15.5",
     "@typescript-eslint/eslint-plugin": "^5.56.0",
     "@typescript-eslint/parser": "^5.56.0",
     "eslint": "^8.36.0",

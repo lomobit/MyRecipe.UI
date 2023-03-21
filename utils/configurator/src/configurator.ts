@@ -17,6 +17,7 @@
  * 
  */
 
+import os from 'os';
 import fs from 'fs';
 import path from 'path';
 
@@ -137,9 +138,39 @@ let configFolderName: string = path.dirname(configPath);
 let configFileNameParts: Array<string> = configFileName.split(".").slice(1);
 let configFileNames: Array<string> = [];
 
+let configKeyValue = new Map<string, string>();
+
 configFileNames.push(`.${configFileNameParts[0]}`);
 for (let i = 1; i < configFileNameParts.length; i++) {
     configFileNames.push(`${configFileNames[i - 1]}.${configFileNameParts[i]}`);
 }
 
-console.log(configFileNames);
+for (let i = 0; i < configFileNames.length; i++) {
+    try {
+        let currentConfigFile = fs.readFileSync(path.join(configFolderName, configFileNames[i]), { encoding:'utf8', flag: 'r' });
+
+        currentConfigFile.split(os.EOL).forEach(keyValueString => {
+            let keyValueArray = keyValueString.split("=");
+            configKeyValue.set(keyValueArray[0], keyValueArray[1]);
+        });
+    }
+    catch (ex) {
+        console.error(errorsOutput([ex]));
+    }
+}
+
+let resultConfigFileString: string = "";
+for (let key of configKeyValue.keys()) {
+    resultConfigFileString += `${key}=${configKeyValue.get(key)}${os.EOL}`;
+}
+
+try {
+    fs.writeFileSync(destinationPath, resultConfigFileString, { encoding:'utf8', flag: 'w' });
+}
+catch (ex) {
+    console.error(errorsOutput([ex]));
+    process.exit(-1);
+}
+
+console.info(successMessage);
+process.exit(0);

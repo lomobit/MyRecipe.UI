@@ -18,6 +18,8 @@
  */
 
 import fs from 'fs';
+import path from 'path';
+
 import {
     needHelpParameter,
     notUseParentConfigsParameter,
@@ -128,5 +130,16 @@ if (notUseParentConfigs) {
     }
 }
 
-console.log("Этого не должно быть видно");
 
+let configFileName: string = path.basename(configPath);
+let configFolderName: string = path.dirname(configPath);
+
+let configFileNameParts: Array<string> = configFileName.split(".").slice(1);
+let configFileNames: Array<string> = [];
+
+configFileNames.push(`.${configFileNameParts[0]}`);
+for (let i = 1; i < configFileNameParts.length; i++) {
+    configFileNames.push(`${configFileNames[i - 1]}.${configFileNameParts[i]}`);
+}
+
+console.log(configFileNames);

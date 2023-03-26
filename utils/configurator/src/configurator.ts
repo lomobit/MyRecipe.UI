@@ -99,10 +99,9 @@ if (needHelp) {
         console.error(errorsOutput([errorValidationIncorrectUsingParameter(needHelpParameter)]));
         process.exit(-1);
     }
-    else {
-        console.info(helpSummary);
-        process.exit(0);
-    }
+
+    console.info(helpSummary);
+    process.exit(0);
 }
 
 let emptyRequiredParameters: Array<string> = [];
@@ -131,6 +130,14 @@ if (notUseParentConfigs) {
     }
 }
 
+/**
+ * Файлы вида ".env.servicing.debug" будут обрабаываться следующим образом
+ * 1) Разбиваем имя файла на составлные части, в данном случае: "env", "servicing", "debug"
+ * 2) Создаем из них возможные комбинации конфигураций, в данном случае: ".env", ".env.servicing", ".env.servicing.debug"
+ * 3) Проходимся по всем файлам от общего к частному (от ".env" к ".env.servicing.debug") и берем значения из конфигураций.
+ *    Если в частной конфигурации ключ будет такой же, как и в родительской, то перезатираем значение.
+ * 4) Итоговый результат записываем по пути, указанному в destinationPath
+ */
 
 let configFileName: string = path.basename(configPath);
 let configFolderName: string = path.dirname(configPath);
@@ -145,14 +152,19 @@ for (let i = 1; i < configFileNameParts.length; i++) {
     configFileNames.push(`${configFileNames[i - 1]}.${configFileNameParts[i]}`);
 }
 
-for (let i = 0; i < configFileNames.length; i++) {
+for (let fileName of configFileNames) {
     try {
-        let currentConfigFile = fs.readFileSync(path.join(configFolderName, configFileNames[i]), { encoding:'utf8', flag: 'r' });
+        let currentConfigFile = fs.readFileSync(path.join(configFolderName, fileName), { encoding:'utf8', flag: 'r' });
 
-        currentConfigFile.split(os.EOL).forEach(keyValueString => {
-            let keyValueArray = keyValueString.split("=");
-            configKeyValue.set(keyValueArray[0], keyValueArray[1]);
-        });
+        currentConfigFile
+            .split(os.EOL)
+            .forEach(keyValueString => {
+                let keyValueArray = keyValueString.split("=");
+
+                if (keyValueArray[0] !== undefined && keyValueArray[0].trim() !== "") {
+                    configKeyValue.set(keyValueArray[0], keyValueArray[1]);
+                }
+            });
     }
     catch (ex) {
         console.error(errorsOutput([ex]));

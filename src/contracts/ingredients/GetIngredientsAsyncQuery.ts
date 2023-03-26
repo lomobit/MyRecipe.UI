@@ -11,14 +11,14 @@ export class GetIngredientsAsyncQuery {
     constructor(
         pageNumber: number,
         pageSize: number,
-        sortingOrder: SortingOrderEnum,
-        sortingField: SortingFieldEnum,
+        sortingOrder?: SortingOrderEnum,
+        sortingField?: SortingFieldEnum,
         nameFilter?: string
         ) {
         this.pageNumber = pageNumber;
         this.pageSize = pageSize;
-        this.sortingOrder = sortingOrder;
-        this.sortingField = sortingField;
+        this.sortingOrder = sortingOrder ?? SortingOrderEnum.Ascending;
+        this.sortingField = sortingField ?? SortingFieldEnum.Id;
         this.nameFilter = nameFilter;
     }
 }

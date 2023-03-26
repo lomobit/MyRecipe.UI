@@ -9,8 +9,6 @@ import { store } from './store';
 const container = document.getElementById('root')!;
 const root = createRoot(container);
 
-console.log(process.env.REACT_APP_ENVIRONMENT);
-
 root.render(
   <React.StrictMode>
     <Provider store={store}>

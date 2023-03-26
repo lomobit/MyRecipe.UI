@@ -1,4 +1,5 @@
 import { IngredientDto } from "../../contracts/ingredients/IngredientDto";
+import {GetIngredientsAsyncQuery} from "../../contracts/ingredients/GetIngredientsAsyncQuery";
 
 const apiUri = process.env.REACT_APP_API_URL;
 const moduleName = "Ingredient";
@@ -17,8 +18,8 @@ const showError = async (error: any) => {
     alert(`${error}`);
 }
 
-export async function GetIngredients(pageNumber: number, pageSize: number) {
-    return await fetch(`${apiUri}/${moduleName}/Get?PageNumber=${pageNumber}&PageSize=${pageSize}`)
+export async function GetIngredients(query: GetIngredientsAsyncQuery) {
+    return await fetch(`${apiUri}/${moduleName}/Get?PageNumber=${query.pageNumber}&PageSize=${query.pageSize}`)
         .then(checkSuccess)
         .catch(showError);
 }

@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import { RootState } from "..";
-import { IIngredientState } from "../../contracts/ingredients/interface/IIngredientState";
+import { IIngredientState } from "../../contracts/ingredients/interfaces/IIngredientState";
 import { addCasesFor_addIngredientAsync, addCasesFor_editIngredientAsync, addCasesFor_getIngredientsAsync } from "./extraReducers";
 
 const initialState: IIngredientState = {

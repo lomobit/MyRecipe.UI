@@ -6,7 +6,7 @@ import { IngredientDto } from "../../contracts/ingredients/IngredientDto";
 export const getIngredientsAsync = createAsyncThunk(
     'ingredient/get',
     async (query: GetIngredientsAsyncQuery) => {
-        const response = await GetIngredients(query.pageNumber, query.pageSize);
+        const response = await GetIngredients(query);
         return response.data;
     }
 );

@@ -1,5 +1,5 @@
 import { ActionReducerMapBuilder } from "@reduxjs/toolkit";
-import { IIngredientState } from "../../contracts/ingredients/interface/IIngredientState";
+import { IIngredientState } from "../../contracts/ingredients/interfaces/IIngredientState";
 import { addIngredientAsync, editIngredientAsync, getIngredientsAsync } from "./thunks";
 
 export const addCasesFor_getIngredientsAsync = (builder: ActionReducerMapBuilder<IIngredientState>) => {

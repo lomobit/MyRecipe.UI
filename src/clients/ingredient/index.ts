@@ -1,6 +1,6 @@
 import { IngredientDto } from "../../contracts/ingredients/IngredientDto";
 
-const apiUri = `https://localhost:4001/api/v1`;
+const apiUri = process.env.REACT_APP_API_URL;
 const moduleName = "Ingredient";
 
 const checkSuccess = async (res: Response) => {

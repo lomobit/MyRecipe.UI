@@ -16,6 +16,8 @@ import { IngredientDto } from '../../contracts/ingredients/IngredientDto';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import {selectGridPageSize, selectIngredientsCount, selectIngredientsSlice, setGridPageSize} from '../../store/ingredients/reducers';
 import { addIngredientAsync, editIngredientAsync, getIngredientsAsync } from '../../store/ingredients/thunks';
+import {SortingOrderEnum} from "../../contracts/common/enums/SortingOrderEnum";
+import {SortingFieldEnum} from "../../contracts/ingredients/enums/SortingFieldEnum";
 
 const Ingredients = () => {
     const ingredientsSlice = useAppSelector(selectIngredientsSlice);
@@ -41,6 +43,9 @@ const Ingredients = () => {
     const [paginationModel, setPaginationModel] = useState({
         page: 0,
         pageSize: gridPageSize,
+        sortingOrder: SortingOrderEnum.Ascending,
+        sortingField: SortingFieldEnum.Id,
+        nameFilter: undefined
     });
 
     useEffect(() => {
@@ -52,7 +57,14 @@ const Ingredients = () => {
 
         (async () => {
             setLoading(true);
-            await dispatch(getIngredientsAsync(new GetIngredientsAsyncQuery(paginationModel.page + 1, paginationModel.pageSize)));
+
+            let getIngredientQuery = new GetIngredientsAsyncQuery(
+                paginationModel.page + 1,
+                paginationModel.pageSize,
+                paginationModel.sortingOrder,
+                paginationModel.sortingField,
+                paginationModel.nameFilter);
+            await dispatch(getIngredientsAsync(getIngredientQuery));
 
             if (!active) {
                 return;
@@ -126,7 +138,11 @@ const Ingredients = () => {
             dispatch(setGridPageSize(model.pageSize));
         }
 
-        setPaginationModel(model);
+        setPaginationModel({
+            ...paginationModel,
+            page: model.page,
+            pageSize: model.pageSize
+        });
     }
 
     return (

@@ -19,7 +19,17 @@ const showError = async (error: any) => {
 }
 
 export async function GetIngredients(query: GetIngredientsAsyncQuery) {
-    return await fetch(`${apiUri}/${moduleName}/Get?PageNumber=${query.pageNumber}&PageSize=${query.pageSize}`)
+    let uri = `${apiUri}/${moduleName}/Get`
+        + `?PageNumber=${query.pageNumber}`
+        + `&PageSize=${query.pageSize}`
+        + `&SortingOrder=${query.sortingOrder}`
+        + `&SortingField=${query.sortingField}`;
+
+    if (query.nameFilter !== undefined && query.nameFilter !== "") {
+        uri += `&NameFilter=${query.nameFilter}`;
+    }
+
+    return await fetch(uri)
         .then(checkSuccess)
         .catch(showError);
 }

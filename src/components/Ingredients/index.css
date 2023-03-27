@@ -9,3 +9,16 @@
     margin-top: 20px;
     width: 100%;
 }
+
+.ingredientsButtons {
+    display: inline-block;
+    width: 100%;
+}
+
+.nameFilteringButtons {
+    float: left;
+}
+
+.addEditButtons {
+    float: right;
+}

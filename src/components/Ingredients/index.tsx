@@ -1,14 +1,13 @@
 import {useEffect, useState} from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
+import UpdateIcon from '@mui/icons-material/Update';
 import {DataGrid, GridPaginationModel, GridRowSelectionModel, GridSortDirection, GridSortModel} from '@mui/x-data-grid';
-import {Button, Stack} from '@mui/material';
+import {Button, IconButton, Stack, TextField} from '@mui/material';
 
 import {
-    ingredientFieldName_Id,
     ingredientFieldName_Name,
     ingredientsMuiDataGridColumns,
-    sortAscending,
     sortDescending
 } from './constants';
 import NoRowsMuiDataGridOverlay from '../muiDataGridSlots/noRowsOverlay';
@@ -179,23 +178,40 @@ const Ingredients = () => {
     return (
         <div className="ingredients">
             <h1>Ингредиенты</h1>
-            <Stack direction="row-reverse" spacing={1}>
-                <Button
-                    variant="outlined"
-                    startIcon={<EditIcon />}
-                    disabled={disableEditButton}
-                    onClick={handleClickEditButton}
-                >
-                    Изменить
-                </Button>
-                <Button
-                    variant="contained"
-                    startIcon={<AddIcon />}
-                    onClick={handleClickAddButton}
-                >
-                    Добавить
-                </Button>
-            </Stack>
+            <div className="ingredientsButtons">
+                <Stack direction="row" spacing={1} className="nameFilteringButtons">
+                    <TextField
+                        label="Поиск по названию"
+                        variant="outlined"
+                        size="small"
+                    />
+                    <IconButton
+                        aria-label="delete"
+                        color="primary"
+                    >
+                        <UpdateIcon />
+                    </IconButton>
+                </Stack>
+                <Stack direction="row-reverse" spacing={1} className="addEditButtons">
+                    <Button
+                        variant="outlined"
+                        startIcon={<EditIcon />}
+                        disabled={disableEditButton}
+                        onClick={handleClickEditButton}
+                    >
+                        Изменить
+                    </Button>
+                    <Button
+                        variant="contained"
+                        startIcon={<AddIcon />}
+                        onClick={handleClickAddButton}
+                    >
+                        Добавить
+                    </Button>
+
+
+                </Stack>
+            </div>
             <DialogAddIngredient
                 open={openAddDialog}
                 setOpen={setOpenAddDialog}

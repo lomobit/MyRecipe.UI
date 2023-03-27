@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {ChangeEvent, useEffect, useState} from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import UpdateIcon from '@mui/icons-material/Update';
@@ -52,16 +52,18 @@ const Ingredients = () => {
     // dataGrid
     const [disableEditButton, setDisableEditButton] = useState(true);
     const [loading, setLoading] = useState(false);
+    const [nameFilter, setNameFilter] = useState("");
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
+    const [sortModel, setSortModel] = useState<GridSortModel>([]);
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
         page: 0,
         pageSize: gridPageSize
     });
-    const [sortModel, setSortModel] = useState<GridSortModel>([]);
+
 
     useEffect(() => {
         updateIngredients();
-    }, [paginationModel, sortModel])
+    }, [paginationModel, sortModel]);
 
     const updateIngredients = () => {
         let active = true;
@@ -74,7 +76,7 @@ const Ingredients = () => {
                 paginationModel.pageSize,
                 getSortingOrderForUpdate(sortModel[0]?.sort),
                 getSortingFieldForUpdate(sortModel[0]?.field),
-                undefined);
+                nameFilter);
             await dispatch(getIngredientsAsync(getIngredientQuery));
 
             if (!active) {
@@ -175,6 +177,14 @@ const Ingredients = () => {
         setSortModel(model);
     }
 
+    const onChangeNameFilter = (event: ChangeEvent<HTMLInputElement>) => {
+        setNameFilter(event.target.value);
+    }
+
+    const handleClickUpdateButton = () => {
+        updateIngredients();
+    }
+
     return (
         <div className="ingredients">
             <h1>Ингредиенты</h1>
@@ -184,10 +194,13 @@ const Ingredients = () => {
                         label="Поиск по названию"
                         variant="outlined"
                         size="small"
+                        value={nameFilter}
+                        onChange={onChangeNameFilter}
                     />
                     <IconButton
                         aria-label="delete"
                         color="primary"
+                        onClick={handleClickUpdateButton}
                     >
                         <UpdateIcon />
                     </IconButton>
@@ -208,8 +221,6 @@ const Ingredients = () => {
                     >
                         Добавить
                     </Button>
-
-
                 </Stack>
             </div>
             <DialogAddIngredient

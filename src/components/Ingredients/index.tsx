@@ -1,25 +1,39 @@
-import {useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
-import {DataGrid, GridPaginationModel, GridRowSelectionModel} from '@mui/x-data-grid';
-import { Button, Stack } from '@mui/material';
+import {DataGrid, GridPaginationModel, GridRowSelectionModel, GridSortDirection, GridSortModel} from '@mui/x-data-grid';
+import {Button, Stack} from '@mui/material';
 
-import { ingredientsMuiDataGridColumns } from './constants';
+import {
+    ingredientFieldName_Id,
+    ingredientFieldName_Name,
+    ingredientsMuiDataGridColumns,
+    sortAscending,
+    sortDescending
+} from './constants';
 import NoRowsMuiDataGridOverlay from '../muiDataGridSlots/noRowsOverlay';
 import MuiDataGridPagination from '../muiDataGridSlots/pagination';
 
 import './index.css';
-import { GetIngredientsAsyncQuery } from '../../contracts/ingredients/GetIngredientsAsyncQuery';
+import {GetIngredientsAsyncQuery} from '../../contracts/ingredients/GetIngredientsAsyncQuery';
 import DialogAddIngredient from './dialogAdd';
 import DialogEditIngredient from './dialogEdit';
-import { IngredientDto } from '../../contracts/ingredients/IngredientDto';
-import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import {selectGridPageSize, selectIngredientsCount, selectIngredientsSlice, setGridPageSize} from '../../store/ingredients/reducers';
-import { addIngredientAsync, editIngredientAsync, getIngredientsAsync } from '../../store/ingredients/thunks';
+import {IngredientDto} from '../../contracts/ingredients/IngredientDto';
+import {useAppDispatch, useAppSelector} from '../../store/hooks';
+import {
+    selectGridPageSize,
+    selectIngredientsCount,
+    selectIngredientsSlice,
+    setGridPageSize
+} from '../../store/ingredients/reducers';
+import {addIngredientAsync, editIngredientAsync, getIngredientsAsync} from '../../store/ingredients/thunks';
 import {SortingOrderEnum} from "../../contracts/common/enums/SortingOrderEnum";
 import {SortingFieldEnum} from "../../contracts/ingredients/enums/SortingFieldEnum";
 
 const Ingredients = () => {
+
+
+    // appSelectors
     const ingredientsSlice = useAppSelector(selectIngredientsSlice);
     const ingredientsCount = useAppSelector(selectIngredientsCount);
     const gridPageSize = useAppSelector(selectGridPageSize);
@@ -40,17 +54,20 @@ const Ingredients = () => {
     const [disableEditButton, setDisableEditButton] = useState(true);
     const [loading, setLoading] = useState(false);
     const [rowSelectionModel, setRowSelectionModel] = useState<GridRowSelectionModel>([]);
-    const [paginationModel, setPaginationModel] = useState({
+    const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
         page: 0,
-        pageSize: gridPageSize,
-        sortingOrder: SortingOrderEnum.Ascending,
-        sortingField: SortingFieldEnum.Id,
-        nameFilter: undefined
+        pageSize: gridPageSize
     });
+    const [sortModel, setSortModel] = useState<GridSortModel>([
+        {
+            field: ingredientFieldName_Id,
+            sort: sortAscending,
+        },
+    ]);
 
     useEffect(() => {
         updateIngredients();
-    }, [paginationModel])
+    }, [paginationModel, sortModel])
 
     const updateIngredients = () => {
         let active = true;
@@ -61,9 +78,9 @@ const Ingredients = () => {
             let getIngredientQuery = new GetIngredientsAsyncQuery(
                 paginationModel.page + 1,
                 paginationModel.pageSize,
-                paginationModel.sortingOrder,
-                paginationModel.sortingField,
-                paginationModel.nameFilter);
+                getSortingOrderForUpdate(sortModel[0].sort),
+                getSortingFieldForUpdate(sortModel[0].field),
+                undefined);
             await dispatch(getIngredientsAsync(getIngredientQuery));
 
             if (!active) {
@@ -76,6 +93,25 @@ const Ingredients = () => {
         return () => {
             active = false;
         };
+    }
+
+    const getSortingOrderForUpdate = (sort: GridSortDirection) => {
+        switch (sort) {
+            case sortDescending:
+                return SortingOrderEnum.Descending;
+            default:
+                return SortingOrderEnum.Ascending;
+
+        }
+    }
+
+    const getSortingFieldForUpdate = (fieldName: string) => {
+        switch (fieldName) {
+            case ingredientFieldName_Name:
+                return SortingFieldEnum.Name;
+            default:
+                return SortingFieldEnum.Id;
+        }
     }
 
     const handleClickAddButton = () => {
@@ -138,11 +174,11 @@ const Ingredients = () => {
             dispatch(setGridPageSize(model.pageSize));
         }
 
-        setPaginationModel({
-            ...paginationModel,
-            page: model.page,
-            pageSize: model.pageSize
-        });
+        setPaginationModel(model);
+    }
+
+    const onSortModelChange = (model: GridSortModel) => {
+        setSortModel(model);
     }
 
     return (
@@ -197,6 +233,8 @@ const Ingredients = () => {
                     onRowSelectionModelChange={onRowSelectionModelChange}
                     paginationModel={paginationModel}
                     onPaginationModelChange={onPaginationModelChange}
+                    sortModel={sortModel}
+                    onSortModelChange={onSortModelChange}
                     disableColumnMenu
                     hideFooterSelectedRowCount
                     slots={{

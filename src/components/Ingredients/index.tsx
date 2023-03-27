@@ -58,12 +58,7 @@ const Ingredients = () => {
         page: 0,
         pageSize: gridPageSize
     });
-    const [sortModel, setSortModel] = useState<GridSortModel>([
-        {
-            field: ingredientFieldName_Id,
-            sort: sortAscending,
-        },
-    ]);
+    const [sortModel, setSortModel] = useState<GridSortModel>([]);
 
     useEffect(() => {
         updateIngredients();
@@ -78,8 +73,8 @@ const Ingredients = () => {
             let getIngredientQuery = new GetIngredientsAsyncQuery(
                 paginationModel.page + 1,
                 paginationModel.pageSize,
-                getSortingOrderForUpdate(sortModel[0].sort),
-                getSortingFieldForUpdate(sortModel[0].field),
+                getSortingOrderForUpdate(sortModel[0]?.sort),
+                getSortingFieldForUpdate(sortModel[0]?.field),
                 undefined);
             await dispatch(getIngredientsAsync(getIngredientQuery));
 

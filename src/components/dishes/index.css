@@ -1,0 +1,9 @@
+@import "../root.css";
+
+/* TODO: Одинаковый у всех страниц, необходимо вынести в одно место и там использовать */
+.dishes {
+    padding: 20px;
+    border: var(--border-width) solid rgb(254, 0, 199);
+}
+
+

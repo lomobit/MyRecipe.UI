@@ -1,8 +1,10 @@
 import './index.css';
 
-function Dishes() {
+const Dishes = () => {
     return (
-        <h1>Dishes</h1>
+        <div className="dishes">
+            <h1>Блюда</h1>
+        </div>
     );
 }
 

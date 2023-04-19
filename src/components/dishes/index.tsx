@@ -1,7 +1,11 @@
 import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
+import Card from '@mui/material/Card';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 import './index.css';
-import {mockDishes} from "./constants";
+import { CardActionArea } from '@mui/material';
+import { mockDishes } from "./constants";
 
 const Dishes = () => {
 
@@ -13,32 +17,32 @@ const Dishes = () => {
             <Grid container justifyContent="left" spacing={2}>
                 {mockDishes.map((value) => (
                     <Grid key={value.id} item>
-                        <Paper
+                        <Card
                             sx={{
-                                height: 260,
                                 width: 217,
                                 backgroundColor: (theme) =>
                                     theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
                             }}
                         >
-                            <div
-                                style={{padding: 10}}
-                            >
-                                <div
-                                    style={{height: 140}}
-                                >
-                                    <img
-                                        src={`${process.env.REACT_APP_API_URL}/File/${value.dishPhotoGuid}`}
-                                        width="100%"
-                                        height="100%"
-                                        alt="Фото блюда"
-                                        loading="lazy"
-                                    />
-                                </div>
-                                <h3>{value.name}</h3>
-                                <p>Количество персон: {value.numberOfPersons}</p>
-                            </div>
-                        </Paper>
+                            <CardActionArea>
+                                <CardMedia
+                                    component="img"
+                                    width="100%"
+                                    height={140}
+                                    draggable={false}
+                                    image={`${process.env.REACT_APP_API_URL}/File/${value.dishPhotoGuid}`}
+                                    alt={`Фото ${value.name}`}
+                                />
+                                <CardContent>
+                                    <Typography gutterBottom variant="h5" component="div">
+                                        {value.name}
+                                    </Typography>
+                                    <Typography variant="body2" color="text.secondary">
+                                        Количество персон: {value.numberOfPersons}
+                                    </Typography>
+                                </CardContent>
+                            </CardActionArea>
+                        </Card>
                     </Grid>
                 ))}
             </Grid>

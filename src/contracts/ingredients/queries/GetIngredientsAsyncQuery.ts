@@ -1,5 +1,5 @@
-import {SortingOrderEnum} from "../common/enums/SortingOrderEnum";
-import {SortingFieldEnum} from "./enums/SortingFieldEnum";
+import {SortingOrderEnum} from "../../common/enums/SortingOrderEnum";
+import {SortingFieldEnum} from "../enums/SortingFieldEnum";
 
 export class GetIngredientsAsyncQuery {
     pageNumber: number;

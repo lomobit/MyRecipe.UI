@@ -1,5 +1,5 @@
 import { IngredientDto } from "../../contracts/ingredients/IngredientDto";
-import {GetIngredientsAsyncQuery} from "../../contracts/ingredients/GetIngredientsAsyncQuery";
+import {GetIngredientsAsyncQuery} from "../../contracts/ingredients/queries/GetIngredientsAsyncQuery";
 
 const apiUri = process.env.REACT_APP_API_URL;
 const moduleName = "Ingredient";

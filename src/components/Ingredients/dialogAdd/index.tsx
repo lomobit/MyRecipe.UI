@@ -73,7 +73,7 @@ const DialogAddIngredient = (props: DialogAddIngredientProps) => {
             <DialogTitle>Добавить ингредиент</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Для добавление ингредиента введите данные:
+                    Для добавления ингредиента введите данные:
                 </DialogContentText>
                 <TextField
                     autoFocus

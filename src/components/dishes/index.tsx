@@ -16,7 +16,7 @@ const Dishes = () => {
                         <Paper
                             sx={{
                                 height: 260,
-                                width: 210,
+                                width: 217,
                                 backgroundColor: (theme) =>
                                     theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
                             }}
@@ -28,7 +28,7 @@ const Dishes = () => {
                                     style={{height: 140}}
                                 >
                                     <img
-                                        src={`https://localhost:4001/api/v1/File/${value.dishPhotoGuid}`}
+                                        src={`${process.env.REACT_APP_API_URL}/File/${value.dishPhotoGuid}`}
                                         width="100%"
                                         height="100%"
                                         alt="Фото блюда"

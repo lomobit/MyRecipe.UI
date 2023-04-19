@@ -23,7 +23,7 @@ import {useState} from "react";
 
 const Dishes = () => {
 
-    const [openDialog, setOpenDialog] = useState(true);
+    const [openDialog, setOpenDialog] = useState(false);
 
 
     return (
@@ -51,7 +51,7 @@ const Dishes = () => {
                     <Button
                         variant="contained"
                         startIcon={<AddIcon />}
-                        //onClick={handleClickAddButton}
+                        onClick={() => setOpenDialog(true)}
                     >
                         Добавить
                     </Button>
@@ -59,7 +59,7 @@ const Dishes = () => {
             </div>
 
             {/* TODO: Вынести диалог в отдельный компонент. */}
-            <Dialog open={openDialog}>
+            <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
                 <DialogTitle>Добавить блюдо</DialogTitle>
                 <DialogContent>
                     {/*<DialogContentText>*/}
@@ -120,7 +120,7 @@ const Dishes = () => {
 
                 </DialogContent>
                 <DialogActions>
-                    <Button>Отмена</Button>
+                    <Button onClick={() => setOpenDialog(false)}>Отмена</Button>
                     <Button>Добавить</Button>
                 </DialogActions>
             </Dialog>

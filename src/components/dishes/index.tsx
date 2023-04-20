@@ -40,7 +40,7 @@ const Dishes = () => {
                         //onChange={onChangeNameFilter}
                     />
                     <IconButton
-                        aria-label="delete"
+                        aria-label="update"
                         color="primary"
                         //onClick={handleClickUpdateButton}
                     >
@@ -75,7 +75,7 @@ const Dishes = () => {
                         />
                     </div>
                     <Button variant="outlined" component="label">
-                        Добавить изображение...
+                        Добавить изображение
                         <input hidden accept="image/*" multiple type="file" />
                     </Button>
                     <DialogContentText style={{marginTop: 30}}>
@@ -117,6 +117,72 @@ const Dishes = () => {
                         multiline
                         // onChange={onChangeIngredientDescription}
                     />
+
+                    <DialogContentText style={{marginTop: 30}}>
+                        Добавьте ингредиенты, которые нужны для приготовления блюда:
+                    </DialogContentText>
+
+                    {/* TODO: Вынести в отдельный компонент и добавлять ингрединеты в список селекторов */}
+                    <div style={{marginTop: 10, marginBottom: 10}}>
+                        <Stack direction="row" spacing={1}  className="nameFilteringButtons" style={{width: "100%"}}>
+                            <Select
+                                value={1}
+                                //onChange={handleSelectItemPerPageChange}
+                                displayEmpty
+                                inputProps={{ 'aria-label': 'Количество элементов' }}
+                                style={{width: "100%"}}
+                                required
+                            >
+                                <MenuItem value={1}>Яйцо</MenuItem>
+                                <MenuItem value={2}>Бекон</MenuItem>
+                                <MenuItem value={3}>Масло</MenuItem>
+                            </Select>
+                            <TextField
+                                type="number"
+                                autoFocus
+                                margin="dense"
+                                id="quantity"
+                                label="Количество"
+                                // value={props.descriptionIngredient}
+                                variant="outlined"
+                                fullWidth
+                                required
+                                // onChange={onChangeIngredientDescription}
+                                style={{width: "100%"}}
+                            />
+                            <Select
+                                value={1}
+                                //onChange={handleSelectItemPerPageChange}
+                                displayEmpty
+                                inputProps={{ 'aria-label': 'Количество элементов' }}
+                                style={{width: "100%"}}
+                                required
+                            >
+                                <MenuItem value={1}>Штука</MenuItem>
+                                <MenuItem value={2}>Грамм</MenuItem>
+                                <MenuItem value={3}>Метр</MenuItem>
+                            </Select>
+                        </Stack>
+                        <TextField
+                            autoFocus
+                            margin="dense"
+                            id="Description"
+                            label="Описание"
+                            // value={props.descriptionIngredient}
+                            variant="outlined"
+                            fullWidth
+                            multiline
+                            // onChange={onChangeIngredientDescription}
+                        />
+                    </div>
+
+                    <Button
+                        variant="outlined"
+                        startIcon={<AddIcon />}
+                        onClick={() => setOpenDialog(true)}
+                    >
+                        Добавить ингредиент
+                    </Button>
 
                 </DialogContent>
                 <DialogActions>

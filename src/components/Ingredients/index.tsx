@@ -198,7 +198,7 @@ const Ingredients = () => {
                         onChange={onChangeNameFilter}
                     />
                     <IconButton
-                        aria-label="delete"
+                        aria-label="update"
                         color="primary"
                         onClick={handleClickUpdateButton}
                     >

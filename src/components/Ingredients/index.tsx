@@ -10,8 +10,8 @@ import {
     ingredientsMuiDataGridColumns,
     sortDescending
 } from './constants';
-import NoRowsMuiDataGridOverlay from '../muiDataGridSlots/noRowsOverlay';
-import MuiDataGridPagination from '../muiDataGridSlots/pagination';
+import NoRowsMuiDataGridOverlay from '../overlays/mui-datagrid-norows-overlay';
+import MuiDataGridPagination from '../paginations/mui-datagrid-pagination';
 
 import './index.css';
 import {GetIngredientsAsyncQuery} from '../../contracts/ingredients/queries/GetIngredientsAsyncQuery';

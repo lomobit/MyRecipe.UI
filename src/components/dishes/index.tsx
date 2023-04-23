@@ -18,7 +18,9 @@ import {
 import { mockDishes } from "./constants";
 import UpdateIcon from "@mui/icons-material/Update";
 import AddIcon from "@mui/icons-material/Add";
-import {useState} from "react";
+import {Fragment, useState} from "react";
+import DishesDialog from "./dishDialog";
+import MuiGridCardsPagination from "../paginations/mui-grid-cards-pagination";
 
 const Dishes = () => {
 
@@ -26,7 +28,7 @@ const Dishes = () => {
 
 
     return (
-        <div className="dishes">
+        <Fragment>
             <h1>Блюда</h1>
             {/* TODO: блок кнопок для блюд повторяет блок кнопок для ингредиентов. Подумать на тем, нужно ли это вынести в отдельный компонент. */}
             <div className="dishesButtons">
@@ -57,7 +59,10 @@ const Dishes = () => {
                 </Stack>
             </div>
 
-
+            <DishesDialog
+                openDialog={openDialog}
+                setOpenDialog={setOpenDialog}
+            />
 
             <Grid container justifyContent="flex-start" spacing={3} style={{marginBottom: 20}}>
                 {
@@ -93,8 +98,9 @@ const Dishes = () => {
                 }
             </Grid>
 
+            <MuiGridCardsPagination/>
 
-        </div>
+        </Fragment>
     );
 }
 

@@ -4,8 +4,6 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    MenuItem,
-    Select,
     Stack,
     TextField
 } from "@mui/material";
@@ -24,8 +22,13 @@ const DishesDialog = (props: DishesDialogProps) => {
     const handleDishImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             setFile(e.target.files[0]);
+            e.target.value = "";
         }
     };
+
+    const handleDishImageDelete = () => {
+        setFile(undefined);
+    }
 
     const noImageData = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0zMiAtMTIwIDYxMiA2MTIiPgogIDxwYXRoIGQ9Im0gNDggMzIgYyAwIDAgMCAwIDAgMCBsIDQ0OCAwIGMgMTYgMCAxNiAxNiAxNiAxNiB2IDI3MiBjIDAgMTYgLTE2IDE2IC0xNiAxNiBsIC00NDggMCBjIC0xNiAwIC0xNiAtMTYgLTE2IC0xNiB2IC0yNzIgYyAwIDAgMCAtMTYgMTYgLTE2IG0gLTE2IDE3NiBsIDExMiAtOTYgbCAxMjggMTI4IG0gMCAwIGwgOTYgLTk2IGwgMTQ0IDEyOCBtIC0xNDQgLTE5MSBDIDM3NiA4MiAzODEgODUgMzgyIDk1IEMgMzgwIDEwNSAzNzcgMTA4IDM2OCAxMDkgQyAzNjEgMTA4IDM1NiAxMDYgMzU0IDk1IEMgMzU1IDg2IDM2MCA4MiAzNjggODEiIHN0cm9rZT0iI2NlY2ZkMiIgc3Ryb2tlLXdpZHRoPSIxMCIgZmlsbD0iI2Y0ZjZmOSIvPgo8L3N2Zz4=";
 
@@ -44,16 +47,28 @@ const DishesDialog = (props: DishesDialogProps) => {
                             alt="There will be text"
                         />
                     </Fragment>
-                    <Button variant="outlined" component="label">
-                        Добавить изображение
-                        <input
-                            hidden={true}
-                            multiple={false}
-                            accept="image/*"
-                            type="file"
-                            onChange={handleDishImageChange}
-                        />
-                    </Button>
+                    <Stack direction="row" spacing={1}>
+                        <Button
+                            variant="outlined"
+                            component="label">
+                            Добавить изображение
+                            <input
+                                hidden={true}
+                                multiple={false}
+                                accept="image/*"
+                                type="file"
+                                onChange={handleDishImageChange}
+                            />
+                        </Button>
+                        <Button
+                            disabled={file === undefined}
+                            variant="outlined"
+                            component="label"
+                            onClick={handleDishImageDelete}
+                        >
+                            Удалить изображение
+                        </Button>
+                    </Stack>
                 </Fragment>
 
 
@@ -89,7 +104,7 @@ const DishesDialog = (props: DishesDialogProps) => {
                     autoFocus
                     margin="dense"
                     id="Description"
-                    label="Описание"
+                    label="Способ приготовления"
                     // value={props.descriptionIngredient}
                     variant="outlined"
                     fullWidth
@@ -101,59 +116,7 @@ const DishesDialog = (props: DishesDialogProps) => {
                     Добавьте ингредиенты, которые нужны для приготовления блюда:
                 </DialogContentText>
 
-                {/* TODO: Вынести в отдельный компонент и добавлять ингрединеты в список селекторов */}
-                <div style={{marginTop: 10, marginBottom: 10}}>
-                    <Stack direction="row" spacing={1} className="nameFilteringButtons" style={{width: "100%"}}>
-                        <Select
-                            value={1}
-                            //onChange={handleSelectItemPerPageChange}
-                            displayEmpty
-                            inputProps={{'aria-label': 'Количество элементов'}}
-                            style={{width: "100%"}}
-                            required
-                        >
-                            <MenuItem value={1}>Яйцо</MenuItem>
-                            <MenuItem value={2}>Бекон</MenuItem>
-                            <MenuItem value={3}>Масло</MenuItem>
-                        </Select>
-                        <TextField
-                            type="number"
-                            autoFocus
-                            margin="dense"
-                            id="quantity"
-                            label="Количество"
-                            // value={props.descriptionIngredient}
-                            variant="outlined"
-                            fullWidth
-                            required
-                            // onChange={onChangeIngredientDescription}
-                            style={{width: "100%"}}
-                        />
-                        <Select
-                            value={1}
-                            //onChange={handleSelectItemPerPageChange}
-                            displayEmpty
-                            inputProps={{'aria-label': 'Количество элементов'}}
-                            style={{width: "100%"}}
-                            required
-                        >
-                            <MenuItem value={1}>Штука</MenuItem>
-                            <MenuItem value={2}>Грамм</MenuItem>
-                            <MenuItem value={3}>Метр</MenuItem>
-                        </Select>
-                    </Stack>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="Description"
-                        label="Описание"
-                        // value={props.descriptionIngredient}
-                        variant="outlined"
-                        fullWidth
-                        multiline
-                        // onChange={onChangeIngredientDescription}
-                    />
-                </div>
+
 
                 <Button
                     variant="outlined"

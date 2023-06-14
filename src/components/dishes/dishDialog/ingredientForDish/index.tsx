@@ -1,14 +1,26 @@
-import {MenuItem, Select, Stack, TextField} from "@mui/material";
+import {IconButton, MenuItem, Select, Stack, TextField} from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 export declare interface IngredientForDishProps {
-
+    index: number;
+    deleteIngredient: (index: number) => void;
 }
 
 const IngredientForDish = (props: IngredientForDishProps) => {
 
+    const handleDeleteIngredient = () => {
+        props.deleteIngredient(props.index);
+    }
+
     return (
         /* TODO: Вынести в отдельный компонент и добавлять ингрединеты в список селекторов */
         <div style={{marginTop: 10, marginBottom: 10}}>
+            <IconButton
+                aria-label="delete"
+                onClick={handleDeleteIngredient}
+            >
+                <DeleteIcon />
+            </IconButton>
             <Stack direction="row" spacing={1} className="nameFilteringButtons" style={{width: "100%"}}>
                 <Select
                     value={1}

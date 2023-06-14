@@ -1,6 +1,7 @@
 import {
     Button,
-    Dialog, DialogActions,
+    Dialog,
+    DialogActions,
     DialogContent,
     DialogContentText,
     DialogTitle,
@@ -9,6 +10,8 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import {ChangeEvent, Fragment, useState} from "react";
+import {IngredientForDishDto} from "../../../contracts/dishes/dtos/IngredientForDishDto";
+import IngredientForDish from "./ingredientForDish";
 
 export declare interface DishesDialogProps {
     openDialog: boolean;
@@ -18,6 +21,7 @@ export declare interface DishesDialogProps {
 const DishesDialog = (props: DishesDialogProps) => {
 
     const [file, setFile] = useState<File>();
+    const [ingredientsForDish, setIngredientsForDish] = useState<IngredientForDishDto[]>([]);
 
     const handleDishImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -30,6 +34,23 @@ const DishesDialog = (props: DishesDialogProps) => {
         setFile(undefined);
     }
 
+    const handleAddIngrediantForDish = () => {
+        let tmp = [...ingredientsForDish];
+        tmp.push(new IngredientForDishDto(1, 1, "", ""));
+
+        setIngredientsForDish(tmp);
+    }
+
+    const handleDeleteIngrediantForDish = (index: number) => {
+        let tmp = [...ingredientsForDish];
+        if (index > -1) {
+            tmp.splice(index, 1);
+        }
+
+        setIngredientsForDish(tmp);
+    }
+
+    // Вынести куда-то в общие константы
     const noImageData = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0zMiAtMTIwIDYxMiA2MTIiPgogIDxwYXRoIGQ9Im0gNDggMzIgYyAwIDAgMCAwIDAgMCBsIDQ0OCAwIGMgMTYgMCAxNiAxNiAxNiAxNiB2IDI3MiBjIDAgMTYgLTE2IDE2IC0xNiAxNiBsIC00NDggMCBjIC0xNiAwIC0xNiAtMTYgLTE2IC0xNiB2IC0yNzIgYyAwIDAgMCAtMTYgMTYgLTE2IG0gLTE2IDE3NiBsIDExMiAtOTYgbCAxMjggMTI4IG0gMCAwIGwgOTYgLTk2IGwgMTQ0IDEyOCBtIC0xNDQgLTE5MSBDIDM3NiA4MiAzODEgODUgMzgyIDk1IEMgMzgwIDEwNSAzNzcgMTA4IDM2OCAxMDkgQyAzNjEgMTA4IDM1NiAxMDYgMzU0IDk1IEMgMzU1IDg2IDM2MCA4MiAzNjggODEiIHN0cm9rZT0iI2NlY2ZkMiIgc3Ryb2tlLXdpZHRoPSIxMCIgZmlsbD0iI2Y0ZjZmOSIvPgo8L3N2Zz4=";
 
     return (
@@ -117,10 +138,17 @@ const DishesDialog = (props: DishesDialogProps) => {
                 </DialogContentText>
 
 
+                <Fragment>
+                    {ingredientsForDish.map((value, index) => <IngredientForDish
+                        key={index}
+                        index={index}
+                        deleteIngredient={handleDeleteIngrediantForDish}/>)}
+                </Fragment>
 
                 <Button
                     variant="outlined"
                     startIcon={<AddIcon/>}
+                    onClick={handleAddIngrediantForDish}
                 >
                     Добавить ингредиент
                 </Button>

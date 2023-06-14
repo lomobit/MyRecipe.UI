@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { AddIngredient, EditIngredient, GetIngredients } from "../../clients/ingredient";
 import { GetIngredientsAsyncQuery } from "../../contracts/ingredients/queries/GetIngredientsAsyncQuery";
-import { IngredientDto } from "../../contracts/ingredients/IngredientDto";
+import { IngredientDto } from "../../contracts/ingredients/dtos/IngredientDto";
 
 export const getIngredientsAsync = createAsyncThunk(
     'ingredient/get',

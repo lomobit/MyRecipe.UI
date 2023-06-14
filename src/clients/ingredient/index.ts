@@ -1,4 +1,4 @@
-import { IngredientDto } from "../../contracts/ingredients/IngredientDto";
+import { IngredientDto } from "../../contracts/ingredients/dtos/IngredientDto";
 import {GetIngredientsAsyncQuery} from "../../contracts/ingredients/queries/GetIngredientsAsyncQuery";
 
 const apiUri = process.env.REACT_APP_API_URL;

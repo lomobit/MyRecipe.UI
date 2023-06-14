@@ -1,4 +1,4 @@
-import { IngredientDto } from "../IngredientDto";
+import { IngredientDto } from "../dtos/IngredientDto";
 
 export interface IIngredientState {
     ingredientsSlice: Array<IngredientDto>;

@@ -1,20 +1,39 @@
-import {IconButton, MenuItem, Select, Stack, TextField} from "@mui/material";
+import {Autocomplete, IconButton, MenuItem, Select, Stack, TextField} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Fragment } from "react";
+import {IngredientForDishDto} from "../../../../contracts/dishes/dtos/IngredientForDishDto";
+import {ChangeEvent} from "react";
+import {useAppSelector} from "../../../../store/hooks";
+import {selectAllIngredients} from "../../../../store/ingredients/reducers";
 
 export declare interface IngredientForDishProps {
     index: number;
-    deleteIngredient: (index: number) => void;
+    ingredient: IngredientForDishDto;
+
+    deleteIngredientForDish: (index: number) => void;
+
+    changeIngredientId: (index: number, ingredientId: number) => void;
+    changeIngredientQuantity: (index: number, quantity: number) => void;
+    changeIngredientOkeiCode: (index: number, okeiCode: string) => void;
+    changeIngredientCondition: (index: number, condition: string) => void;
 }
 
 const IngredientForDish = (props: IngredientForDishProps) => {
 
+    const allIngredients = useAppSelector(selectAllIngredients);
+
     const handleDeleteIngredient = () => {
-        props.deleteIngredient(props.index);
+        props.deleteIngredientForDish(props.index);
+    }
+
+    const onChangeIngredientQuantity = (event: ChangeEvent<HTMLInputElement>) => {
+        props.changeIngredientQuantity(props.index, +event.target.value);
+    }
+
+    const onChangeIngredientDescription = (event: ChangeEvent<HTMLInputElement>) => {
+        props.changeIngredientCondition(props.index, event.target.value);
     }
 
     return (
-        /* TODO: Вынести в отдельный компонент и добавлять ингрединеты в список селекторов */
         <Stack direction="row" spacing={1} style={{marginTop: 10, marginBottom: 10}}>
             <IconButton
                 aria-label="delete"
@@ -25,54 +44,37 @@ const IngredientForDish = (props: IngredientForDishProps) => {
             </IconButton>
             <div>
                 <Stack direction="row" spacing={1} className="nameFilteringButtons" style={{width: "100%"}}>
-                    <Select
-                        value={1}
-                        //onChange={handleSelectItemPerPageChange}
-                        displayEmpty
-                        inputProps={{'aria-label': 'Количество элементов'}}
-                        style={{width: "100%"}}
-                        required
-                    >
-                        <MenuItem value={1}>Яйцо</MenuItem>
-                        <MenuItem value={2}>Бекон</MenuItem>
-                        <MenuItem value={3}>Масло</MenuItem>
-                    </Select>
+                    <Autocomplete
+                        disablePortal
+                        id="combo-box-demo"
+                        options={allIngredients.map(x => x.name)}
+                        sx={{ width: 300 }}
+                        renderInput={(params) => <TextField {...params} label="Ингредиент" />}
+                    />
                     <TextField
                         type="number"
                         autoFocus
                         margin="dense"
                         id="quantity"
                         label="Количество"
-                        // value={props.descriptionIngredient}
+                        value={props.ingredient.quantity}
                         variant="outlined"
                         fullWidth
                         required
-                        // onChange={onChangeIngredientDescription}
+                        onChange={onChangeIngredientQuantity}
                         style={{width: "100%"}}
                     />
-                    <Select
-                        value={1}
-                        //onChange={handleSelectItemPerPageChange}
-                        displayEmpty
-                        inputProps={{'aria-label': 'Количество элементов'}}
-                        style={{width: "100%"}}
-                        required
-                    >
-                        <MenuItem value={1}>Штука</MenuItem>
-                        <MenuItem value={2}>Грамм</MenuItem>
-                        <MenuItem value={3}>Метр</MenuItem>
-                    </Select>
                 </Stack>
                 <TextField
                     autoFocus
                     margin="dense"
-                    id="Description"
-                    label="Описание"
-                    // value={props.descriptionIngredient}
+                    id="Condition"
+                    label="Состояние"
+                    value={props.ingredient.condition}
                     variant="outlined"
                     fullWidth
                     multiline
-                    // onChange={onChangeIngredientDescription}
+                    onChange={onChangeIngredientDescription}
                 />
             </div>
         </Stack>

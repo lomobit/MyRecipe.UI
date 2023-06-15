@@ -1,5 +1,6 @@
 import { IngredientDto } from "../../contracts/ingredients/dtos/IngredientDto";
 import {GetIngredientsAsyncQuery} from "../../contracts/ingredients/queries/GetIngredientsAsyncQuery";
+import {GetAllIngredientsAsyncQuery} from "../../contracts/ingredients/queries/GetAllIngredientsAsyncQuery";
 
 const apiUri = process.env.REACT_APP_API_URL;
 const moduleName = "Ingredient";
@@ -27,6 +28,18 @@ export async function GetIngredients(query: GetIngredientsAsyncQuery) {
 
     if (query.nameFilter !== undefined && query.nameFilter !== "") {
         uri += `&NameFilter=${query.nameFilter}`;
+    }
+
+    return await fetch(uri)
+        .then(checkSuccess)
+        .catch(showError);
+}
+
+export async function GetAllIngredients(query: GetAllIngredientsAsyncQuery) {
+    let uri = `${apiUri}/${moduleName}/GetAll`;
+
+    if (query.nameFilter !== undefined && query.nameFilter !== "") {
+        uri += `?NameFilter=${query.nameFilter}`;
     }
 
     return await fetch(uri)

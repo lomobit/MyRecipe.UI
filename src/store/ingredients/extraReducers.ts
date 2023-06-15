@@ -1,6 +1,6 @@
 import { ActionReducerMapBuilder } from "@reduxjs/toolkit";
 import { IIngredientState } from "../../contracts/ingredients/interfaces/IIngredientState";
-import { addIngredientAsync, editIngredientAsync, getIngredientsAsync } from "./thunks";
+import {addIngredientAsync, editIngredientAsync, getAllIngredientsAsync, getIngredientsAsync} from "./thunks";
 
 export const addCasesFor_getIngredientsAsync = (builder: ActionReducerMapBuilder<IIngredientState>) => {
     builder
@@ -14,6 +14,20 @@ export const addCasesFor_getIngredientsAsync = (builder: ActionReducerMapBuilder
         })
         .addCase(getIngredientsAsync.rejected, (state) => {
             state.getIngredientsStatus = 'failed';
+        });
+}
+
+export const addCasesFor_getAllIngredientsAsync = (builder: ActionReducerMapBuilder<IIngredientState>) => {
+    builder
+        .addCase(getAllIngredientsAsync.pending, (state) => {
+            state.getAllIngredientsStatus = 'loading';
+        })
+        .addCase(getAllIngredientsAsync.fulfilled, (state, action) => {
+            state.getAllIngredientsStatus = 'idle';
+            state.allIngredients = action.payload;
+        })
+        .addCase(getAllIngredientsAsync.rejected, (state) => {
+            state.getAllIngredientsStatus = 'failed';
         });
 }
 

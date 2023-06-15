@@ -9,9 +9,13 @@ import {
     TextField
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import {ChangeEvent, Fragment, useState} from "react";
+import {ChangeEvent, Fragment, useEffect, useState} from "react";
 import {IngredientForDishDto} from "../../../contracts/dishes/dtos/IngredientForDishDto";
 import IngredientForDish from "./ingredientForDish";
+import {GetIngredientsAsyncQuery} from "../../../contracts/ingredients/queries/GetIngredientsAsyncQuery";
+import {getAllIngredientsAsync, getIngredientsAsync} from "../../../store/ingredients/thunks";
+import {useAppDispatch} from "../../../store/hooks";
+import {GetAllIngredientsAsyncQuery} from "../../../contracts/ingredients/queries/GetAllIngredientsAsyncQuery";
 
 export declare interface DishesDialogProps {
     openDialog: boolean;
@@ -20,8 +24,15 @@ export declare interface DishesDialogProps {
 
 const DishesDialog = (props: DishesDialogProps) => {
 
+    const dispatch = useAppDispatch();
+
     const [file, setFile] = useState<File>();
     const [ingredientsForDish, setIngredientsForDish] = useState<IngredientForDishDto[]>([]);
+
+    useEffect(() => {
+        let getIngredientQuery = new GetAllIngredientsAsyncQuery();
+        (async () => await dispatch(getAllIngredientsAsync(getIngredientQuery)))();
+    });
 
     const handleDishImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -45,6 +56,42 @@ const DishesDialog = (props: DishesDialogProps) => {
         let tmp = [...ingredientsForDish];
         if (index > -1) {
             tmp.splice(index, 1);
+        }
+
+        setIngredientsForDish(tmp);
+    }
+
+    const handleChangeIngredientForDishId = (index: number, ingredientId: number) => {
+        let tmp = [...ingredientsForDish];
+        if (index > -1) {
+            tmp[index].ingredientId = ingredientId;
+        }
+
+        setIngredientsForDish(tmp);
+    }
+
+    const handleChangeIngredientForDishQuantity = (index: number, quantity: number) => {
+        let tmp = [...ingredientsForDish];
+        if (index > -1) {
+            tmp[index].quantity = quantity;
+        }
+
+        setIngredientsForDish(tmp);
+    }
+
+    const handleChangeIngredientForDishOkeiCode = (index: number, okeiCode: string) => {
+        let tmp = [...ingredientsForDish];
+        if (index > -1) {
+            tmp[index].okeiCode = okeiCode;
+        }
+
+        setIngredientsForDish(tmp);
+    }
+
+    const handleChangeIngredientForDishCondition = (index: number, condition: string) => {
+        let tmp = [...ingredientsForDish];
+        if (index > -1) {
+            tmp[index].condition = condition;
         }
 
         setIngredientsForDish(tmp);
@@ -139,10 +186,20 @@ const DishesDialog = (props: DishesDialogProps) => {
 
 
                 <Fragment>
-                    {ingredientsForDish.map((value, index) => <IngredientForDish
-                        key={index}
-                        index={index}
-                        deleteIngredient={handleDeleteIngrediantForDish}/>)}
+                    {
+                        ingredientsForDish.map((value, index) =>
+                            <IngredientForDish
+                                key={index}
+                                index={index}
+                                ingredient={value}
+                                deleteIngredientForDish={handleDeleteIngrediantForDish}
+                                changeIngredientId={handleChangeIngredientForDishId}
+                                changeIngredientQuantity={handleChangeIngredientForDishQuantity}
+                                changeIngredientOkeiCode={handleChangeIngredientForDishOkeiCode}
+                                changeIngredientCondition={handleChangeIngredientForDishCondition}
+                            />
+                        )
+                    }
                 </Fragment>
 
                 <Stack direction="row-reverse">

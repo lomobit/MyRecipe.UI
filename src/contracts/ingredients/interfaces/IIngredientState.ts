@@ -5,6 +5,9 @@ export interface IIngredientState {
     ingredientsCount: number;
     getIngredientsStatus: 'idle' | 'loading' | 'failed';
 
+    allIngredients: Array<IngredientDto>;
+    getAllIngredientsStatus: 'idle' | 'loading' | 'failed';
+
     addIngredientIdStatus: 'idle' | 'loading' | 'failed';
     
     editIngredientIdStatus: 'idle' | 'loading' | 'failed';

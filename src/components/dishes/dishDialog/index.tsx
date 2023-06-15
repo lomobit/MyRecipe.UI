@@ -133,7 +133,7 @@ const DishesDialog = (props: DishesDialogProps) => {
                     // onChange={onChangeIngredientDescription}
                 />
 
-                <DialogContentText style={{marginTop: 30}}>
+                <DialogContentText style={{marginTop: 30, marginBottom: 10}}>
                     Добавьте ингредиенты, которые нужны для приготовления блюда:
                 </DialogContentText>
 
@@ -145,13 +145,15 @@ const DishesDialog = (props: DishesDialogProps) => {
                         deleteIngredient={handleDeleteIngrediantForDish}/>)}
                 </Fragment>
 
-                <Button
-                    variant="outlined"
-                    startIcon={<AddIcon/>}
-                    onClick={handleAddIngrediantForDish}
-                >
-                    Добавить ингредиент
-                </Button>
+                <Stack direction="row-reverse">
+                    <Button
+                        variant="outlined"
+                        startIcon={<AddIcon/>}
+                        onClick={handleAddIngrediantForDish}
+                    >
+                        Добавить ингредиент
+                    </Button>
+                </Stack>
 
             </DialogContent>
             <DialogActions>

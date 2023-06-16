@@ -1,9 +1,19 @@
-import {Autocomplete, IconButton, MenuItem, Select, Stack, TextField} from "@mui/material";
+import {
+    Autocomplete,
+    AutocompleteChangeDetails,
+    AutocompleteChangeReason,
+    IconButton,
+    MenuItem,
+    Select,
+    Stack,
+    TextField
+} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {IngredientForDishDto} from "../../../../contracts/dishes/dtos/IngredientForDishDto";
-import {ChangeEvent} from "react";
+import {ChangeEvent, SyntheticEvent} from "react";
 import {useAppSelector} from "../../../../store/hooks";
 import {selectAllIngredients} from "../../../../store/ingredients/reducers";
+import {IngredientDto} from "../../../../contracts/ingredients/dtos/IngredientDto";
 
 export declare interface IngredientForDishProps {
     index: number;
@@ -11,7 +21,7 @@ export declare interface IngredientForDishProps {
 
     deleteIngredientForDish: (index: number) => void;
 
-    changeIngredientId: (index: number, ingredientId: number) => void;
+    changeIngredientId: (index: number, ingredient: IngredientDto) => void;
     changeIngredientQuantity: (index: number, quantity: number) => void;
     changeIngredientOkeiCode: (index: number, okeiCode: string) => void;
     changeIngredientCondition: (index: number, condition: string) => void;
@@ -23,6 +33,19 @@ const IngredientForDish = (props: IngredientForDishProps) => {
 
     const handleDeleteIngredient = () => {
         props.deleteIngredientForDish(props.index);
+    }
+
+    const onChangeIngredientName = (
+        event: SyntheticEvent<Element, Event>,
+        value: string | null,
+        reason: AutocompleteChangeReason,
+        details?: AutocompleteChangeDetails<string> | undefined
+    ) => {
+        debugger;
+        let ingredients = allIngredients.filter(x => x.name == value);
+        if (ingredients.length > 0) {
+            props.changeIngredientId(props.index, ingredients[0]);
+        }
     }
 
     const onChangeIngredientQuantity = (event: ChangeEvent<HTMLInputElement>) => {
@@ -47,9 +70,11 @@ const IngredientForDish = (props: IngredientForDishProps) => {
                     <Autocomplete
                         disablePortal
                         id="combo-box-demo"
+                        value={props.ingredient.ingredientName}
                         options={allIngredients.map(x => x.name)}
                         sx={{ width: 300 }}
                         renderInput={(params) => <TextField {...params} label="Ингредиент" />}
+                        onChange={onChangeIngredientName}
                     />
                     <TextField
                         type="number"

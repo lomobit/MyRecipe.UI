@@ -16,6 +16,7 @@ import {GetIngredientsAsyncQuery} from "../../../contracts/ingredients/queries/G
 import {getAllIngredientsAsync, getIngredientsAsync} from "../../../store/ingredients/thunks";
 import {useAppDispatch} from "../../../store/hooks";
 import {GetAllIngredientsAsyncQuery} from "../../../contracts/ingredients/queries/GetAllIngredientsAsyncQuery";
+import {IngredientDto} from "../../../contracts/ingredients/dtos/IngredientDto";
 
 export declare interface DishesDialogProps {
     openDialog: boolean;
@@ -61,10 +62,11 @@ const DishesDialog = (props: DishesDialogProps) => {
         setIngredientsForDish(tmp);
     }
 
-    const handleChangeIngredientForDishId = (index: number, ingredientId: number) => {
+    const handleChangeIngredientForDishId = (index: number, ingredient: IngredientDto) => {
         let tmp = [...ingredientsForDish];
         if (index > -1) {
-            tmp[index].ingredientId = ingredientId;
+            tmp[index].ingredientId = ingredient.id ?? 0;
+            tmp[index].ingredientName = ingredient.name;
         }
 
         setIngredientsForDish(tmp);

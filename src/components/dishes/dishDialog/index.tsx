@@ -208,9 +208,9 @@ const DishesDialog = (props: DishesDialogProps) => {
                             <IngredientForDish
                                 key={index}
                                 ingredientForDishIndex={index}
-                                ingredientName={value.ingredient?.name ?? ""}
+                                ingredientName={value.ingredient?.name ?? null}
                                 ingredientQuantity={value.quantity}
-                                ingredientOkeiName={value.okei?.name ?? ""}
+                                ingredientOkeiName={value.okei?.name ?? null}
                                 ingredientCondition={value.condition}
                                 deleteIngredientForDish={handleDeleteIngrediantForDish}
                                 changeIngredientId={handleChangeIngredientForDishId}

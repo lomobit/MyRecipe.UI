@@ -17,9 +17,9 @@ import {OkeiDto} from "../../../../contracts/ingredients/dtos/OkeiDto";
 export declare interface IngredientForDishProps {
     ingredientForDishIndex: number;
 
-    ingredientName: string;
+    ingredientName: string | null;
     ingredientQuantity: number;
-    ingredientOkeiName: string;
+    ingredientOkeiName: string | null;
     ingredientCondition?: string;
 
     deleteIngredientForDish: (index: number) => void;
@@ -83,11 +83,10 @@ const IngredientForDish = (props: IngredientForDishProps) => {
             <div>
                 <Stack direction="row" spacing={1} className="nameFilteringButtons" style={{width: "100%"}}>
                     <Autocomplete
-                        disablePortal
                         id="combo-box-ingredients"
                         value={props.ingredientName}
                         options={allIngredients.map(x => x.name)}
-                        sx={{ width: 400 }}
+                        sx={{ width: 300 }}
                         renderInput={(params) => <TextField {...params} label="Ингредиент" />}
                         onChange={onChangeIngredientName}
                     />
@@ -102,14 +101,13 @@ const IngredientForDish = (props: IngredientForDishProps) => {
                         fullWidth
                         required
                         onChange={onChangeIngredientQuantity}
-                        style={{width: "100%"}}
+                        style={{width: "auto"}}
                     />
                     <Autocomplete
-                        disablePortal
                         id="combo-box-okei-codes"
                         value={props.ingredientOkeiName}
                         options={allOkeis.map(x => x.name)}
-                        sx={{ width: 400 }}
+                        sx={{ width: 300 }}
                         renderInput={(params) => <TextField {...params} label="Единица измерения" />}
                         onChange={onChangeIngredientOkei}
                     />

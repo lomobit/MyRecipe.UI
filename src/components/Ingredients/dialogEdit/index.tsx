@@ -35,7 +35,7 @@ const DialogEditIngredient = (props: DialogEditIngrediantProps) => {
         clearFields();
     };
 
-    const handleEdit = async () => {
+    const handleEdit = () => {
         if (props.nameIngredient === undefined || !props.nameIngredient) {
             setIsValidationNameError(true);
             setHelperTextErrorForName("Необходимо ввести имя");

@@ -1,10 +1,12 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import reduxLogger from 'redux-logger';
 import ingredientReducer from './ingredients/reducers';
+import okeiReducer from './okeis/reducers';
 
 export const store = configureStore({
     reducer: {
         ingredient: ingredientReducer,
+        okei: okeiReducer
     },
     devTools: true,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware()

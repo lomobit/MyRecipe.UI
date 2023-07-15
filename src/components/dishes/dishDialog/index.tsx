@@ -16,6 +16,8 @@ import {getAllIngredientsAsync} from "../../../store/ingredients/thunks";
 import {useAppDispatch} from "../../../store/hooks";
 import {GetAllIngredientsAsyncQuery} from "../../../contracts/ingredients/queries/GetAllIngredientsAsyncQuery";
 import {IngredientDto} from "../../../contracts/ingredients/dtos/IngredientDto";
+import {OkeiDto} from "../../../contracts/ingredients/dtos/OkeiDto";
+import { getAllOkeisAsync } from "../../../store/okeis/thunks";
 
 export declare interface DishesDialogProps {
     openDialog: boolean;
@@ -30,9 +32,9 @@ const DishesDialog = (props: DishesDialogProps) => {
     const [ingredientsForDish, setIngredientsForDish] = useState<IngredientForDishDto[]>([]);
 
     useEffect(() => {
-        let getIngredientQuery = new GetAllIngredientsAsyncQuery();
-        (async () => await dispatch(getAllIngredientsAsync(getIngredientQuery)))();
-    });
+        (async () => await dispatch(getAllIngredientsAsync(new GetAllIngredientsAsyncQuery())))();
+        (async () => await dispatch(getAllOkeisAsync()))();
+    }, []);
 
     const handleDishImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -85,13 +87,13 @@ const DishesDialog = (props: DishesDialogProps) => {
         setIngredientsForDish(tmp);
     }
 
-    const handleChangeIngredientForDishOkeiCode = (index: number, okeiCode: string) => {
+    const handleChangeIngredientForDishOkeiCode = (index: number, okei: OkeiDto) => {
         if (index < 0) {
             return;
         }
 
         let tmp = [...ingredientsForDish];
-        tmp[index].okeiCode = okeiCode;
+        tmp[index].okei = okei;
 
         setIngredientsForDish(tmp);
     }
@@ -208,6 +210,7 @@ const DishesDialog = (props: DishesDialogProps) => {
                                 ingredientForDishIndex={index}
                                 ingredientName={value.ingredient?.name ?? ""}
                                 ingredientQuantity={value.quantity}
+                                ingredientOkeiName={value.okei?.name ?? ""}
                                 ingredientCondition={value.condition}
                                 deleteIngredientForDish={handleDeleteIngrediantForDish}
                                 changeIngredientId={handleChangeIngredientForDishId}

@@ -1,19 +1,20 @@
 import {IngredientDto} from "../../ingredients/dtos/IngredientDto";
+import {OkeiDto} from "../../ingredients/dtos/OkeiDto";
 
 export class IngredientForDishDto {
     quantity: number;
-    okeiCode: string;
     condition?: string;
     ingredient?: IngredientDto;
+    okei?: OkeiDto;
 
      constructor(
          quantity: number,
-         okeiCode: string,
          condition?: string,
-         ingredient?: IngredientDto) {
+         ingredient?: IngredientDto,
+         okei?: OkeiDto) {
          this.quantity = quantity;
-         this.okeiCode = okeiCode;
          this.condition = condition;
          this.ingredient = ingredient;
+         this.okei = okei;
      }
 }

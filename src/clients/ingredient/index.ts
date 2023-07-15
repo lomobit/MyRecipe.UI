@@ -4,23 +4,10 @@ import {GetAllIngredientsAsyncQuery} from "../../contracts/ingredients/queries/G
 import {
     AddIngredientAsyncCommand
 } from "../../contracts/ingredients/commands/AddIngredientAsyncCommand";
+import {checkSuccess, showError} from "../common";
 
 const apiUri = process.env.REACT_APP_API_URL;
 const moduleName = "Ingredient";
-
-const checkSuccess = async (res: Response) => {
-    let result = res.json();
-    if (res.ok) {
-        return result;
-    }
-
-    let errorResult = await result;
-    throw new Error(`${errorResult.messages[0].value}`);
-}
-
-const showError = async (error: any) => {
-    alert(`${error}`);
-}
 
 export async function GetIngredients(query: GetIngredientsAsyncQuery) {
     let uri = `${apiUri}/${moduleName}/Get`

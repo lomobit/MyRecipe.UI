@@ -11,25 +11,29 @@ import {ChangeEvent, SyntheticEvent} from "react";
 import {useAppSelector} from "../../../../store/hooks";
 import {selectAllIngredients} from "../../../../store/ingredients/reducers";
 import {IngredientDto} from "../../../../contracts/ingredients/dtos/IngredientDto";
+import {selectAllOkeis} from "../../../../store/okeis/reducers";
+import {OkeiDto} from "../../../../contracts/ingredients/dtos/OkeiDto";
 
 export declare interface IngredientForDishProps {
     ingredientForDishIndex: number;
 
     ingredientName: string;
     ingredientQuantity: number;
+    ingredientOkeiName: string;
     ingredientCondition?: string;
 
     deleteIngredientForDish: (index: number) => void;
 
     changeIngredientId: (index: number, ingredient: IngredientDto) => void;
     changeIngredientQuantity: (index: number, quantity: number) => void;
-    changeIngredientOkeiCode: (index: number, okeiCode: string) => void;
+    changeIngredientOkeiCode: (index: number, okei: OkeiDto) => void;
     changeIngredientCondition: (index: number, condition: string) => void;
 }
 
 const IngredientForDish = (props: IngredientForDishProps) => {
 
     const allIngredients = useAppSelector(selectAllIngredients);
+    const allOkeis = useAppSelector(selectAllOkeis);
 
     const handleDeleteIngredient = () => {
         props.deleteIngredientForDish(props.ingredientForDishIndex);
@@ -44,6 +48,18 @@ const IngredientForDish = (props: IngredientForDishProps) => {
         let ingredients = allIngredients.filter(x => x.name === value);
         if (ingredients.length > 0) {
             props.changeIngredientId(props.ingredientForDishIndex, ingredients[0]);
+        }
+    }
+
+    const onChangeIngredientOkei = (
+        event: SyntheticEvent<Element, Event>,
+        value: string | null,
+        reason: AutocompleteChangeReason,
+        details?: AutocompleteChangeDetails<string> | undefined
+    ) => {
+        let okeis = allOkeis.filter(x => x.name === value);
+        if (okeis.length > 0) {
+            props.changeIngredientOkeiCode(props.ingredientForDishIndex, okeis[0]);
         }
     }
 
@@ -71,7 +87,7 @@ const IngredientForDish = (props: IngredientForDishProps) => {
                         id="combo-box-ingredients"
                         value={props.ingredientName}
                         options={allIngredients.map(x => x.name)}
-                        sx={{ width: 300 }}
+                        sx={{ width: 400 }}
                         renderInput={(params) => <TextField {...params} label="Ингредиент" />}
                         onChange={onChangeIngredientName}
                     />
@@ -91,11 +107,11 @@ const IngredientForDish = (props: IngredientForDishProps) => {
                     <Autocomplete
                         disablePortal
                         id="combo-box-okei-codes"
-                        value={props.ingredientName}
-                        options={allIngredients.map(x => x.name)}
-                        sx={{ width: 300 }}
-                        renderInput={(params) => <TextField {...params} label="Ингредиент" />}
-                        onChange={onChangeIngredientName}
+                        value={props.ingredientOkeiName}
+                        options={allOkeis.map(x => x.name)}
+                        sx={{ width: 400 }}
+                        renderInput={(params) => <TextField {...params} label="Единица измерения" />}
+                        onChange={onChangeIngredientOkei}
                     />
                 </Stack>
                 <TextField

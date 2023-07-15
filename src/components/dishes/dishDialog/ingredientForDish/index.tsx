@@ -20,7 +20,12 @@ export declare interface IngredientForDishProps {
     ingredientName: string | null;
     ingredientQuantity: number;
     ingredientOkeiName: string | null;
-    ingredientCondition?: string;
+    ingredientCondition: string;
+
+    ingredientNameError: boolean;
+    ingredientQuantityError: boolean;
+    ingredientOkeiNameError: boolean;
+    ingredientConditionError: boolean;
 
     deleteIngredientForDish: (index: number) => void;
 
@@ -87,7 +92,13 @@ const IngredientForDish = (props: IngredientForDishProps) => {
                         value={props.ingredientName}
                         options={allIngredients.map(x => x.name)}
                         sx={{ width: 300 }}
-                        renderInput={(params) => <TextField {...params} label="Ингредиент *" />}
+                        renderInput={(params) =>
+                            <TextField
+                                {...params}
+                                label="Ингредиент *"
+                                error={props.ingredientNameError}
+                                helperText={props.ingredientNameError && "Выберите ингредиент"}
+                            />}
                         onChange={onChangeIngredientName}
                     />
                     <TextField
@@ -102,13 +113,21 @@ const IngredientForDish = (props: IngredientForDishProps) => {
                         required
                         onChange={onChangeIngredientQuantity}
                         style={{width: "auto"}}
+                        error={props.ingredientQuantityError}
+                        helperText={props.ingredientQuantityError && "Укажите количество"}
                     />
                     <Autocomplete
                         id="combo-box-okei-codes"
                         value={props.ingredientOkeiName}
                         options={allOkeis.map(x => x.name)}
                         sx={{ width: 300 }}
-                        renderInput={(params) => <TextField {...params} label="Единица измерения *" />}
+                        renderInput={(params) =>
+                            <TextField
+                                {...params}
+                                label="Единица измерения *"
+                                error={props.ingredientOkeiNameError}
+                                helperText={props.ingredientOkeiNameError && "Выберите единицу измерения"}
+                            />}
                         onChange={onChangeIngredientOkei}
                     />
                 </Stack>
@@ -116,13 +135,15 @@ const IngredientForDish = (props: IngredientForDishProps) => {
                     autoFocus
                     margin="dense"
                     id="Condition"
-                    label="Состояние"
+                    label="Состояние (Пример: варёное, жареное)"
                     value={props.ingredientCondition}
                     variant="outlined"
                     fullWidth
                     multiline
                     onChange={onChangeIngredientDescription}
                     required
+                    error={props.ingredientConditionError}
+                    helperText={props.ingredientConditionError && "Укажите состояние ингредиента"}
                 />
             </div>
         </Stack>

@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import {ChangeEvent, Fragment, useEffect, useState} from "react";
-import {IngredientForDishDto} from "../../../contracts/dishes/dtos/IngredientForDishDto";
+import {IngredientForDishModel} from "../../../contracts/dishes/models/IngredientForDishModel";
 import IngredientForDish from "./ingredientForDish";
 import {getAllIngredientsAsync} from "../../../store/ingredients/thunks";
 import {useAppDispatch} from "../../../store/hooks";
@@ -32,7 +32,7 @@ const DishesDialog = (props: DishesDialogProps) => {
     const [dishName, setDishName] = useState<string>();
     const [dishNumberOfPerson, setDishNumberOfPerson] = useState<number>();
     const [dishDescription, setDishDescription] = useState<string>();
-    const [ingredientsForDish, setIngredientsForDish] = useState<IngredientForDishDto[]>([]);
+    const [ingredientsForDish, setIngredientsForDish] = useState<IngredientForDishModel[]>([]);
 
     const [isDishNameValidationError, setIsDishNameValidationError ] = useState<boolean>(false);
     const [isDishNumberOfPersonValidationError, setIsDishNumberOfPersonValidationError ] = useState<boolean>(false);
@@ -58,7 +58,7 @@ const DishesDialog = (props: DishesDialogProps) => {
 
     const handleAddIngrediantForDish = () => {
         let tmp = [...ingredientsForDish];
-        tmp.push(new IngredientForDishDto(1, ""));
+        tmp.push(new IngredientForDishModel(1, ""));
 
         setIngredientsForDish(tmp);
         setIsDishIngredientsValidationError(false);
@@ -82,6 +82,7 @@ const DishesDialog = (props: DishesDialogProps) => {
 
         let tmp = [...ingredientsForDish];
         tmp[index].ingredient = ingredient;
+        tmp[index].ingredientError = false;
 
         setIngredientsForDish(tmp);
     }
@@ -93,6 +94,7 @@ const DishesDialog = (props: DishesDialogProps) => {
 
         let tmp = [...ingredientsForDish];
         tmp[index].quantity = quantity;
+        tmp[index].quantityError = false;
 
         setIngredientsForDish(tmp);
     }
@@ -104,15 +106,19 @@ const DishesDialog = (props: DishesDialogProps) => {
 
         let tmp = [...ingredientsForDish];
         tmp[index].okei = okei;
+        tmp[index].okeiError = false;
 
         setIngredientsForDish(tmp);
     }
 
     const handleChangeIngredientForDishCondition = (index: number, condition: string) => {
-        let tmp = [...ingredientsForDish];
-        if (index > -1) {
-            tmp[index].condition = condition;
+        if (index < 0) {
+            return;
         }
+
+        let tmp = [...ingredientsForDish];
+        tmp[index].condition = condition;
+        tmp[index].conditionError = false
 
         setIngredientsForDish(tmp);
     }
@@ -125,8 +131,10 @@ const DishesDialog = (props: DishesDialogProps) => {
     }
 
     const onChangeDishNumberOfPerson = (event: ChangeEvent<HTMLInputElement>) => {
-        setDishNumberOfPerson(+event.target.value);
-        if (event.target.value) {
+        let value = +event.target.value;
+
+        setDishNumberOfPerson(value);
+        if (value && value > 0) {
             setIsDishNumberOfPersonValidationError(false);
         }
     }
@@ -140,10 +148,80 @@ const DishesDialog = (props: DishesDialogProps) => {
 
     const handleDialogsAddButtonClick = () => {
         // Валидация обязательных полей
+        if (!validateRequiredFields()) {
+            alert("Не все обязательные поля заполнены!");
+            return;
+        }
 
+        alert("Validation Passed");
         // Отправка запроса на добавление нового блюда
 
         // После успешного ответа очистка полей и закрытие диалогового окна
+    }
+
+    const validateRequiredFields = (): boolean => {
+        let hasError: boolean = false;
+
+        // Проверка на заполненность названия блюда
+        if (!dishName) {
+            hasError = true;
+            setIsDishNameValidationError(true);
+        }
+
+        // Проверка на заполненность количества персон
+        if (!dishNumberOfPerson || dishNumberOfPerson < 1) {
+            hasError = true;
+            setIsDishNumberOfPersonValidationError(true);
+        }
+
+        // Проверка на заполненость способа приготовления
+        if (!dishDescription) {
+            hasError = true;
+            setIsDishDescriptionValidationError(true);
+        }
+
+        // Проверка на то, что в нашем блюде есть ингредиенты
+        if (!ingredientsForDish?.length) {
+            hasError = true;
+            setIsDishIngredientsValidationError(true);
+        }
+        // Проверка, что все поля каждого ингредиента заполнены
+        else {
+            let hasErrorInIngredients: boolean = false;
+            let tmp: IngredientForDishModel[] = [...ingredientsForDish];
+            for (let i = 0; i < tmp.length; i++) {
+                // Проверка на заполнение типа ингредиента
+                if (!tmp[i].ingredient) {
+                    hasErrorInIngredients = true;
+                    tmp[i].ingredientError = true;
+                }
+
+                // Проверка на заполнение количества ингредиента
+                if (!tmp[i].quantity || tmp[i].quantity < 1) {
+                    hasErrorInIngredients = true;
+                    tmp[i].quantityError = true;
+                }
+
+                // Проверка на зполнение единицы измерения ингредиента
+                if (!tmp[i].okei) {
+                    hasErrorInIngredients = true;
+                    tmp[i].okeiError = true;
+                }
+
+                // Проверка на заполнение состояния ингредиента
+                if (!tmp[i].condition) {
+                    hasErrorInIngredients = true;
+                    tmp[i].conditionError = true;
+                }
+            }
+
+            if (hasErrorInIngredients) {
+                hasError = true;
+                setIngredientsForDish(tmp);
+            }
+        }
+
+        return !hasError;
     }
 
     const handleDialogsCancelButtonClick = () => {
@@ -249,7 +327,7 @@ const DishesDialog = (props: DishesDialogProps) => {
                     required
                     onChange={onChangeDishNumberOfPerson}
                     error={isDishNumberOfPersonValidationError}
-                    helperText={isDishNumberOfPersonValidationError && "Не указано на какое количество персон расчитано блюдо"}
+                    helperText={isDishNumberOfPersonValidationError && "Неверно указано количество персон, на которых расчитано блюдо"}
                 />
                 <TextField
                     autoFocus
@@ -293,6 +371,10 @@ const DishesDialog = (props: DishesDialogProps) => {
                                 changeIngredientQuantity={handleChangeIngredientForDishQuantity}
                                 changeIngredientOkeiCode={handleChangeIngredientForDishOkeiCode}
                                 changeIngredientCondition={handleChangeIngredientForDishCondition}
+                                ingredientConditionError={value.conditionError}
+                                ingredientNameError={value.ingredientError}
+                                ingredientOkeiNameError={value.okeiError}
+                                ingredientQuantityError={value.quantityError}
                             />
                         )
                     }

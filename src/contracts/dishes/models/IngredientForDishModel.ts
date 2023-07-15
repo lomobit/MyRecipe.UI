@@ -1,15 +1,19 @@
 import {IngredientDto} from "../../ingredients/dtos/IngredientDto";
 import {OkeiDto} from "../../ingredients/dtos/OkeiDto";
 
-export class IngredientForDishDto {
+export class IngredientForDishModel {
     quantity: number;
-    condition?: string;
+    condition: string;
     ingredient?: IngredientDto;
     okei?: OkeiDto;
+    quantityError: boolean = false;
+    conditionError: boolean = false;
+    ingredientError: boolean = false;
+    okeiError: boolean = false;
 
      constructor(
          quantity: number,
-         condition?: string,
+         condition: string,
          ingredient?: IngredientDto,
          okei?: OkeiDto) {
          this.quantity = quantity;

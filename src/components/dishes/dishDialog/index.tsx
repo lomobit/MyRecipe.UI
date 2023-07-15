@@ -119,16 +119,16 @@ const DishesDialog = (props: DishesDialogProps) => {
             <DialogContent>
 
                 <Fragment>
-                    <div style={{display: "flex", alignItems: "center", marginBottom: 15}}>
+                    <Fragment>
                         <img
                             src={file !== undefined
                                 ? URL.createObjectURL(file)
                                 : noImageData}
                             width="70%"
                             alt="There will be text"
-                            style={{margin: "auto"}}
+                            style={{display: "flex", margin: "auto", marginBottom: 15}}
                         />
-                    </div>
+                    </Fragment>
                     <Stack direction="row" spacing={1}>
                         <Button
                             variant="outlined"

@@ -1,6 +1,9 @@
 import { IngredientDto } from "../../contracts/ingredients/dtos/IngredientDto";
 import {GetIngredientsAsyncQuery} from "../../contracts/ingredients/queries/GetIngredientsAsyncQuery";
 import {GetAllIngredientsAsyncQuery} from "../../contracts/ingredients/queries/GetAllIngredientsAsyncQuery";
+import {
+    AddIngredientAsyncCommand
+} from "../../contracts/ingredients/commands/AddIngredientAsyncCommand";
 
 const apiUri = process.env.REACT_APP_API_URL;
 const moduleName = "Ingredient";
@@ -47,10 +50,10 @@ export async function GetAllIngredients(query: GetAllIngredientsAsyncQuery) {
         .catch(showError);
 }
 
-export async function AddIngredient(ingredient: IngredientDto) {
+export async function AddIngredient(command: AddIngredientAsyncCommand) {
     let bodyQuery = {
-        name: ingredient.name,
-        description: ingredient.description,
+        name: command.name,
+        description: command.description,
     };
 
     let queryOptions = {

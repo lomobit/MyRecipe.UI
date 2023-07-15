@@ -28,6 +28,7 @@ import {
 import {addIngredientAsync, editIngredientAsync, getIngredientsAsync} from '../../store/ingredients/thunks';
 import {SortingOrderEnum} from "../../contracts/common/enums/SortingOrderEnum";
 import {SortingFieldEnum} from "../../contracts/ingredients/enums/SortingFieldEnum";
+import {AddIngredientAsyncCommand} from "../../contracts/ingredients/commands/AddIngredientAsyncCommand";
 
 const Ingredients = () => {
 
@@ -119,12 +120,12 @@ const Ingredients = () => {
     }
 
     const onAddIngredientClick = () => {
-        dispatch(addIngredientAsync(new IngredientDto(nameIngredientAddDialog, descriptionIngredientAddDialog)))
+        dispatch(addIngredientAsync(new AddIngredientAsyncCommand(nameIngredientAddDialog, descriptionIngredientAddDialog)))
             .then(() => updateIngredients());
     }
 
     const onEditIngredientClick = () => {
-        dispatch(editIngredientAsync(new IngredientDto(nameIngredientEditDialog, descriptionIngredientEditDialog, idIngredientEditDialog)))
+        dispatch(editIngredientAsync(new IngredientDto(idIngredientEditDialog, nameIngredientEditDialog, descriptionIngredientEditDialog)))
             .then(() => updateIngredients());
         
         onRowSelectionModelChange([]);

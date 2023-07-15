@@ -3,6 +3,9 @@ import {AddIngredient, EditIngredient, GetAllIngredients, GetIngredients} from "
 import { GetIngredientsAsyncQuery } from "../../contracts/ingredients/queries/GetIngredientsAsyncQuery";
 import { IngredientDto } from "../../contracts/ingredients/dtos/IngredientDto";
 import {GetAllIngredientsAsyncQuery} from "../../contracts/ingredients/queries/GetAllIngredientsAsyncQuery";
+import {
+    AddIngredientAsyncCommand
+} from "../../contracts/ingredients/commands/AddIngredientAsyncCommand";
 
 export const getIngredientsAsync = createAsyncThunk(
     'ingredient/get',
@@ -22,8 +25,8 @@ export const getAllIngredientsAsync = createAsyncThunk(
 
 export const addIngredientAsync = createAsyncThunk(
     'ingredient/add',
-    async (ingredient: IngredientDto) => {
-        const response = await AddIngredient(ingredient);
+    async (command: AddIngredientAsyncCommand) => {
+        const response = await AddIngredient(command);
         return response.data;
     }
 );

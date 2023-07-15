@@ -12,8 +12,7 @@ import AddIcon from "@mui/icons-material/Add";
 import {ChangeEvent, Fragment, useEffect, useState} from "react";
 import {IngredientForDishDto} from "../../../contracts/dishes/dtos/IngredientForDishDto";
 import IngredientForDish from "./ingredientForDish";
-import {GetIngredientsAsyncQuery} from "../../../contracts/ingredients/queries/GetIngredientsAsyncQuery";
-import {getAllIngredientsAsync, getIngredientsAsync} from "../../../store/ingredients/thunks";
+import {getAllIngredientsAsync} from "../../../store/ingredients/thunks";
 import {useAppDispatch} from "../../../store/hooks";
 import {GetAllIngredientsAsyncQuery} from "../../../contracts/ingredients/queries/GetAllIngredientsAsyncQuery";
 import {IngredientDto} from "../../../contracts/ingredients/dtos/IngredientDto";
@@ -48,44 +47,51 @@ const DishesDialog = (props: DishesDialogProps) => {
 
     const handleAddIngrediantForDish = () => {
         let tmp = [...ingredientsForDish];
-        tmp.push(new IngredientForDishDto(1, 1, "", ""));
+        tmp.push(new IngredientForDishDto(1, ""));
 
         setIngredientsForDish(tmp);
     }
 
     const handleDeleteIngrediantForDish = (index: number) => {
-        let tmp = [...ingredientsForDish];
-        if (index > -1) {
-            tmp.splice(index, 1);
+        if (index < 0) {
+            return;
         }
+
+        let tmp = [...ingredientsForDish];
+        tmp.splice(index, 1);
 
         setIngredientsForDish(tmp);
     }
 
     const handleChangeIngredientForDishId = (index: number, ingredient: IngredientDto) => {
-        let tmp = [...ingredientsForDish];
-        if (index > -1) {
-            tmp[index].ingredientId = ingredient.id ?? 0;
-            tmp[index].ingredientName = ingredient.name;
+        if (index < 0) {
+            return;
         }
+
+        let tmp = [...ingredientsForDish];
+        tmp[index].ingredient = ingredient;
 
         setIngredientsForDish(tmp);
     }
 
     const handleChangeIngredientForDishQuantity = (index: number, quantity: number) => {
-        let tmp = [...ingredientsForDish];
-        if (index > -1) {
-            tmp[index].quantity = quantity;
+        if (index < 0) {
+            return;
         }
+
+        let tmp = [...ingredientsForDish];
+        tmp[index].quantity = quantity;
 
         setIngredientsForDish(tmp);
     }
 
     const handleChangeIngredientForDishOkeiCode = (index: number, okeiCode: string) => {
-        let tmp = [...ingredientsForDish];
-        if (index > -1) {
-            tmp[index].okeiCode = okeiCode;
+        if (index < 0) {
+            return;
         }
+
+        let tmp = [...ingredientsForDish];
+        tmp[index].okeiCode = okeiCode;
 
         setIngredientsForDish(tmp);
     }
@@ -99,24 +105,30 @@ const DishesDialog = (props: DishesDialogProps) => {
         setIngredientsForDish(tmp);
     }
 
-    // Вынести куда-то в общие константы
+    // TODO: Вынести куда-то в общие константы
     const noImageData = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0zMiAtMTIwIDYxMiA2MTIiPgogIDxwYXRoIGQ9Im0gNDggMzIgYyAwIDAgMCAwIDAgMCBsIDQ0OCAwIGMgMTYgMCAxNiAxNiAxNiAxNiB2IDI3MiBjIDAgMTYgLTE2IDE2IC0xNiAxNiBsIC00NDggMCBjIC0xNiAwIC0xNiAtMTYgLTE2IC0xNiB2IC0yNzIgYyAwIDAgMCAtMTYgMTYgLTE2IG0gLTE2IDE3NiBsIDExMiAtOTYgbCAxMjggMTI4IG0gMCAwIGwgOTYgLTk2IGwgMTQ0IDEyOCBtIC0xNDQgLTE5MSBDIDM3NiA4MiAzODEgODUgMzgyIDk1IEMgMzgwIDEwNSAzNzcgMTA4IDM2OCAxMDkgQyAzNjEgMTA4IDM1NiAxMDYgMzU0IDk1IEMgMzU1IDg2IDM2MCA4MiAzNjggODEiIHN0cm9rZT0iI2NlY2ZkMiIgc3Ryb2tlLXdpZHRoPSIxMCIgZmlsbD0iI2Y0ZjZmOSIvPgo8L3N2Zz4=";
 
     return (
-        <Dialog open={props.openDialog} onClose={() => props.setOpenDialog(false)}>
+        <Dialog
+            open={props.openDialog}
+            onClose={() => props.setOpenDialog(false)}
+            fullWidth={true}
+            maxWidth="md"
+        >
             <DialogTitle>Добавить блюдо</DialogTitle>
             <DialogContent>
 
                 <Fragment>
-                    <Fragment>
+                    <div style={{display: "flex", alignItems: "center", marginBottom: 15}}>
                         <img
                             src={file !== undefined
                                 ? URL.createObjectURL(file)
                                 : noImageData}
-                            width="100%"
+                            width="70%"
                             alt="There will be text"
+                            style={{margin: "auto"}}
                         />
-                    </Fragment>
+                    </div>
                     <Stack direction="row" spacing={1}>
                         <Button
                             variant="outlined"
@@ -179,6 +191,7 @@ const DishesDialog = (props: DishesDialogProps) => {
                     variant="outlined"
                     fullWidth
                     multiline
+                    rows={8}
                     // onChange={onChangeIngredientDescription}
                 />
 
@@ -192,8 +205,10 @@ const DishesDialog = (props: DishesDialogProps) => {
                         ingredientsForDish.map((value, index) =>
                             <IngredientForDish
                                 key={index}
-                                index={index}
-                                ingredient={value}
+                                ingredientForDishIndex={index}
+                                ingredientName={value.ingredient?.name ?? ""}
+                                ingredientQuantity={value.quantity}
+                                ingredientCondition={value.condition}
                                 deleteIngredientForDish={handleDeleteIngrediantForDish}
                                 changeIngredientId={handleChangeIngredientForDishId}
                                 changeIngredientQuantity={handleChangeIngredientForDishQuantity}

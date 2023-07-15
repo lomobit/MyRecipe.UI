@@ -29,7 +29,16 @@ const DishesDialog = (props: DishesDialogProps) => {
     const dispatch = useAppDispatch();
 
     const [file, setFile] = useState<File>();
+    const [dishName, setDishName] = useState<string>();
+    const [dishNumberOfPerson, setDishNumberOfPerson] = useState<number>();
+    const [dishDescription, setDishDescription] = useState<string>();
     const [ingredientsForDish, setIngredientsForDish] = useState<IngredientForDishDto[]>([]);
+
+    const [isDishNameValidationError, setIsDishNameValidationError ] = useState<boolean>(false);
+    const [isDishNumberOfPersonValidationError, setIsDishNumberOfPersonValidationError ] = useState<boolean>(false);
+    const [isDishDescriptionValidationError, setIsDishDescriptionValidationError ] = useState<boolean>(false);
+    const [isDishIngredientsValidationError, setIsDishIngredientsValidationError ] = useState<boolean>(false);
+
 
     useEffect(() => {
         (async () => await dispatch(getAllIngredientsAsync(new GetAllIngredientsAsyncQuery())))();
@@ -52,6 +61,7 @@ const DishesDialog = (props: DishesDialogProps) => {
         tmp.push(new IngredientForDishDto(1, ""));
 
         setIngredientsForDish(tmp);
+        setIsDishIngredientsValidationError(false);
     }
 
     const handleDeleteIngrediantForDish = (index: number) => {
@@ -105,6 +115,61 @@ const DishesDialog = (props: DishesDialogProps) => {
         }
 
         setIngredientsForDish(tmp);
+    }
+
+    const onChangeDishName = (event: ChangeEvent<HTMLInputElement>) => {
+        setDishName(event.target.value);
+        if (event.target.value) {
+            setIsDishNameValidationError(false);
+        }
+    }
+
+    const onChangeDishNumberOfPerson = (event: ChangeEvent<HTMLInputElement>) => {
+        setDishNumberOfPerson(+event.target.value);
+        if (event.target.value) {
+            setIsDishNumberOfPersonValidationError(false);
+        }
+    }
+
+    const onChangeDishDescription = (event: ChangeEvent<HTMLInputElement>) => {
+        setDishDescription(event.target.value);
+        if (event.target.value) {
+            setIsDishDescriptionValidationError(false);
+        }
+    }
+
+    const handleDialogsAddButtonClick = () => {
+        // Валидация обязательных полей
+
+        // Отправка запроса на добавление нового блюда
+
+        // После успешного ответа очистка полей и закрытие диалогового окна
+    }
+
+    const handleDialogsCancelButtonClick = () => {
+        // Очистка полей
+        clearFields();
+
+        // Очисток ошибок валидации
+        resetValidation();
+
+        // Закрытие диалогового окна
+        props.setOpenDialog(false);
+    }
+
+    const clearFields = () => {
+        setFile(undefined);
+        setDishName(undefined);
+        setDishNumberOfPerson(undefined);
+        setDishDescription(undefined);
+        setIngredientsForDish([]);
+    }
+
+    const resetValidation = () => {
+        setIsDishNameValidationError(false);
+        setIsDishNumberOfPersonValidationError(false);
+        setIsDishDescriptionValidationError(false);
+        setIsDishIngredientsValidationError(false);
     }
 
     // TODO: Вынести куда-то в общие константы
@@ -164,13 +229,13 @@ const DishesDialog = (props: DishesDialogProps) => {
                     margin="dense"
                     id="Name"
                     label="Название"
-                    //value={props.nameIngredient}
+                    value={dishName}
                     variant="outlined"
                     fullWidth
                     required
-                    // onChange={onChangeIngredientName}
-                    // error={isValidationNameError}
-                    // helperText={helperTextErrorForName}
+                    onChange={onChangeDishName}
+                    error={isDishNameValidationError}
+                    helperText={isDishNameValidationError && "Не заполнено название блюда"}
                 />
                 <TextField
                     type="number"
@@ -178,27 +243,38 @@ const DishesDialog = (props: DishesDialogProps) => {
                     margin="dense"
                     id="NumberOfPerson"
                     label="Количество персон"
-                    // value={props.descriptionIngredient}
+                    value={dishNumberOfPerson}
                     variant="outlined"
                     fullWidth
                     required
-                    // onChange={onChangeIngredientDescription}
+                    onChange={onChangeDishNumberOfPerson}
+                    error={isDishNumberOfPersonValidationError}
+                    helperText={isDishNumberOfPersonValidationError && "Не указано на какое количество персон расчитано блюдо"}
                 />
                 <TextField
                     autoFocus
                     margin="dense"
                     id="Description"
                     label="Способ приготовления"
-                    // value={props.descriptionIngredient}
+                    value={dishDescription}
                     variant="outlined"
                     fullWidth
                     multiline
+                    required
                     rows={8}
-                    // onChange={onChangeIngredientDescription}
+                    onChange={onChangeDishDescription}
+                    error={isDishDescriptionValidationError}
+                    helperText={isDishDescriptionValidationError && "Не указан способ приготовления блюда"}
                 />
 
-                <DialogContentText style={{marginTop: 30, marginBottom: 10}}>
-                    Добавьте ингредиенты, которые нужны для приготовления блюда:
+                <DialogContentText
+                    style={{
+                        marginTop: 30,
+                        marginBottom: 10,
+                        color: isDishIngredientsValidationError ? "#d32f2f" : "rgba(0, 0, 0, 0.6)"
+                    }}
+                >
+                    Добавьте ингредиенты, которые нужны для приготовления блюда: *
                 </DialogContentText>
 
 
@@ -224,9 +300,10 @@ const DishesDialog = (props: DishesDialogProps) => {
 
                 <Stack direction="row-reverse">
                     <Button
-                        variant="outlined"
+                        variant="contained"
                         startIcon={<AddIcon/>}
                         onClick={handleAddIngrediantForDish}
+                        color={isDishIngredientsValidationError ? "error" : "primary"}
                     >
                         Добавить ингредиент
                     </Button>
@@ -234,8 +311,17 @@ const DishesDialog = (props: DishesDialogProps) => {
 
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => props.setOpenDialog(false)}>Отмена</Button>
-                <Button>Добавить</Button>
+                <Button
+                    onClick={handleDialogsCancelButtonClick}
+                >
+                    Отмена
+                </Button>
+                <Button
+                    variant="contained"
+                    onClick={handleDialogsAddButtonClick}
+                >
+                    Добавить
+                </Button>
             </DialogActions>
         </Dialog>
     );

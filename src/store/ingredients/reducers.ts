@@ -25,7 +25,7 @@ const initialState: IIngredientState = {
     editIngredientIdStatus: 'idle',
 
     // setGridPageSize
-    gridPageSize: 10,
+    gridPageSize: 20,
 };
 
 const ingredientSlice = createSlice({

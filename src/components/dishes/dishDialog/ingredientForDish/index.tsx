@@ -75,7 +75,7 @@ const IngredientForDish = (props: IngredientForDishProps) => {
         <Stack direction="row" spacing={1} style={{marginTop: 10, marginBottom: 10}}>
             <IconButton
                 aria-label="delete"
-                color="error"
+                color="primary"
                 onClick={handleDeleteIngredient}
             >
                 <DeleteIcon />
@@ -87,7 +87,7 @@ const IngredientForDish = (props: IngredientForDishProps) => {
                         value={props.ingredientName}
                         options={allIngredients.map(x => x.name)}
                         sx={{ width: 300 }}
-                        renderInput={(params) => <TextField {...params} label="Ингредиент" />}
+                        renderInput={(params) => <TextField {...params} label="Ингредиент *" />}
                         onChange={onChangeIngredientName}
                     />
                     <TextField
@@ -108,7 +108,7 @@ const IngredientForDish = (props: IngredientForDishProps) => {
                         value={props.ingredientOkeiName}
                         options={allOkeis.map(x => x.name)}
                         sx={{ width: 300 }}
-                        renderInput={(params) => <TextField {...params} label="Единица измерения" />}
+                        renderInput={(params) => <TextField {...params} label="Единица измерения *" />}
                         onChange={onChangeIngredientOkei}
                     />
                 </Stack>
@@ -122,6 +122,7 @@ const IngredientForDish = (props: IngredientForDishProps) => {
                     fullWidth
                     multiline
                     onChange={onChangeIngredientDescription}
+                    required
                 />
             </div>
         </Stack>

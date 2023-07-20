@@ -14,7 +14,7 @@ import NoRowsMuiDataGridOverlay from '../overlays/mui-datagrid-norows-overlay';
 import MuiDataGridPagination from '../paginations/mui-datagrid-pagination';
 
 import './index.css';
-import {GetIngredientsAsyncQuery} from '../../contracts/ingredients/queries/GetIngredientsAsyncQuery';
+import {GetIngredientsPageAsyncQuery} from '../../contracts/ingredients/queries/GetIngredientsPageAsyncQuery';
 import DialogAddIngredient from './dialogAdd';
 import DialogEditIngredient from './dialogEdit';
 import {IngredientDto} from '../../contracts/ingredients/dtos/IngredientDto';
@@ -25,7 +25,7 @@ import {
     selectIngredientsSlice,
     setGridPageSize
 } from '../../store/ingredients/reducers';
-import {addIngredientAsync, editIngredientAsync, getIngredientsAsync} from '../../store/ingredients/thunks';
+import {addIngredientAsync, editIngredientAsync, getIngredientsPageAsync} from '../../store/ingredients/thunks';
 import {SortingOrderEnum} from "../../contracts/common/enums/SortingOrderEnum";
 import {SortingFieldEnum} from "../../contracts/ingredients/enums/SortingFieldEnum";
 import {AddIngredientAsyncCommand} from "../../contracts/ingredients/commands/AddIngredientAsyncCommand";
@@ -72,13 +72,13 @@ const Ingredients = () => {
         (async () => {
             setLoading(true);
 
-            let getIngredientQuery = new GetIngredientsAsyncQuery(
+            let getIngredientQuery = new GetIngredientsPageAsyncQuery(
                 paginationModel.page + 1,
                 paginationModel.pageSize,
                 getSortingOrderForUpdate(sortModel[0]?.sort),
                 getSortingFieldForUpdate(sortModel[0]?.field),
                 nameFilter);
-            await dispatch(getIngredientsAsync(getIngredientQuery));
+            await dispatch(getIngredientsPageAsync(getIngredientQuery));
 
             if (!active) {
                 return;

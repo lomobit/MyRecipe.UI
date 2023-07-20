@@ -1,5 +1,5 @@
 import { IngredientDto } from "../../contracts/ingredients/dtos/IngredientDto";
-import {GetIngredientsAsyncQuery} from "../../contracts/ingredients/queries/GetIngredientsAsyncQuery";
+import {GetIngredientsPageAsyncQuery} from "../../contracts/ingredients/queries/GetIngredientsPageAsyncQuery";
 import {GetAllIngredientsAsyncQuery} from "../../contracts/ingredients/queries/GetAllIngredientsAsyncQuery";
 import {
     AddIngredientAsyncCommand
@@ -9,8 +9,8 @@ import {checkSuccess, showError} from "../common";
 const apiUri = process.env.REACT_APP_API_URL;
 const moduleName = "Ingredient";
 
-export async function GetIngredients(query: GetIngredientsAsyncQuery) {
-    let uri = `${apiUri}/${moduleName}/Get`
+export async function GetIngredientsPage(query: GetIngredientsPageAsyncQuery) {
+    let uri = `${apiUri}/${moduleName}/GetPage`
         + `?PageNumber=${query.pageNumber}`
         + `&PageSize=${query.pageSize}`
         + `&SortingOrder=${query.sortingOrder}`

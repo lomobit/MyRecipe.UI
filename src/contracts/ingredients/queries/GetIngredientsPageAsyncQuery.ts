@@ -1,7 +1,7 @@
 import {SortingOrderEnum} from "../../common/enums/SortingOrderEnum";
 import {SortingFieldEnum} from "../enums/SortingFieldEnum";
 
-export class GetIngredientsAsyncQuery {
+export class GetIngredientsPageAsyncQuery {
     pageNumber: number;
     pageSize: number;
     sortingOrder: SortingOrderEnum;

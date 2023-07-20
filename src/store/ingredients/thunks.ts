@@ -1,16 +1,16 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import {AddIngredient, EditIngredient, GetAllIngredients, GetIngredients} from "../../clients/ingredient";
-import { GetIngredientsAsyncQuery } from "../../contracts/ingredients/queries/GetIngredientsAsyncQuery";
+import { AddIngredient, EditIngredient, GetAllIngredients, GetIngredientsPage } from "../../clients/ingredient";
+import { GetIngredientsPageAsyncQuery } from "../../contracts/ingredients/queries/GetIngredientsPageAsyncQuery";
 import { IngredientDto } from "../../contracts/ingredients/dtos/IngredientDto";
-import {GetAllIngredientsAsyncQuery} from "../../contracts/ingredients/queries/GetAllIngredientsAsyncQuery";
+import { GetAllIngredientsAsyncQuery } from "../../contracts/ingredients/queries/GetAllIngredientsAsyncQuery";
 import {
     AddIngredientAsyncCommand
 } from "../../contracts/ingredients/commands/AddIngredientAsyncCommand";
 
-export const getIngredientsAsync = createAsyncThunk(
-    'ingredient/get',
-    async (query: GetIngredientsAsyncQuery) => {
-        const response = await GetIngredients(query);
+export const getIngredientsPageAsync = createAsyncThunk(
+    'ingredient/getPage',
+    async (query: GetIngredientsPageAsyncQuery) => {
+        const response = await GetIngredientsPage(query);
         return response.data;
     }
 );

@@ -12,7 +12,7 @@ const initialState: IIngredientState = {
     // getIngredientsAsync
     ingredientsSlice: [],
     ingredientsCount: 0,
-    getIngredientsStatus: 'idle',
+    getIngredientsPageStatus: 'idle',
 
     // getAllIngredientsAsync
     allIngredients: [],

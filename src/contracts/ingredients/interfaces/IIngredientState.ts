@@ -3,7 +3,7 @@ import { IngredientDto } from "../dtos/IngredientDto";
 export interface IIngredientState {
     ingredientsSlice: Array<IngredientDto>;
     ingredientsCount: number;
-    getIngredientsStatus: 'idle' | 'loading' | 'failed';
+    getIngredientsPageStatus: 'idle' | 'loading' | 'failed';
 
     allIngredients: Array<IngredientDto>;
     getAllIngredientsStatus: 'idle' | 'loading' | 'failed';

@@ -62,6 +62,7 @@ const DishesDialog = (props: DishesDialogProps) => {
 
     const handleDishImageDelete = () => {
         setDishPhoto(undefined);
+        setDishPhotoUrl(undefined);
     }
 
     const handleAddIngrediantForDish = () => {

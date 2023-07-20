@@ -8,9 +8,9 @@ export interface IIngredientState {
     allIngredients: Array<IngredientDto>;
     getAllIngredientsStatus: 'idle' | 'loading' | 'failed';
 
-    addIngredientIdStatus: 'idle' | 'loading' | 'failed';
+    addIngredientStatus: 'idle' | 'loading' | 'failed';
     
-    editIngredientIdStatus: 'idle' | 'loading' | 'failed';
+    editIngredientStatus: 'idle' | 'loading' | 'failed';
 
-    gridPageSize: number;
+    ingredientsGridPageSize: number;
 }

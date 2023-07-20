@@ -1,0 +1,11 @@
+import {DishForGridDto} from "../dtos/DishForGridDto";
+
+export interface IDishState {
+    dishesSlice: Array<DishForGridDto>;
+    dishesCount: number;
+    getDishesPageStatus: 'idle' | 'loading' | 'failed';
+
+    addDishStatus: 'idle' | 'loading' | 'failed';
+
+    dishesGridPageSize: number;
+}

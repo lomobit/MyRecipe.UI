@@ -5,7 +5,7 @@ import {
     addCasesFor_addIngredientAsync,
     addCasesFor_editIngredientAsync,
     addCasesFor_getAllIngredientsAsync,
-    addCasesFor_getIngredientsAsync
+    addCasesFor_getIngredientsPageAsync
 } from "./extraReducers";
 
 const initialState: IIngredientState = {
@@ -19,34 +19,34 @@ const initialState: IIngredientState = {
     getAllIngredientsStatus: 'idle',
 
     // addIngredientAsync
-    addIngredientIdStatus: 'idle',
+    addIngredientStatus: 'idle',
 
     // editIngredientAsync
-    editIngredientIdStatus: 'idle',
+    editIngredientStatus: 'idle',
 
     // setGridPageSize
-    gridPageSize: 20,
+    ingredientsGridPageSize: 20,
 };
 
 const ingredientSlice = createSlice({
     name: 'ingredient',
     initialState,
     reducers: {
-        setGridPageSize: (state, action: PayloadAction<number>) => {
-            state.gridPageSize = action.payload;
+        setIngredientsGridPageSize: (state, action: PayloadAction<number>) => {
+            state.ingredientsGridPageSize = action.payload;
         }
     },
     extraReducers: (builder) => {
-        addCasesFor_getIngredientsAsync(builder);
+        addCasesFor_getIngredientsPageAsync(builder);
         addCasesFor_getAllIngredientsAsync(builder);
         addCasesFor_addIngredientAsync(builder);
         addCasesFor_editIngredientAsync(builder);
     },
 });
 
-export const { setGridPageSize } = ingredientSlice.actions;
+export const { setIngredientsGridPageSize } = ingredientSlice.actions;
 
-export const selectGridPageSize = (state: RootState) => state.ingredient.gridPageSize;
+export const selectIngredientGridPageSize = (state: RootState) => state.ingredient.ingredientsGridPageSize;
 export const selectIngredientsSlice = (state: RootState) => state.ingredient.ingredientsSlice;
 export const selectIngredientsCount = (state: RootState) => state.ingredient.ingredientsCount;
 export const selectAllIngredients = (state: RootState) => state.ingredient.allIngredients;

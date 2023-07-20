@@ -2,7 +2,7 @@ import { ActionReducerMapBuilder } from "@reduxjs/toolkit";
 import { IIngredientState } from "../../contracts/ingredients/interfaces/IIngredientState";
 import {addIngredientAsync, editIngredientAsync, getAllIngredientsAsync, getIngredientsPageAsync} from "./thunks";
 
-export const addCasesFor_getIngredientsAsync = (builder: ActionReducerMapBuilder<IIngredientState>) => {
+export const addCasesFor_getIngredientsPageAsync = (builder: ActionReducerMapBuilder<IIngredientState>) => {
     builder
         .addCase(getIngredientsPageAsync.pending, (state) => {
             state.getIngredientsPageStatus = 'loading';
@@ -34,25 +34,25 @@ export const addCasesFor_getAllIngredientsAsync = (builder: ActionReducerMapBuil
 export const addCasesFor_addIngredientAsync = (builder: ActionReducerMapBuilder<IIngredientState>) => {
     builder
         .addCase(addIngredientAsync.pending, (state) => {
-            state.addIngredientIdStatus = 'loading';
+            state.addIngredientStatus = 'loading';
         })
         .addCase(addIngredientAsync.fulfilled, (state, action) => {
-            state.addIngredientIdStatus = 'idle';
+            state.addIngredientStatus = 'idle';
         })
         .addCase(addIngredientAsync.rejected, (state) => {
-            state.addIngredientIdStatus = 'failed';
+            state.addIngredientStatus = 'failed';
         });
 }
 
 export const addCasesFor_editIngredientAsync = (builder: ActionReducerMapBuilder<IIngredientState>) => {
     builder
         .addCase(editIngredientAsync.pending, (state) => {
-            state.editIngredientIdStatus = 'loading';
+            state.editIngredientStatus = 'loading';
         })
         .addCase(editIngredientAsync.fulfilled, (state, action) => {
-            state.editIngredientIdStatus = 'idle';
+            state.editIngredientStatus = 'idle';
         })
         .addCase(editIngredientAsync.rejected, (state) => {
-            state.editIngredientIdStatus = 'failed';
+            state.editIngredientStatus = 'failed';
         });
 }

@@ -20,10 +20,10 @@ import DialogEditIngredient from './dialogEdit';
 import {IngredientDto} from '../../contracts/ingredients/dtos/IngredientDto';
 import {useAppDispatch, useAppSelector} from '../../store/hooks';
 import {
-    selectGridPageSize,
+    selectIngredientGridPageSize,
     selectIngredientsCount,
     selectIngredientsSlice,
-    setGridPageSize
+    setIngredientsGridPageSize
 } from '../../store/ingredients/reducers';
 import {addIngredientAsync, editIngredientAsync, getIngredientsPageAsync} from '../../store/ingredients/thunks';
 import {SortingOrderEnum} from "../../contracts/common/enums/SortingOrderEnum";
@@ -36,7 +36,7 @@ const Ingredients = () => {
     // appSelectors
     const ingredientsSlice = useAppSelector(selectIngredientsSlice);
     const ingredientsCount = useAppSelector(selectIngredientsCount);
-    const gridPageSize = useAppSelector(selectGridPageSize);
+    const gridPageSize = useAppSelector(selectIngredientGridPageSize);
     const dispatch = useAppDispatch();
 
     // dialogAdd
@@ -168,7 +168,7 @@ const Ingredients = () => {
 
     const onPaginationModelChange = (model: GridPaginationModel) => {
         if (model.pageSize !== gridPageSize) {
-            dispatch(setGridPageSize(model.pageSize));
+            dispatch(setIngredientsGridPageSize(model.pageSize));
         }
 
         setPaginationModel(model);

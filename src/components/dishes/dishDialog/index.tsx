@@ -1,5 +1,7 @@
 import {
+    Backdrop,
     Button,
+    CircularProgress,
     Dialog,
     DialogActions,
     DialogContent,
@@ -13,11 +15,14 @@ import {ChangeEvent, Fragment, useEffect, useState} from "react";
 import {IngredientForDishModel} from "../../../contracts/dishes/models/IngredientForDishModel";
 import IngredientForDish from "./ingredientForDish";
 import {getAllIngredientsAsync} from "../../../store/ingredients/thunks";
-import {useAppDispatch} from "../../../store/hooks";
+import {useAppDispatch, useAppSelector} from "../../../store/hooks";
 import {GetAllIngredientsAsyncQuery} from "../../../contracts/ingredients/queries/GetAllIngredientsAsyncQuery";
 import {IngredientDto} from "../../../contracts/ingredients/dtos/IngredientDto";
-import {OkeiDto} from "../../../contracts/ingredients/dtos/OkeiDto";
+import {OkeiDto} from "../../../contracts/okei/dtos/OkeiDto";
 import { getAllOkeisAsync } from "../../../store/okeis/thunks";
+import {AddDishAsyncCommand} from "../../../contracts/dishes/commands/AddDishAsyncCommand";
+import {IngredientForDishDto} from "../../../contracts/dishes/dtos/IngredientForDishDto";
+import { addDishAsync } from "../../../store/dishes/thunks";
 
 export declare interface DishesDialogProps {
     openDialog: boolean;
@@ -28,16 +33,19 @@ const DishesDialog = (props: DishesDialogProps) => {
 
     const dispatch = useAppDispatch();
 
-    const [file, setFile] = useState<File>();
-    const [dishName, setDishName] = useState<string>();
-    const [dishNumberOfPerson, setDishNumberOfPerson] = useState<number>();
-    const [dishDescription, setDishDescription] = useState<string>();
+    const [dishPhoto, setDishPhoto] = useState<File>();
+    const [dishPhotoUrl, setDishPhotoUrl] = useState<string>();
+    const [dishName, setDishName] = useState<string>("");
+    const [dishNumberOfPerson, setDishNumberOfPerson] = useState<number>(1);
+    const [dishDescription, setDishDescription] = useState<string>("");
     const [ingredientsForDish, setIngredientsForDish] = useState<IngredientForDishModel[]>([]);
 
     const [isDishNameValidationError, setIsDishNameValidationError ] = useState<boolean>(false);
     const [isDishNumberOfPersonValidationError, setIsDishNumberOfPersonValidationError ] = useState<boolean>(false);
     const [isDishDescriptionValidationError, setIsDishDescriptionValidationError ] = useState<boolean>(false);
     const [isDishIngredientsValidationError, setIsDishIngredientsValidationError ] = useState<boolean>(false);
+
+    const [dialogLoading, setDialogLoading] = useState<boolean>(false);
 
 
     useEffect(() => {
@@ -47,13 +55,13 @@ const DishesDialog = (props: DishesDialogProps) => {
 
     const handleDishImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
-            setFile(e.target.files[0]);
+            setDishPhoto(e.target.files[0]);
             e.target.value = "";
         }
     };
 
     const handleDishImageDelete = () => {
-        setFile(undefined);
+        setDishPhoto(undefined);
     }
 
     const handleAddIngrediantForDish = () => {
@@ -153,10 +161,30 @@ const DishesDialog = (props: DishesDialogProps) => {
             return;
         }
 
-        alert("Validation Passed");
         // Отправка запроса на добавление нового блюда
+        setDialogLoading(true);
 
-        // После успешного ответа очистка полей и закрытие диалогового окна
+        let addDishAsyncQuery = new AddDishAsyncCommand(
+            dishName!,
+            dishDescription!,
+            dishNumberOfPerson!,
+            ingredientsForDish.map(x => new IngredientForDishDto(
+                x.ingredient!.id,
+                x.quantity,
+                x.okei!.code,
+                x.condition)),
+            dishPhoto
+        );
+
+        dispatch(addDishAsync(addDishAsyncQuery))
+            .then((s) => {
+                // После успешного ответа очистка полей и закрытие диалогового окна
+                setDialogLoading(false);
+
+                if (s.payload) {
+                    handleDialogsCancelButtonClick();
+                }
+            });
     }
 
     const validateRequiredFields = (): boolean => {
@@ -236,10 +264,10 @@ const DishesDialog = (props: DishesDialogProps) => {
     }
 
     const clearFields = () => {
-        setFile(undefined);
-        setDishName(undefined);
-        setDishNumberOfPerson(undefined);
-        setDishDescription(undefined);
+        setDishPhoto(undefined);
+        setDishName("");
+        setDishNumberOfPerson(1);
+        setDishDescription("");
         setIngredientsForDish([]);
     }
 
@@ -248,6 +276,21 @@ const DishesDialog = (props: DishesDialogProps) => {
         setIsDishNumberOfPersonValidationError(false);
         setIsDishDescriptionValidationError(false);
         setIsDishIngredientsValidationError(false);
+    }
+
+    const getDishPhotoUrl = (): string => {
+        if (dishPhotoUrl) {
+            return dishPhotoUrl;
+        }
+
+        if (dishPhoto !== undefined) {
+            let result = URL.createObjectURL(dishPhoto);
+            setDishPhotoUrl(result);
+
+            return result;
+        }
+
+        return noImageData;
     }
 
     // TODO: Вынести куда-то в общие константы
@@ -260,15 +303,19 @@ const DishesDialog = (props: DishesDialogProps) => {
             fullWidth={true}
             maxWidth="md"
         >
+            <Backdrop
+                open={dialogLoading}
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
+
             <DialogTitle>Добавить блюдо</DialogTitle>
             <DialogContent>
-
                 <Fragment>
                     <Fragment>
                         <img
-                            src={file !== undefined
-                                ? URL.createObjectURL(file)
-                                : noImageData}
+                            src={getDishPhotoUrl()}
                             width="70%"
                             alt="There will be text"
                             style={{display: "flex", margin: "auto", marginBottom: 15}}
@@ -288,7 +335,7 @@ const DishesDialog = (props: DishesDialogProps) => {
                             />
                         </Button>
                         <Button
-                            disabled={file === undefined}
+                            disabled={dishPhoto === undefined}
                             variant="outlined"
                             component="label"
                             onClick={handleDishImageDelete}

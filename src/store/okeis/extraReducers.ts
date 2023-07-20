@@ -1,5 +1,5 @@
 import {ActionReducerMapBuilder} from "@reduxjs/toolkit";
-import {IOkeiState} from "../../contracts/ingredients/interfaces/IOkeiState";
+import {IOkeiState} from "../../contracts/okei/interfaces/IOkeiState";
 import {getAllOkeisAsync} from "./thunks";
 
 export const addCasesFor_getAllOkeisAsync = (builder: ActionReducerMapBuilder<IOkeiState>) => {

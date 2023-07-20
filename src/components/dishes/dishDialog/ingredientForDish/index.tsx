@@ -12,7 +12,7 @@ import {useAppSelector} from "../../../../store/hooks";
 import {selectAllIngredients} from "../../../../store/ingredients/reducers";
 import {IngredientDto} from "../../../../contracts/ingredients/dtos/IngredientDto";
 import {selectAllOkeis} from "../../../../store/okeis/reducers";
-import {OkeiDto} from "../../../../contracts/ingredients/dtos/OkeiDto";
+import {OkeiDto} from "../../../../contracts/okei/dtos/OkeiDto";
 
 export declare interface IngredientForDishProps {
     ingredientForDishIndex: number;

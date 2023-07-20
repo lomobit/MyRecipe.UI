@@ -1,5 +1,5 @@
 import {IngredientDto} from "../../ingredients/dtos/IngredientDto";
-import {OkeiDto} from "../../ingredients/dtos/OkeiDto";
+import {OkeiDto} from "../../okei/dtos/OkeiDto";
 
 export class IngredientForDishModel {
     quantity: number;

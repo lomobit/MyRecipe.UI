@@ -10,4 +10,7 @@ export const checkSuccess = async (res: Response) => {
 
 export const showError = async (error: any) => {
     alert(`${error}`);
+    return {
+        success: false
+    };
 }

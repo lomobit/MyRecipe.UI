@@ -1,7 +1,7 @@
-import {IDishState} from "../../contracts/ingredients/interfaces/IDishState";
+import {IDishState} from "../../contracts/dishes/interfaces/IDishState";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "../index";
-import {addCasesFor_getDishesPageAsync} from "./extraReducers";
+import {addCasesFor_addDishAsync, addCasesFor_getDishesPageAsync} from "./extraReducers";
 
 const initialState: IDishState = {
     // getDishesPageAsync
@@ -26,6 +26,7 @@ const dishSlice = createSlice({
     },
     extraReducers: (builder) => {
         addCasesFor_getDishesPageAsync(builder);
+        addCasesFor_addDishAsync(builder);
     },
 });
 

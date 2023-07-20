@@ -1,6 +1,6 @@
 import {ActionReducerMapBuilder} from "@reduxjs/toolkit";
-import {IDishState} from "../../contracts/ingredients/interfaces/IDishState";
-import {getDishesPageAsync} from "./thunks";
+import {IDishState} from "../../contracts/dishes/interfaces/IDishState";
+import {addDishAsync, getDishesPageAsync} from "./thunks";
 
 export const addCasesFor_getDishesPageAsync = (builder: ActionReducerMapBuilder<IDishState>) => {
     builder
@@ -14,5 +14,18 @@ export const addCasesFor_getDishesPageAsync = (builder: ActionReducerMapBuilder<
         })
         .addCase(getDishesPageAsync.rejected, (state) => {
             state.getDishesPageStatus = 'failed';
+        });
+}
+
+export const addCasesFor_addDishAsync = (builder: ActionReducerMapBuilder<IDishState>) => {
+    builder
+        .addCase(addDishAsync.pending, (state) => {
+            state.addDishStatus = 'loading';
+        })
+        .addCase(addDishAsync.fulfilled, (state, action) => {
+            state.addDishStatus = 'idle';
+        })
+        .addCase(addDishAsync.rejected, (state) => {
+            state.addDishStatus = 'failed';
         });
 }

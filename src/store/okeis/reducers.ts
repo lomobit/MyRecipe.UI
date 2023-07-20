@@ -1,4 +1,4 @@
-import {IOkeiState} from "../../contracts/ingredients/interfaces/IOkeiState";
+import {IOkeiState} from "../../contracts/okei/interfaces/IOkeiState";
 import {createSlice} from "@reduxjs/toolkit";
 import {addCasesFor_getAllOkeisAsync} from "./extraReducers";
 import {RootState} from "../index";

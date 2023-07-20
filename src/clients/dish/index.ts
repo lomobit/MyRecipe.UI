@@ -38,9 +38,6 @@ export async function AddDishAsync(command: AddDishAsyncCommand) {
 
     let queryOptions = {
         method: 'POST',
-        headers: {
-            //"Content-Type": "multipart/form-data",
-        },
         body: bodyQuery,
     };
 

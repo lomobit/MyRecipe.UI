@@ -266,6 +266,7 @@ const DishesDialog = (props: DishesDialogProps) => {
 
     const clearFields = () => {
         setDishPhoto(undefined);
+        setDishPhotoUrl(undefined);
         setDishName("");
         setDishNumberOfPerson(1);
         setDishDescription("");

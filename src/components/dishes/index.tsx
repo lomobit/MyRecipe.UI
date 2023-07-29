@@ -54,8 +54,6 @@ const Dishes = () => {
         let active = true;
 
         (async () => {
-            setLoading(true);
-
             let getDishesQuery = new GetIngredientsPageAsyncQuery(
                 paginationModel.page + 1,
                 paginationModel.pageSize,
@@ -67,8 +65,6 @@ const Dishes = () => {
             if (!active) {
                 return;
             }
-
-            setLoading(false);
         })();
 
         return () => {
@@ -127,13 +123,6 @@ const Dishes = () => {
                 spacing={3}
                 style={{marginBottom: 20}}
             >
-                <Backdrop
-                    open={loading}
-                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                >
-                    <CircularProgress color="inherit" />
-                </Backdrop>
-
                 {
                     dishesSlice.map((dish) => (
                         <Grid key={dish.id} item>

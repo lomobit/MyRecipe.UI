@@ -24,6 +24,7 @@ import {GridPaginationModel} from "@mui/x-data-grid";
 import {selectDishesSlice, selectDishesCount, selectDishGridPageSize} from "../../store/dishes/reducers";
 import {SortingOrderEnum} from "../../contracts/common/enums/SortingOrderEnum";
 import {SortingFieldEnum} from "../../contracts/ingredients/enums/SortingFieldEnum";
+import {noImageData} from "./constants";
 
 const Dishes = () => {
 
@@ -73,6 +74,14 @@ const Dishes = () => {
         return () => {
             active = false;
         };
+    }
+
+    const getDishPhotoUrl = (dishPhotoGuid?: string): string => {
+        if (dishPhotoGuid) {
+            return `${process.env.REACT_APP_API_URL}/File/${dishPhotoGuid}`
+        }
+
+        return noImageData;
     }
 
     return (
@@ -139,7 +148,7 @@ const Dishes = () => {
                                         component="img"
                                         height={200}
                                         draggable={false}
-                                        image={`${process.env.REACT_APP_API_URL}/File/${dish.dishPhotoGuid}`}
+                                        image={getDishPhotoUrl(dish.dishPhotoGuid)}
                                         alt={`Фото ${dish.name}`}
                                     />
                                     <CardContent>

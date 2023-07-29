@@ -23,6 +23,7 @@ import { getAllOkeisAsync } from "../../../store/okeis/thunks";
 import {AddDishAsyncCommand} from "../../../contracts/dishes/commands/AddDishAsyncCommand";
 import {IngredientForDishDto} from "../../../contracts/dishes/dtos/IngredientForDishDto";
 import { addDishAsync } from "../../../store/dishes/thunks";
+import {noImageData} from "../constants";
 
 export declare interface DishesDialogProps {
     openDialog: boolean;
@@ -294,9 +295,6 @@ const DishesDialog = (props: DishesDialogProps) => {
 
         return noImageData;
     }
-
-    // TODO: Вынести куда-то в общие константы
-    const noImageData = "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii0zMiAtMTIwIDYxMiA2MTIiPgogIDxwYXRoIGQ9Im0gNDggMzIgYyAwIDAgMCAwIDAgMCBsIDQ0OCAwIGMgMTYgMCAxNiAxNiAxNiAxNiB2IDI3MiBjIDAgMTYgLTE2IDE2IC0xNiAxNiBsIC00NDggMCBjIC0xNiAwIC0xNiAtMTYgLTE2IC0xNiB2IC0yNzIgYyAwIDAgMCAtMTYgMTYgLTE2IG0gLTE2IDE3NiBsIDExMiAtOTYgbCAxMjggMTI4IG0gMCAwIGwgOTYgLTk2IGwgMTQ0IDEyOCBtIC0xNDQgLTE5MSBDIDM3NiA4MiAzODEgODUgMzgyIDk1IEMgMzgwIDEwNSAzNzcgMTA4IDM2OCAxMDkgQyAzNjEgMTA4IDM1NiAxMDYgMzU0IDk1IEMgMzU1IDg2IDM2MCA4MiAzNjggODEiIHN0cm9rZT0iI2NlY2ZkMiIgc3Ryb2tlLXdpZHRoPSIxMCIgZmlsbD0iI2Y0ZjZmOSIvPgo8L3N2Zz4=";
 
     return (
         <Dialog

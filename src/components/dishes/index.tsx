@@ -3,29 +3,77 @@ import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import Pagination from '@mui/material/Pagination';
 import './index.css';
 import {
+    Backdrop,
     Button,
-    CardActionArea,
-    FormControl,
+    CardActionArea, CircularProgress,
     IconButton,
-    MenuItem,
-    Select,
     Stack,
     TextField
 } from '@mui/material';
-import { mockDishes } from "./constants";
 import UpdateIcon from "@mui/icons-material/Update";
 import AddIcon from "@mui/icons-material/Add";
-import {Fragment, useState} from "react";
+import {Fragment, useEffect, useRef, useState} from "react";
 import DishesDialog from "./dishDialog";
 import MuiGridCardsPagination from "../paginations/mui-grid-cards-pagination";
+import {GetIngredientsPageAsyncQuery} from "../../contracts/ingredients/queries/GetIngredientsPageAsyncQuery";
+import {useAppDispatch, useAppSelector} from "../../store/hooks";
+import { getDishesPageAsync } from '../../store/dishes/thunks';
+import {GridPaginationModel} from "@mui/x-data-grid";
+import {selectDishesSlice, selectDishesCount, selectDishGridPageSize} from "../../store/dishes/reducers";
+import {SortingOrderEnum} from "../../contracts/common/enums/SortingOrderEnum";
+import {SortingFieldEnum} from "../../contracts/ingredients/enums/SortingFieldEnum";
 
 const Dishes = () => {
 
+    // appSelectors
+    const dishesSlice = useAppSelector(selectDishesSlice);
+    const dishesCount = useAppSelector(selectDishesCount);
+    const gridPageSize = useAppSelector(selectDishGridPageSize);
+    const dispatch = useAppDispatch();
+
+    // dishDialog
     const [openDialog, setOpenDialog] = useState(false);
 
+    //cardsGrid
+    const nameFilter = useRef<string>();
+
+    const [loading, setLoading] = useState(false);
+    const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+        page: 0,
+        pageSize: gridPageSize
+    });
+
+    useEffect(() => {
+        updateDishes();
+    }, [paginationModel]);
+
+    const updateDishes = () => {
+        let active = true;
+
+        (async () => {
+            setLoading(true);
+
+            let getDishesQuery = new GetIngredientsPageAsyncQuery(
+                paginationModel.page + 1,
+                paginationModel.pageSize,
+                SortingOrderEnum.Ascending,
+                SortingFieldEnum.Id,
+                nameFilter.current);
+            await dispatch(getDishesPageAsync(getDishesQuery));
+
+            if (!active) {
+                return;
+            }
+
+            setLoading(false);
+        })();
+
+        return () => {
+            active = false;
+        };
+    }
 
     return (
         <Fragment>
@@ -64,9 +112,21 @@ const Dishes = () => {
                 setOpenDialog={setOpenDialog}
             />
 
-            <Grid container justifyContent="flex-start" spacing={3} style={{marginBottom: 20}}>
+            <Grid
+                container
+                justifyContent="flex-start"
+                spacing={3}
+                style={{marginBottom: 20}}
+            >
+                <Backdrop
+                    open={loading}
+                    sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                >
+                    <CircularProgress color="inherit" />
+                </Backdrop>
+
                 {
-                    mockDishes.map((dish) => (
+                    dishesSlice.map((dish) => (
                         <Grid key={dish.id} item>
                             <Card
                                 sx={{
@@ -77,8 +137,7 @@ const Dishes = () => {
                                 <CardActionArea>
                                     <CardMedia
                                         component="img"
-                                        width="100%"
-                                        height={140}
+                                        height={200}
                                         draggable={false}
                                         image={`${process.env.REACT_APP_API_URL}/File/${dish.dishPhotoGuid}`}
                                         alt={`Фото ${dish.name}`}

@@ -13,7 +13,7 @@ const initialState: IDishState = {
     addDishStatus: 'idle',
 
     // setGridPageSize
-    dishesGridPageSize: 0
+    dishesGridPageSize: 9
 }
 
 const dishSlice = createSlice({
@@ -33,6 +33,9 @@ const dishSlice = createSlice({
 
 export const { setDishesGridPageSize } = dishSlice.actions;
 export const selectDishGridPageSize = (state: RootState) => state.dish.dishesGridPageSize;
+export const selectDishesSlice = (state: RootState) => state.dish.dishesSlice;
+export const selectDishesCount = (state: RootState) => state.dish.dishesCount;
+
 
 
 export default dishSlice.reducer;

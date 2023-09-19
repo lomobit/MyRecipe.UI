@@ -21,7 +21,12 @@ import {GetIngredientsPageAsyncQuery} from "../../contracts/ingredients/queries/
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import { getDishesPageAsync } from '../../store/dishes/thunks';
 import {GridPaginationModel} from "@mui/x-data-grid";
-import {selectDishesSlice, selectDishesCount, selectDishGridPageSize} from "../../store/dishes/reducers";
+import {
+    selectDishesSlice,
+    selectDishesCount,
+    selectDishGridPageSize,
+    isLoadingDishesPage
+} from "../../store/dishes/reducers";
 import {SortingOrderEnum} from "../../contracts/common/enums/SortingOrderEnum";
 import {SortingFieldEnum} from "../../contracts/ingredients/enums/SortingFieldEnum";
 import {noImageData} from "./constants";
@@ -32,6 +37,7 @@ const Dishes = () => {
     const dishesSlice = useAppSelector(selectDishesSlice);
     const dishesCount = useAppSelector(selectDishesCount);
     const gridPageSize = useAppSelector(selectDishGridPageSize);
+    const loading = useAppSelector(isLoadingDishesPage);
     const dispatch = useAppDispatch();
 
     // dishDialog
@@ -40,7 +46,6 @@ const Dishes = () => {
     //cardsGrid
     const nameFilter = useRef<string>();
 
-    const [loading, setLoading] = useState(false);
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
         page: 0,
         pageSize: gridPageSize
@@ -123,6 +128,7 @@ const Dishes = () => {
                 spacing={3}
                 style={{marginBottom: 20}}
             >
+                {loading && "Я загружаюсь!!!!!"}
                 {
                     dishesSlice.map((dish) => (
                         <Grid key={dish.id} item>

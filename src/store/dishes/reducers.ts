@@ -35,6 +35,7 @@ export const { setDishesGridPageSize } = dishSlice.actions;
 export const selectDishGridPageSize = (state: RootState) => state.dish.dishesGridPageSize;
 export const selectDishesSlice = (state: RootState) => state.dish.dishesSlice;
 export const selectDishesCount = (state: RootState) => state.dish.dishesCount;
+export const isLoadingDishesPage = (state: RootState) => state.dish.getDishesPageStatus == 'loading';
 
 
 

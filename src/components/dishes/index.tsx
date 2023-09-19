@@ -1,13 +1,7 @@
 import Grid from '@mui/material/Grid';
-import Card from '@mui/material/Card';
-import CardMedia from '@mui/material/CardMedia';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
 import './index.css';
 import {
-    Backdrop,
     Button,
-    CardActionArea, CircularProgress,
     IconButton,
     Stack,
     TextField
@@ -29,7 +23,7 @@ import {
 } from "../../store/dishes/reducers";
 import {SortingOrderEnum} from "../../contracts/common/enums/SortingOrderEnum";
 import {SortingFieldEnum} from "../../contracts/ingredients/enums/SortingFieldEnum";
-import {noImageData} from "./constants";
+import DishesGridCard from "./dishGridCard";
 
 const Dishes = () => {
 
@@ -75,14 +69,6 @@ const Dishes = () => {
         return () => {
             active = false;
         };
-    }
-
-    const getDishPhotoUrl = (dishPhotoGuid?: string): string => {
-        if (dishPhotoGuid) {
-            return `${process.env.REACT_APP_API_URL}/File/${dishPhotoGuid}`
-        }
-
-        return noImageData;
     }
 
     return (
@@ -131,32 +117,12 @@ const Dishes = () => {
                 { loading && "Я загружаюсь!!!!!!" }
                 {
                     dishesSlice.map((dish) => (
-                        <Grid key={dish.id} item>
-                            <Card
-                                sx={{
-                                    width: 217
-                                }}
-                                onClick={() => alert(`${dish.name}`)}
-                            >
-                                <CardActionArea>
-                                    <CardMedia
-                                        component="img"
-                                        height={200}
-                                        draggable={false}
-                                        image={getDishPhotoUrl(dish.dishPhotoGuid)}
-                                        alt={`Фото ${dish.name}`}
-                                    />
-                                    <CardContent>
-                                        <Typography gutterBottom variant="h5" component="div">
-                                            {dish.name}
-                                        </Typography>
-                                        <Typography variant="body2" color="text.secondary">
-                                            Количество персон: {dish.numberOfPersons}
-                                        </Typography>
-                                    </CardContent>
-                                </CardActionArea>
-                            </Card>
-                        </Grid>
+                        <DishesGridCard
+                            id={dish.id}
+                            name={dish.name}
+                            numberOfPersons={dish.numberOfPersons}
+                            dishPhotoGuid={dish.dishPhotoGuid}
+                        />
                     ))
                 }
             </Grid>

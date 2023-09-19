@@ -128,7 +128,7 @@ const Dishes = () => {
                 spacing={3}
                 style={{marginBottom: 20}}
             >
-                { loading && "Я загружаюсь!!!!!" }
+                { loading && "Я загружаюсь!!!!!!" }
                 {
                     dishesSlice.map((dish) => (
                         <Grid key={dish.id} item>

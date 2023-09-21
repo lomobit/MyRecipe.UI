@@ -21,6 +21,14 @@ export async function GetDishesPageAsync(query: GetDishesPageAsyncQuery) {
         .catch(showError);
 }
 
+export async function GetDishById(id: number) {
+    let uri = `${apiUri}/${moduleName}/Get/${id}`;
+
+    return await fetch(uri)
+        .then(checkSuccess)
+        .catch(showError);
+}
+
 export async function AddDishAsync(command: AddDishAsyncCommand) {
     let bodyQuery: FormData = new FormData();
 

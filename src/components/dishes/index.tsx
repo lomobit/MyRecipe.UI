@@ -38,6 +38,7 @@ const Dishes = () => {
 
     // dishDialog
     const [openDialog, setOpenDialog] = useState(false);
+    const [openingDishId, setOpeningDishId] = useState<number | undefined>(undefined);
 
     //cardsGrid
     const nameFilter = useRef<string>();
@@ -52,8 +53,6 @@ const Dishes = () => {
     }, [paginationModel]);
 
     const updateDishes = () => {
-        let active = true;
-
         (async () => {
             let getDishesQuery = new GetIngredientsPageAsyncQuery(
                 paginationModel.page + 1,
@@ -62,15 +61,21 @@ const Dishes = () => {
                 SortingFieldEnum.Id,
                 nameFilter.current);
             await dispatch(getDishesPageAsync(getDishesQuery));
-
-            if (!active) {
-                return;
-            }
         })();
+    }
 
-        return () => {
-            active = false;
-        };
+    const handleDishAdding = () => {
+        if (openingDishId !== undefined) {
+            setOpeningDishId(undefined);
+            
+        }
+        
+        setOpenDialog(true);
+    }
+
+    const handleDishOpening = (id: number) => {
+        setOpeningDishId(id);
+        setOpenDialog(true);
     }
 
     return (
@@ -98,7 +103,7 @@ const Dishes = () => {
                     <Button
                         variant="contained"
                         startIcon={<AddIcon />}
-                        onClick={() => setOpenDialog(true)}
+                        onClick={handleDishAdding}
                     >
                         Добавить
                     </Button>
@@ -108,6 +113,8 @@ const Dishes = () => {
             <DishesDialog
                 openDialog={openDialog}
                 setOpenDialog={setOpenDialog}
+
+                dishId={openingDishId}
             />
 
             <Grid
@@ -130,6 +137,7 @@ const Dishes = () => {
                                     name={dish.name}
                                     numberOfPersons={dish.numberOfPersons}
                                     dishPhotoGuid={dish.dishPhotoGuid}
+                                    onClick={() => handleDishOpening(dish.id)}
                                 />
                             ))
                         )
@@ -137,7 +145,6 @@ const Dishes = () => {
             </Grid>
 
             <MuiGridCardsPagination/>
-
         </Fragment>
     );
 }

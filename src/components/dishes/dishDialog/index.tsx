@@ -22,18 +22,25 @@ import {OkeiDto} from "../../../contracts/okei/dtos/OkeiDto";
 import { getAllOkeisAsync } from "../../../store/okeis/thunks";
 import {AddDishAsyncCommand} from "../../../contracts/dishes/commands/AddDishAsyncCommand";
 import {IngredientForDishDto} from "../../../contracts/dishes/dtos/IngredientForDishDto";
-import { addDishAsync } from "../../../store/dishes/thunks";
+import {addDishAsync, getDishByIdAsync} from "../../../store/dishes/thunks";
 import {noImageData} from "../constants";
+import {selectAllIngredients} from "../../../store/ingredients/reducers";
+import {selectAllOkeis} from "../../../store/okeis/reducers";
 
 export declare interface DishesDialogProps {
     openDialog: boolean;
     setOpenDialog: (open: boolean) => void;
+
+    dishId? : number;
 }
 
 const DishesDialog = (props: DishesDialogProps) => {
 
+    const allIngredients = useAppSelector(selectAllIngredients);
+    const allOkeis = useAppSelector(selectAllOkeis);
     const dispatch = useAppDispatch();
 
+    const [dishId, setDishId] = useState<number | undefined>(undefined);
     const [dishPhoto, setDishPhoto] = useState<File>();
     const [dishPhotoUrl, setDishPhotoUrl] = useState<string>();
     const [dishName, setDishName] = useState<string>("");
@@ -53,6 +60,42 @@ const DishesDialog = (props: DishesDialogProps) => {
         (async () => await dispatch(getAllIngredientsAsync(new GetAllIngredientsAsyncQuery())))();
         (async () => await dispatch(getAllOkeisAsync()))();
     }, []);
+
+    useEffect(() => {
+        if (props.dishId !== undefined)
+        {
+            dispatch(getDishByIdAsync(props.dishId!))
+                .then((response) => {
+                    //console.log(response.payload);
+                    setDishId(response.payload.id);
+                    setDishName(response.payload.name);
+                    setDishNumberOfPerson(response.payload.numberOfPersons);
+                    setDishDescription(response.payload.description);
+
+                    let ingredientsForDish: IngredientForDishModel[] = [];
+                    for (let i = 0; i < response.payload.ingredientsForDish.length; i++) {
+                        ingredientsForDish.push(new IngredientForDishModel(
+                            response.payload.ingredientsForDish[i].quantity,
+                            response.payload.ingredientsForDish[i].condition,
+                            allIngredients.filter(x => x.id === response.payload.ingredientsForDish[i].ingredientId)[0],
+                            allOkeis.filter(x => x.code === response.payload.ingredientsForDish[i].okeiCode)[0]
+                        ));
+                    }
+                    setIngredientsForDish(ingredientsForDish);
+
+                    if (response.payload.dishPhotoGuid) {
+                        setDishPhotoUrl(`${process.env.REACT_APP_API_URL}/File/${response.payload.dishPhotoGuid}`);
+                    }
+                    else {
+                        setDishPhotoUrl(undefined);
+                    }
+                });
+        }
+        else {
+            clearFields();
+            resetValidation();
+        }
+    }, [props.dishId]);
 
     const handleDishImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
@@ -179,11 +222,11 @@ const DishesDialog = (props: DishesDialogProps) => {
         );
 
         dispatch(addDishAsync(addDishAsyncQuery))
-            .then((s) => {
+            .then((result) => {
                 // После успешного ответа очистка полей и закрытие диалогового окна
                 setDialogLoading(false);
 
-                if (s.payload) {
+                if (result.payload) {
                     handleDialogsCancelButtonClick();
                 }
             });

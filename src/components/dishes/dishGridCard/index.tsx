@@ -11,6 +11,8 @@ export declare interface DishesGridCardProps {
     name: string;
     numberOfPersons: number;
     dishPhotoGuid?: string;
+
+    onClick?: () => void;
 }
 
 const DishesGridCard = (props: DishesGridCardProps) => {
@@ -29,7 +31,7 @@ const DishesGridCard = (props: DishesGridCardProps) => {
                 sx={{
                     width: 217
                 }}
-                onClick={() => alert(`${props.name}`)}
+                onClick={props.onClick}
             >
                 <CardActionArea>
                     <CardMedia

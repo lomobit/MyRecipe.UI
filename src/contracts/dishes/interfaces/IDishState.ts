@@ -5,6 +5,8 @@ export interface IDishState {
     dishesCount: number;
     getDishesPageStatus: 'idle' | 'loading' | 'failed';
 
+    getDishStatus: 'idle' | 'loading' | 'failed';
+
     addDishStatus: 'idle' | 'loading' | 'failed';
 
     dishesGridPageSize: number;

@@ -24,6 +24,8 @@ import {
 import {SortingOrderEnum} from "../../contracts/common/enums/SortingOrderEnum";
 import {SortingFieldEnum} from "../../contracts/ingredients/enums/SortingFieldEnum";
 import DishesGridCard from "./dishGridCard";
+import {skeletonCardArray} from "./constants";
+import DishesGridCardSkeleton from "./dishGridCardSkeleton";
 
 const Dishes = () => {
 
@@ -114,16 +116,23 @@ const Dishes = () => {
                 spacing={3}
                 style={{marginBottom: 20}}
             >
-                { loading && "Я загружаюсь!!!!!!" }
                 {
-                    dishesSlice.map((dish) => (
-                        <DishesGridCard
-                            id={dish.id}
-                            name={dish.name}
-                            numberOfPersons={dish.numberOfPersons}
-                            dishPhotoGuid={dish.dishPhotoGuid}
-                        />
-                    ))
+                    loading
+                        ? (
+                            skeletonCardArray.map((id) => (
+                                <DishesGridCardSkeleton id={id} />
+                            ))
+                        )
+                        : (
+                            dishesSlice.map((dish) => (
+                                <DishesGridCard
+                                    id={dish.id}
+                                    name={dish.name}
+                                    numberOfPersons={dish.numberOfPersons}
+                                    dishPhotoGuid={dish.dishPhotoGuid}
+                                />
+                            ))
+                        )
                 }
             </Grid>
 

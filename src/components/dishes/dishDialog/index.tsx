@@ -64,14 +64,15 @@ const DishesDialog = (props: DishesDialogProps) => {
     useEffect(() => {
         if (props.dishId !== undefined)
         {
+            setDialogLoading(true);
             dispatch(getDishByIdAsync(props.dishId!))
                 .then((response) => {
-                    //console.log(response.payload);
                     setDishId(response.payload.id);
                     setDishName(response.payload.name);
                     setDishNumberOfPerson(response.payload.numberOfPersons);
                     setDishDescription(response.payload.description);
 
+                    // Добавление ингредиентов
                     let ingredientsForDish: IngredientForDishModel[] = [];
                     for (let i = 0; i < response.payload.ingredientsForDish.length; i++) {
                         ingredientsForDish.push(new IngredientForDishModel(
@@ -83,12 +84,15 @@ const DishesDialog = (props: DishesDialogProps) => {
                     }
                     setIngredientsForDish(ingredientsForDish);
 
+                    // Добавление фото блюда
                     if (response.payload.dishPhotoGuid) {
                         setDishPhotoUrl(`${process.env.REACT_APP_API_URL}/File/${response.payload.dishPhotoGuid}`);
                     }
                     else {
                         setDishPhotoUrl(undefined);
                     }
+
+                    setDialogLoading(false);
                 });
         }
         else {
@@ -199,14 +203,7 @@ const DishesDialog = (props: DishesDialogProps) => {
         }
     }
 
-    const handleDialogsAddButtonClick = () => {
-        // Валидация обязательных полей
-        if (!validateRequiredFields()) {
-            alert("Не все обязательные поля заполнены!");
-            return;
-        }
-
-        // Отправка запроса на добавление нового блюда
+    const addNewDish = () => {
         setDialogLoading(true);
 
         let addDishAsyncQuery = new AddDishAsyncCommand(
@@ -230,6 +227,26 @@ const DishesDialog = (props: DishesDialogProps) => {
                     handleDialogsCancelButtonClick();
                 }
             });
+    }
+
+    const editDish = () => {
+        alert("Вызов метода API для изменения ингредиента!");
+    }
+
+    const handleDialogsAddButtonClick = () => {
+        // Валидация обязательных полей
+        if (!validateRequiredFields()) {
+            alert("Не все обязательные поля заполнены!");
+            return;
+        }
+
+        if (props.dishId === undefined) {
+            addNewDish();
+        }
+        else {
+            editDish();
+        }
+
     }
 
     const validateRequiredFields = (): boolean => {
@@ -353,7 +370,9 @@ const DishesDialog = (props: DishesDialogProps) => {
                 <CircularProgress color="inherit" />
             </Backdrop>
 
-            <DialogTitle>Добавить блюдо</DialogTitle>
+            <DialogTitle>
+                {props.dishId === undefined ? 'Добавить блюдо' : 'Изменить блюдо'}
+            </DialogTitle>
             <DialogContent>
                 <Fragment>
                     <Fragment>
@@ -368,7 +387,7 @@ const DishesDialog = (props: DishesDialogProps) => {
                         <Button
                             variant="outlined"
                             component="label">
-                            Добавить изображение
+                            {dishPhoto === undefined && dishPhotoUrl === undefined ? 'Добавить изображение' : 'Заменить изображение'}
                             <input
                                 hidden={true}
                                 multiple={false}
@@ -378,7 +397,7 @@ const DishesDialog = (props: DishesDialogProps) => {
                             />
                         </Button>
                         <Button
-                            disabled={dishPhoto === undefined}
+                            disabled={dishPhoto === undefined && dishPhotoUrl === undefined}
                             variant="outlined"
                             component="label"
                             onClick={handleDishImageDelete}
@@ -492,7 +511,7 @@ const DishesDialog = (props: DishesDialogProps) => {
                     variant="contained"
                     onClick={handleDialogsAddButtonClick}
                 >
-                    Добавить
+                    {props.dishId === undefined ? 'Добавить' : 'Изменить'}
                 </Button>
             </DialogActions>
         </Dialog>

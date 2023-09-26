@@ -40,7 +40,6 @@ const DishesDialog = (props: DishesDialogProps) => {
     const allOkeis = useAppSelector(selectAllOkeis);
     const dispatch = useAppDispatch();
 
-    const [dishId, setDishId] = useState<number | undefined>(undefined);
     const [dishPhoto, setDishPhoto] = useState<File>();
     const [dishPhotoUrl, setDishPhotoUrl] = useState<string>();
     const [dishName, setDishName] = useState<string>("");
@@ -67,7 +66,6 @@ const DishesDialog = (props: DishesDialogProps) => {
             setDialogLoading(true);
             dispatch(getDishByIdAsync(props.dishId!))
                 .then((response) => {
-                    setDishId(response.payload.id);
                     setDishName(response.payload.name);
                     setDishNumberOfPerson(response.payload.numberOfPersons);
                     setDishDescription(response.payload.description);
@@ -91,9 +89,8 @@ const DishesDialog = (props: DishesDialogProps) => {
                     else {
                         setDishPhotoUrl(undefined);
                     }
-
-                    setDialogLoading(false);
-                });
+                })
+                .finally(() => setDialogLoading(false));
         }
         else {
             clearFields();
@@ -221,12 +218,11 @@ const DishesDialog = (props: DishesDialogProps) => {
         dispatch(addDishAsync(addDishAsyncQuery))
             .then((result) => {
                 // После успешного ответа очистка полей и закрытие диалогового окна
-                setDialogLoading(false);
-
                 if (result.payload) {
                     handleDialogsCancelButtonClick();
                 }
-            });
+            })
+            .finally(() => setDialogLoading(false));
     }
 
     const editDish = () => {

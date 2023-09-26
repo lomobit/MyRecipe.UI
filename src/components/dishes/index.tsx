@@ -77,6 +77,11 @@ const Dishes = () => {
         setOpenDialog(true);
     }
 
+    const handleSetOpenDialog = (open: boolean) => {
+        setOpeningDishId(undefined);
+        setOpenDialog(open);
+    }
+
     return (
         <Fragment>
             <h1>Блюда</h1>
@@ -111,7 +116,7 @@ const Dishes = () => {
 
             <DishesDialog
                 openDialog={openDialog}
-                setOpenDialog={setOpenDialog}
+                setOpenDialog={handleSetOpenDialog}
 
                 dishId={openingDishId}
             />

@@ -27,6 +27,7 @@ import {noImageData} from "../constants";
 import {selectAllIngredients} from "../../../store/ingredients/reducers";
 import {selectAllOkeis} from "../../../store/okeis/reducers";
 import {EditDishAsyncCommand} from "../../../contracts/dishes/commands/EditDishAsyncCommand";
+import {PayloadAction, SerializedError} from "@reduxjs/toolkit";
 
 export declare interface DishesDialogProps {
     openDialog: boolean;
@@ -41,6 +42,7 @@ const DishesDialog = (props: DishesDialogProps) => {
     const allOkeis = useAppSelector(selectAllOkeis);
     const dispatch = useAppDispatch();
 
+    // dishInfo
     const [dishPhoto, setDishPhoto] = useState<File>();
     const [dishPhotoUrl, setDishPhotoUrl] = useState<string>();
     const [dishName, setDishName] = useState<string>("");
@@ -48,49 +50,29 @@ const DishesDialog = (props: DishesDialogProps) => {
     const [dishDescription, setDishDescription] = useState<string>("");
     const [ingredientsForDish, setIngredientsForDish] = useState<IngredientForDishModel[]>([]);
 
+    // dishValidation
     const [isDishNameValidationError, setIsDishNameValidationError ] = useState<boolean>(false);
     const [isDishNumberOfPersonValidationError, setIsDishNumberOfPersonValidationError ] = useState<boolean>(false);
     const [isDishDescriptionValidationError, setIsDishDescriptionValidationError ] = useState<boolean>(false);
     const [isDishIngredientsValidationError, setIsDishIngredientsValidationError ] = useState<boolean>(false);
 
+    // loadingSpinner
     const [dialogLoading, setDialogLoading] = useState<boolean>(false);
 
 
     useEffect(() => {
         (async () => await dispatch(getAllIngredientsAsync(new GetAllIngredientsAsyncQuery())))();
         (async () => await dispatch(getAllOkeisAsync()))();
+
+
     }, []);
 
     useEffect(() => {
         if (props.dishId !== undefined)
         {
             setDialogLoading(true);
-            dispatch(getDishByIdAsync(props.dishId!))
-                .then((response) => {
-                    setDishName(response.payload.name);
-                    setDishNumberOfPerson(response.payload.numberOfPersons);
-                    setDishDescription(response.payload.description);
-
-                    // Добавление ингредиентов
-                    let ingredientsForDish: IngredientForDishModel[] = [];
-                    for (let i = 0; i < response.payload.ingredientsForDish.length; i++) {
-                        ingredientsForDish.push(new IngredientForDishModel(
-                            response.payload.ingredientsForDish[i].quantity,
-                            response.payload.ingredientsForDish[i].condition,
-                            allIngredients.filter(x => x.id === response.payload.ingredientsForDish[i].ingredientId)[0],
-                            allOkeis.filter(x => x.code === response.payload.ingredientsForDish[i].okeiCode)[0]
-                        ));
-                    }
-                    setIngredientsForDish(ingredientsForDish);
-
-                    // Добавление фото блюда
-                    if (response.payload.dishPhotoGuid) {
-                        setDishPhotoUrl(`${process.env.REACT_APP_API_URL}/File/${response.payload.dishPhotoGuid}`);
-                    }
-                    else {
-                        setDishPhotoUrl(undefined);
-                    }
-                })
+            dispatch(getDishByIdAsync(props.dishId))
+                .then(fillDialogWithResponseData)
                 .catch(() => {
                     props.setOpenDialog(false);
                 })
@@ -103,6 +85,32 @@ const DishesDialog = (props: DishesDialogProps) => {
             resetValidation();
         }
     }, [props.dishId]);
+
+    const fillDialogWithResponseData = (response: PayloadAction<any, string, {arg: number, requestId: string, requestStatus: "fulfilled"}, never> | PayloadAction<unknown, string, {arg: number, requestId: string, requestStatus: "rejected", aborted: boolean, condition: boolean}, SerializedError>) => {
+        setDishName(response.payload.name);
+        setDishNumberOfPerson(response.payload.numberOfPersons);
+        setDishDescription(response.payload.description);
+
+        // Добавление ингредиентов
+        let ingredientsForDish: IngredientForDishModel[] = [];
+        for (let i = 0; i < response.payload.ingredientsForDish.length; i++) {
+            ingredientsForDish.push(new IngredientForDishModel(
+                response.payload.ingredientsForDish[i].quantity,
+                response.payload.ingredientsForDish[i].condition,
+                allIngredients.filter(x => x.id === response.payload.ingredientsForDish[i].ingredientId)[0],
+                allOkeis.filter(x => x.code === response.payload.ingredientsForDish[i].okeiCode)[0]
+            ));
+        }
+        setIngredientsForDish(ingredientsForDish);
+
+        // Добавление фото блюда
+        if (response.payload.dishPhotoGuid) {
+            setDishPhotoUrl(`${process.env.REACT_APP_API_URL}/File/${response.payload.dishPhotoGuid}`);
+        }
+        else {
+            setDishPhotoUrl(undefined);
+        }
+    }
 
     const handleDishImageChange = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {

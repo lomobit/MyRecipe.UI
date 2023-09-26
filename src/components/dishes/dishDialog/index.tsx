@@ -22,10 +22,11 @@ import {OkeiDto} from "../../../contracts/okei/dtos/OkeiDto";
 import { getAllOkeisAsync } from "../../../store/okeis/thunks";
 import {AddDishAsyncCommand} from "../../../contracts/dishes/commands/AddDishAsyncCommand";
 import {IngredientForDishDto} from "../../../contracts/dishes/dtos/IngredientForDishDto";
-import {addDishAsync, getDishByIdAsync} from "../../../store/dishes/thunks";
+import {addDishAsync, editDishAsync, getDishByIdAsync} from "../../../store/dishes/thunks";
 import {noImageData} from "../constants";
 import {selectAllIngredients} from "../../../store/ingredients/reducers";
 import {selectAllOkeis} from "../../../store/okeis/reducers";
+import {EditDishAsyncCommand} from "../../../contracts/dishes/commands/EditDishAsyncCommand";
 
 export declare interface DishesDialogProps {
     openDialog: boolean;
@@ -90,7 +91,12 @@ const DishesDialog = (props: DishesDialogProps) => {
                         setDishPhotoUrl(undefined);
                     }
                 })
-                .finally(() => setDialogLoading(false));
+                .catch(() => {
+                    props.setOpenDialog(false);
+                })
+                .finally(() => {
+                    setDialogLoading(false);
+                });
         }
         else {
             clearFields();
@@ -204,9 +210,9 @@ const DishesDialog = (props: DishesDialogProps) => {
         setDialogLoading(true);
 
         let addDishAsyncQuery = new AddDishAsyncCommand(
-            dishName!,
-            dishDescription!,
-            dishNumberOfPerson!,
+            dishName,
+            dishDescription,
+            dishNumberOfPerson,
             ingredientsForDish.map(x => new IngredientForDishDto(
                 x.ingredient!.id,
                 x.quantity,
@@ -218,15 +224,40 @@ const DishesDialog = (props: DishesDialogProps) => {
         dispatch(addDishAsync(addDishAsyncQuery))
             .then((result) => {
                 // После успешного ответа очистка полей и закрытие диалогового окна
+                setDialogLoading(false);
+
+                if (result.payload) {
+                    handleDialogsCancelButtonClick();
+                }
+            });
+    }
+
+    const editDish = () => {
+        setDialogLoading(true);
+
+        let editDishAsyncCommand = new EditDishAsyncCommand(
+            props.dishId ?? 0,
+            dishName,
+            dishDescription,
+            dishNumberOfPerson,
+            ingredientsForDish.map(x => new IngredientForDishDto(
+                x.ingredient!.id,
+                x.quantity,
+                x.okei!.code,
+                x.condition,
+                x.id)),
+            dishPhoto !== undefined ? dishPhoto : undefined
+        );
+
+        dispatch(editDishAsync(editDishAsyncCommand))
+            .then((result) => {
+                // После успешного ответа очистка полей и закрытие диалогового окна
+                setDialogLoading(false);
+
                 if (result.payload) {
                     handleDialogsCancelButtonClick();
                 }
             })
-            .finally(() => setDialogLoading(false));
-    }
-
-    const editDish = () => {
-        alert("Вызов метода API для изменения ингредиента!");
     }
 
     const handleDialogsAddButtonClick = () => {

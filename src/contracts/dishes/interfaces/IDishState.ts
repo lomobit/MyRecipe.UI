@@ -9,5 +9,7 @@ export interface IDishState {
 
     addDishStatus: 'idle' | 'loading' | 'failed';
 
+    editDishStatus: 'idle' | 'loading' | 'failed';
+
     dishesGridPageSize: number;
 }

@@ -1,7 +1,12 @@
 import {IDishState} from "../../contracts/dishes/interfaces/IDishState";
 import {createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {RootState} from "../index";
-import {addCasesFor_addDishAsync, addCasesFor_getDishByIdAsync, addCasesFor_getDishesPageAsync} from "./extraReducers";
+import {
+    addCasesFor_addDishAsync,
+    addCasesFor_getDishByIdAsync,
+    addCasesFor_getDishesPageAsync,
+    addCasesFor_editDishAsync
+} from "./extraReducers";
 
 const initialState: IDishState = {
     // getDishesPageAsync
@@ -14,6 +19,9 @@ const initialState: IDishState = {
 
     // addDishAsync
     addDishStatus: 'idle',
+
+    // editDishAsync
+    editDishStatus: 'idle',
 
     // setGridPageSize
     dishesGridPageSize: 9
@@ -31,6 +39,7 @@ const dishSlice = createSlice({
         addCasesFor_getDishesPageAsync(builder);
         addCasesFor_getDishByIdAsync(builder);
         addCasesFor_addDishAsync(builder);
+        addCasesFor_editDishAsync(builder);
     },
 });
 

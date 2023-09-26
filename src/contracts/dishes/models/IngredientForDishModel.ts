@@ -6,6 +6,7 @@ export class IngredientForDishModel {
     condition: string;
     ingredient?: IngredientDto;
     okei?: OkeiDto;
+    id?: number;
     quantityError: boolean = false;
     conditionError: boolean = false;
     ingredientError: boolean = false;
@@ -15,10 +16,13 @@ export class IngredientForDishModel {
          quantity: number,
          condition: string,
          ingredient?: IngredientDto,
-         okei?: OkeiDto) {
+         okei?: OkeiDto,
+         id?: number
+     ) {
          this.quantity = quantity;
          this.condition = condition;
          this.ingredient = ingredient;
          this.okei = okei;
+         this.id = id;
      }
 }

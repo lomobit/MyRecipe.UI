@@ -42,7 +42,6 @@ const Dishes = () => {
 
     //cardsGrid
     const nameFilter = useRef<string>();
-
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
         page: 0,
         pageSize: gridPageSize
@@ -67,7 +66,7 @@ const Dishes = () => {
     const handleDishAdding = () => {
         if (openingDishId !== undefined) {
             setOpeningDishId(undefined);
-            
+
         }
         
         setOpenDialog(true);

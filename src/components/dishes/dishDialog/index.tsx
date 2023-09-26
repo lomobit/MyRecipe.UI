@@ -44,7 +44,7 @@ const DishesDialog = (props: DishesDialogProps) => {
 
     // dishInfo
     const [dishPhoto, setDishPhoto] = useState<File>();
-    const [dishPhotoUrl, setDishPhotoUrl] = useState<string>();
+    const [dishPhotoGuid, setDishPhotoGuid] = useState<string>();
     const [dishName, setDishName] = useState<string>("");
     const [dishNumberOfPerson, setDishNumberOfPerson] = useState<number>(1);
     const [dishDescription, setDishDescription] = useState<string>("");
@@ -105,10 +105,10 @@ const DishesDialog = (props: DishesDialogProps) => {
 
         // Добавление фото блюда
         if (response.payload.dishPhotoGuid) {
-            setDishPhotoUrl(`${process.env.REACT_APP_API_URL}/File/${response.payload.dishPhotoGuid}`);
+            setDishPhotoGuid(response.payload.dishPhotoGuid);
         }
         else {
-            setDishPhotoUrl(undefined);
+            setDishPhotoGuid(undefined);
         }
     }
 
@@ -121,7 +121,7 @@ const DishesDialog = (props: DishesDialogProps) => {
 
     const handleDishImageDelete = () => {
         setDishPhoto(undefined);
-        setDishPhotoUrl(undefined);
+        setDishPhotoGuid(undefined);
     }
 
     const handleAddIngrediantForDish = () => {
@@ -254,7 +254,8 @@ const DishesDialog = (props: DishesDialogProps) => {
                 x.okei!.code,
                 x.condition,
                 x.id)),
-            dishPhoto !== undefined ? dishPhoto : undefined
+            dishPhoto,
+            dishPhotoGuid
         );
 
         dispatch(editDishAsync(editDishAsyncCommand))
@@ -362,7 +363,7 @@ const DishesDialog = (props: DishesDialogProps) => {
 
     const clearFields = () => {
         setDishPhoto(undefined);
-        setDishPhotoUrl(undefined);
+        setDishPhotoGuid(undefined);
         setDishName("");
         setDishNumberOfPerson(1);
         setDishDescription("");
@@ -377,15 +378,12 @@ const DishesDialog = (props: DishesDialogProps) => {
     }
 
     const getDishPhotoUrl = (): string => {
-        if (dishPhotoUrl) {
-            return dishPhotoUrl;
+        if (dishPhotoGuid) {
+            return `${process.env.REACT_APP_API_URL}/File/${dishPhotoGuid}`;
         }
 
         if (dishPhoto !== undefined) {
-            let result = URL.createObjectURL(dishPhoto);
-            setDishPhotoUrl(result);
-
-            return result;
+            return URL.createObjectURL(dishPhoto);
         }
 
         return noImageData;
@@ -422,7 +420,7 @@ const DishesDialog = (props: DishesDialogProps) => {
                         <Button
                             variant="outlined"
                             component="label">
-                            {dishPhoto === undefined && dishPhotoUrl === undefined ? 'Добавить изображение' : 'Заменить изображение'}
+                            {dishPhoto === undefined && dishPhotoGuid === undefined ? 'Добавить изображение' : 'Заменить изображение'}
                             <input
                                 hidden={true}
                                 multiple={false}
@@ -432,7 +430,7 @@ const DishesDialog = (props: DishesDialogProps) => {
                             />
                         </Button>
                         <Button
-                            disabled={dishPhoto === undefined && dishPhotoUrl === undefined}
+                            disabled={dishPhoto === undefined && dishPhotoGuid === undefined}
                             variant="outlined"
                             component="label"
                             onClick={handleDishImageDelete}

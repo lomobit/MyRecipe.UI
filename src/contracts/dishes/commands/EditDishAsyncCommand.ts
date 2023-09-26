@@ -7,6 +7,7 @@ export class EditDishAsyncCommand {
         public description: string,
         public numberOfPersons: number,
         public ingredientsForDish: Array<IngredientForDishDto>,
-        public dishPhoto?: File
+        public dishPhoto?: File,
+        public dishPhotoGuid?: string
     ) {}
 }

@@ -64,6 +64,11 @@ export async function EditDishAsync(command: EditDishAsyncCommand) {
     bodyQuery.append("numberOfPersons", command.numberOfPersons.toString());
     bodyQuery.append("dishPhoto", command.dishPhoto as Blob);
 
+    if (command.dishPhotoGuid !== undefined) {
+        bodyQuery.append("dishPhotoGuid", command.dishPhotoGuid);
+    }
+
+
     for (let i = 0; i < command.ingredientsForDish.length; i++) {
         if (command.ingredientsForDish[i].id !== undefined) {
             bodyQuery.append(`ingredientsForDish[${i}].id`, command.ingredientsForDish[i].id!.toString());

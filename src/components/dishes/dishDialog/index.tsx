@@ -33,6 +33,8 @@ export declare interface DishesDialogProps {
     openDialog: boolean;
     setOpenDialog: (open: boolean) => void;
 
+    onSave: () => void;
+
     dishId? : number;
 }
 
@@ -237,6 +239,8 @@ const DishesDialog = (props: DishesDialogProps) => {
                 if (result.payload) {
                     handleDialogsCancelButtonClick();
                 }
+
+                props.onSave();
             });
     }
 
@@ -266,6 +270,8 @@ const DishesDialog = (props: DishesDialogProps) => {
                 if (result.payload) {
                     handleDialogsCancelButtonClick();
                 }
+
+                props.onSave();
             })
     }
 
@@ -282,7 +288,6 @@ const DishesDialog = (props: DishesDialogProps) => {
         else {
             editDish();
         }
-
     }
 
     const validateRequiredFields = (): boolean => {

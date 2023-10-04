@@ -82,6 +82,10 @@ const Dishes = () => {
         setOpenDialog(open);
     }
 
+    const onSaveDish = () => {
+        updateDishes();
+    }
+
     return (
         <Fragment>
             <h1>Блюда</h1>
@@ -117,7 +121,7 @@ const Dishes = () => {
             <DishesDialog
                 openDialog={openDialog}
                 setOpenDialog={handleSetOpenDialog}
-
+                onSave={onSaveDish}
                 dishId={openingDishId}
             />
 

@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import UpdateIcon from "@mui/icons-material/Update";
 import AddIcon from "@mui/icons-material/Add";
-import {Fragment, useEffect, useRef, useState} from "react";
+import {ChangeEvent, Fragment, useEffect, useRef, useState} from "react";
 import DishesDialog from "./dishDialog";
 import MuiGridCardsPagination from "../paginations/mui-grid-cards-pagination";
 import {GetIngredientsPageAsyncQuery} from "../../contracts/ingredients/queries/GetIngredientsPageAsyncQuery";
@@ -41,7 +41,7 @@ const Dishes = () => {
     const [openingDishId, setOpeningDishId] = useState<number | undefined>(undefined);
 
     //cardsGrid
-    const nameFilter = useRef<string>();
+    const [nameFilter, setNameFilter] = useState<string>("");
     const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
         page: 0,
         pageSize: gridPageSize
@@ -58,7 +58,7 @@ const Dishes = () => {
                 paginationModel.pageSize,
                 SortingOrderEnum.Ascending,
                 SortingFieldEnum.Id,
-                nameFilter.current);
+                nameFilter);
             await dispatch(getDishesPageAsync(getDishesQuery));
         })();
     }
@@ -86,6 +86,14 @@ const Dishes = () => {
         updateDishes();
     }
 
+    const onChangeNameFilter = (event: ChangeEvent<HTMLInputElement>) => {
+        setNameFilter(event.target.value);
+    }
+
+    const handleClickUpdateButton = () => {
+        updateDishes();
+    }
+
     return (
         <Fragment>
             <h1>Блюда</h1>
@@ -96,13 +104,13 @@ const Dishes = () => {
                         label="Поиск по названию"
                         variant="outlined"
                         size="small"
-                        //value={""}
-                        //onChange={onChangeNameFilter}
+                        value={nameFilter}
+                        onChange={onChangeNameFilter}
                     />
                     <IconButton
                         aria-label="update"
                         color="primary"
-                        //onClick={handleClickUpdateButton}
+                        onClick={handleClickUpdateButton}
                     >
                         <UpdateIcon />
                     </IconButton>

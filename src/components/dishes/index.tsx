@@ -94,6 +94,14 @@ const Dishes = () => {
         updateDishes();
     }
 
+    const handlePageChange = () => {
+        alert("onPageChange");
+    }
+
+    const handlePageSizeChange = () => {
+        alert("onPageSizeChange");
+    }
+
     return (
         <Fragment>
             <h1>Блюда</h1>
@@ -160,7 +168,14 @@ const Dishes = () => {
                 }
             </Grid>
 
-            <MuiGridCardsPagination/>
+            <MuiGridCardsPagination
+                currentPage={1}
+                totalPages={10}
+                pageSize={9}
+
+                onPageChange={handlePageChange}
+                onPageSizeChange={handlePageSizeChange}
+            />
         </Fragment>
     );
 }

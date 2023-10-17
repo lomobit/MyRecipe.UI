@@ -17,12 +17,23 @@ export declare interface DishesGridCardProps {
 
 const DishesGridCard = (props: DishesGridCardProps) => {
 
+    const MaxSymbolsName: number = 16;
+
     const getDishPhotoUrl = (dishPhotoGuid?: string): string => {
         if (dishPhotoGuid) {
             return `${process.env.REACT_APP_API_URL}/File/${dishPhotoGuid}`
         }
 
         return noImageData;
+    }
+
+    const getDishName = () => {
+        let result = props.name;
+        if (result.length > MaxSymbolsName) {
+            result = result.substring(0, MaxSymbolsName - 3) + '...';
+        }
+
+        return result;
     }
 
     return (
@@ -43,7 +54,7 @@ const DishesGridCard = (props: DishesGridCardProps) => {
                     />
                     <CardContent>
                         <Typography gutterBottom variant="h5" component="div">
-                            {props.name}
+                            {getDishName()}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                             Количество персон: {props.numberOfPersons}

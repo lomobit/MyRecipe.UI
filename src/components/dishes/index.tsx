@@ -92,7 +92,7 @@ const Dishes = () => {
     }
 
     const handleClickUpdateButton = () => {
-        updateDishes();
+        setPaginationModel({...paginationModel, page: 0});
     }
 
     const handlePageChange = (page: number) => {

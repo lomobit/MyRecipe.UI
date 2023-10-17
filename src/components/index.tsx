@@ -2,7 +2,6 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainMenu from "./mainMenu";
 import Home from './home';
 import Schedules from './schedules';
-import Meals from './meals';
 import Dishes from './dishes';
 import Ingredients from './ingredients';
 import Settings from './settings';
@@ -20,7 +19,6 @@ function MyRecipeApp() {
                     <Routes>
                         <Route path="/" element={<Home />} />
                         <Route path="/schedules" element={<Schedules />} />
-                        <Route path="/meals" element={<Meals />} />
                         <Route path="/dishes" element={<Dishes />} />
                         <Route path="/ingredients" element={<Ingredients />} />
                         <Route path="/settings" element={<Settings />} />

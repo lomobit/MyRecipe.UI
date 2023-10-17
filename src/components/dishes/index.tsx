@@ -14,7 +14,6 @@ import MuiGridCardsPagination from "../paginations/mui-grid-cards-pagination";
 import {GetIngredientsPageAsyncQuery} from "../../contracts/ingredients/queries/GetIngredientsPageAsyncQuery";
 import {useAppDispatch, useAppSelector} from "../../store/hooks";
 import { getDishesPageAsync } from '../../store/dishes/thunks';
-import {GridPaginationModel} from "@mui/x-data-grid";
 import {
     selectDishesSlice,
     selectDishesCount,
@@ -26,6 +25,8 @@ import {SortingFieldEnum} from "../../contracts/ingredients/enums/SortingFieldEn
 import DishesGridCard from "./dishGridCard";
 import {skeletonCardArray} from "./constants";
 import DishesGridCardSkeleton from "./dishGridCardSkeleton";
+import {CustomGridPaginationModel} from "../../contracts/common/interfaces/CustomGridPaginationModel";
+import {PageSize} from "../../contracts/common/types/PageSize";
 
 const Dishes = () => {
 
@@ -42,7 +43,7 @@ const Dishes = () => {
 
     //cardsGrid
     const [nameFilter, setNameFilter] = useState<string>("");
-    const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+    const [paginationModel, setPaginationModel] = useState<CustomGridPaginationModel>({
         page: 0,
         pageSize: gridPageSize
     });
@@ -94,12 +95,22 @@ const Dishes = () => {
         updateDishes();
     }
 
-    const handlePageChange = () => {
-        alert("onPageChange");
+    const handlePageChange = (page: number) => {
+        setPaginationModel({...paginationModel, page: page - 1});
     }
 
-    const handlePageSizeChange = () => {
-        alert("onPageSizeChange");
+    const handlePageSizeChange = (pageSize: PageSize) => {
+        let currentPage = paginationModel.page + 1;
+        let totalPages = getTotalPagesForPagination(dishesCount, pageSize);
+        if (currentPage > totalPages) {
+            currentPage = totalPages;
+        }
+
+        setPaginationModel({page: currentPage - 1, pageSize: pageSize});
+    }
+
+    const getTotalPagesForPagination = (count: number, pageSize: PageSize) => {
+        return Math.ceil(count / pageSize);
     }
 
     return (
@@ -150,8 +161,8 @@ const Dishes = () => {
                 {
                     loading
                         ? (
-                            skeletonCardArray.map((id) => (
-                                <DishesGridCardSkeleton id={id} />
+                            skeletonCardArray.map((id, index) => (
+                                <DishesGridCardSkeleton id={index} />
                             ))
                         )
                         : (
@@ -169,9 +180,9 @@ const Dishes = () => {
             </Grid>
 
             <MuiGridCardsPagination
-                currentPage={1}
-                totalPages={10}
-                pageSize={9}
+                currentPage={paginationModel.page + 1}
+                totalPages={getTotalPagesForPagination(dishesCount, paginationModel.pageSize)}
+                pageSize={paginationModel.pageSize}
 
                 onPageChange={handlePageChange}
                 onPageSizeChange={handlePageSizeChange}

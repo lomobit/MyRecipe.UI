@@ -7,6 +7,7 @@ import {
     addCasesFor_getDishesPageAsync,
     addCasesFor_editDishAsync
 } from "./extraReducers";
+import {PageSize} from "../../contracts/common/types/PageSize";
 
 const initialState: IDishState = {
     // getDishesPageAsync
@@ -31,7 +32,7 @@ const dishSlice = createSlice({
     name: 'dish',
     initialState,
     reducers: {
-        setDishesGridPageSize: (state, action: PayloadAction<number>) => {
+        setDishesGridPageSize: (state, action: PayloadAction<PageSize>) => {
             state.dishesGridPageSize = action.payload;
         }
     },

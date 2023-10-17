@@ -1,0 +1,1 @@
+export type PageSize = 9 | 12 | 15;

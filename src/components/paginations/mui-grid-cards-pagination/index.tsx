@@ -2,26 +2,28 @@ import {FormControl, MenuItem, Select, SelectChangeEvent, Stack} from "@mui/mate
 import Pagination from "@mui/material/Pagination";
 import * as React from "react";
 import { ReactNode } from "react";
-
-type PageSize = 9 | 12 | 15;
+import {PageSize} from "../../../contracts/common/types/PageSize";
 
 export declare interface MuiGridCardsPaginationProps {
     currentPage: number;
     totalPages: number;
     pageSize: PageSize;
 
-    onPageChange: () => void;
-    onPageSizeChange: () => void;
+    onPageChange: (page: number) => void;
+    onPageSizeChange: (pageSize: PageSize) => void;
 }
 
 const MuiGridCardsPagination = (props: MuiGridCardsPaginationProps) => {
 
     const handlePaginationChange = (event: React.ChangeEvent<unknown>, page: number) => {
-        props.onPageChange();
+        props.onPageChange(page);
     }
 
     const handleSelectItemPerPageChange = (event: SelectChangeEvent<PageSize>, child?: ReactNode) => {
-        props.onPageSizeChange();
+        let currentValue: PageSize = event.target.value as PageSize;
+        if (currentValue) {
+            props.onPageSizeChange(currentValue);
+        }
     }
 
     return (

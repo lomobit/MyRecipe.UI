@@ -1,4 +1,5 @@
 import {DishForGridDto} from "../dtos/DishForGridDto";
+import {PageSize} from "../../common/types/PageSize";
 
 export interface IDishState {
     dishesSlice: Array<DishForGridDto>;
@@ -11,5 +12,5 @@ export interface IDishState {
 
     editDishStatus: 'idle' | 'loading' | 'failed';
 
-    dishesGridPageSize: number;
+    dishesGridPageSize: PageSize;
 }

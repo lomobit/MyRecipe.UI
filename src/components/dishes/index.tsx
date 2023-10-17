@@ -162,13 +162,14 @@ const Dishes = () => {
                     loading
                         ? (
                             skeletonCardArray.map((id, index) => (
-                                <DishesGridCardSkeleton id={index} />
+                                <DishesGridCardSkeleton id={id} key={id}/>
                             ))
                         )
                         : (
                             dishesSlice.map((dish) => (
                                 <DishesGridCard
                                     id={dish.id}
+                                    key={dish.id}
                                     name={dish.name}
                                     numberOfPersons={dish.numberOfPersons}
                                     dishPhotoGuid={dish.dishPhotoGuid}

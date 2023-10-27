@@ -1,9 +1,9 @@
 import './index.css';
 
-function Schedules() {
+function Events() {
     return (
-        <h1>Schedules</h1>
+        <h1>События</h1>
     );
 }
 
-export default Schedules;
+export default Events;

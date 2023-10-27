@@ -359,11 +359,7 @@ const DishesDialog = (props: DishesDialogProps) => {
         // Очистка полей
         clearFields();
 
-        // Очисток ошибок валидации
-        resetValidation();
-
-        // Закрытие диалогового окна
-        props.setOpenDialog(false);
+        handleDialogClose();
     }
 
     const clearFields = () => {
@@ -394,10 +390,18 @@ const DishesDialog = (props: DishesDialogProps) => {
         return noImageData;
     }
 
+    const handleDialogClose = () => {
+        // Очисток ошибок валидации
+        resetValidation();
+
+        // Закрытие диалогового окна
+        props.setOpenDialog(false);
+    }
+
     return (
         <Dialog
             open={props.openDialog}
-            onClose={() => props.setOpenDialog(false)}
+            onClose={handleDialogClose}
             fullWidth={true}
             maxWidth="md"
         >

@@ -21,12 +21,14 @@ const Events = () => {
         {
             name: "Сплав1",
             startAt: new Date(2023, 10, 26),
-            finishAt: new Date(2023, 10, 28)
+            finishAt: new Date(2023, 10, 28),
+            color: "red"
         },
         {
             name: "Сплав2",
             startAt: new Date(2023, 11, 4),
-            finishAt: new Date(2023, 11, 6)
+            finishAt: new Date(2023, 11, 6),
+            color: "rgb(94,66,141)"
         },
         {
             name: "Сплав3",
@@ -36,12 +38,14 @@ const Events = () => {
         {
             name: "Сплав4",
             startAt: new Date(2023, 11, 23),
-            finishAt: new Date(2023, 11, 26)
+            finishAt: new Date(2023, 11, 26),
+            color: "violet"
         },
         {
             name: "Сплав5",
             startAt: new Date(2023, 11, 30),
-            finishAt: new Date(2024, 0, 2)
+            finishAt: new Date(2024, 0, 2),
+            color: "green"
         },
         {
             name: "Сплав6",
@@ -158,8 +162,19 @@ const Events = () => {
                                     >
                                         <span
                                             style={{
-                                                color: day.month == currentDate.getMonth() + 1 ? "black" : "lightgray",
-                                                marginLeft: "10px"
+                                                color: day.month == currentDate.getMonth() + 1 && day.date == currentDate.getDate()
+                                                    ? "white"
+                                                    : day.month == currentDate.getMonth() + 1
+                                                        ? "black"
+                                                        : "lightgray",
+                                                marginLeft: "10px",
+                                                paddingLeft: day.date < 10 ? 7 : 3,
+                                                paddingRight: day.date < 10 ? 7 : 4,
+                                                paddingBottom: 1,
+                                                borderRadius: "50%",
+                                                backgroundColor: day.month == currentDate.getMonth() + 1 && day.date == currentDate.getDate()
+                                                    ? "rgb(25,103,210)"
+                                                    : ""
                                             }}
                                         >
                                             { day.date }
@@ -179,7 +194,7 @@ const Events = () => {
                                                 marginLeft: (x.startAt.getDate() - week[0].date >= 0 ? x.startAt.getDate() - week[0].date : 0) * cellWidth,
                                                 width: getEventWidth(getNumberOfCommonDays(x, week[0], week[6])),
                                                 height: "25px",
-                                                background: "rgb(3, 155, 229)",
+                                                background: x.color ? x.color : "rgb(3, 155, 229)",
                                                 cursor: "pointer",
                                                 boxShadow: "0px 1px 1px 0px rgba(60,64,67,0.3)",
                                                 borderRadius: "3px"

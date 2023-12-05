@@ -3,14 +3,10 @@ import {Fragment, useState} from "react";
 import {Button, FormControl, IconButton, MenuItem, Select, Stack} from '@mui/material';
 import * as React from "react";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import AddIcon from "@mui/icons-material/Add";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';import AddIcon from "@mui/icons-material/Add";
 
-export declare interface EventsProps {
-    //currentDate: Date
-}
 
-function Events(props: EventsProps) {
+const Events = () => {
     const [currentDate, setCurrentDate] = useState<Date>(new Date());
 
     const currentPeriod = [
@@ -24,58 +20,60 @@ function Events(props: EventsProps) {
     const events = [
         {
             name: "Сплав1",
-            startAt: new Date(2023, 11, 26),
-            finishAt: new Date(2023, 12, 28)
+            startAt: new Date(2023, 10, 26),
+            finishAt: new Date(2023, 10, 28)
         },
         {
             name: "Сплав2",
-            startAt: new Date(2023, 12, 4),
-            finishAt: new Date(2023, 12, 6)
+            startAt: new Date(2023, 11, 4),
+            finishAt: new Date(2023, 11, 6)
         },
         {
             name: "Сплав3",
-            startAt: new Date(2023, 12, 5),
-            finishAt: new Date(2023, 12, 7)
+            startAt: new Date(2023, 11, 5),
+            finishAt: new Date(2023, 11, 7)
         },
         {
             name: "Сплав4",
-            startAt: new Date(2023, 12, 23),
-            finishAt: new Date(2023, 12, 26)
+            startAt: new Date(2023, 11, 23),
+            finishAt: new Date(2023, 11, 26)
         },
         {
             name: "Сплав5",
-            startAt: new Date(2023, 12, 30),
-            finishAt: new Date(2024, 1, 2)
+            startAt: new Date(2023, 11, 30),
+            finishAt: new Date(2024, 0, 2)
+        },
+        {
+            name: "Сплав6",
+            startAt: new Date(2023, 11, 8),
+            finishAt: new Date(2023, 11, 20)
         },
     ];
 
     const cellWidth = 107;
     const eventWidth = 100;
 
-    const getEventWidth = (startWeekDate: number, startDate: number, finishDate: number, finishWeekDate: number) => {
-        let result = 0;
+    const getNumberOfCommonDays = (event: any, firstItem: any, lastItem: any) => {
+        debugger;
 
-        if (startDate < startWeekDate && finishWeekDate < finishDate)
-        {
-            result = 7;
+        let start1 = event.startAt;
+        let end1 = event.finishAt;
+        let start2 = new Date(2023, firstItem.month - 1, firstItem.date);
+        let end2 = new Date(2023, lastItem.month - 1, lastItem.date);
+
+        if (end1 < start2 || end2 < start1) {
+            return 0;
         }
 
-        else if (startDate < startWeekDate)
-        {
-            result = finishDate - startWeekDate;
-        }
+        const commonStart = start1 < start2 ? start2 : start1;
+        const commonEnd = end1 < end2 ? end1 : end2;
+        const commonDays = Math.ceil((commonEnd.getTime() - commonStart.getTime()) / (1000 * 60 * 60 * 24));
 
-        else if (finishWeekDate < finishDate || finishDate < startDate)
-        {
-            result = finishWeekDate - startDate;
-        }
+        return commonDays;
+    }
 
-        else
-        {
-            result = finishDate - startDate;
-        }
-
-        return (cellWidth * (result)) + eventWidth;
+    const getEventWidth = (cellsCount: number) => {
+        return (cellWidth * (cellsCount)) + eventWidth;
     }
 
     return (
@@ -133,8 +131,7 @@ function Events(props: EventsProps) {
             <div className="mainCalendarGrid" style={{height: "120px", marginTop: "20px"}}>
                 {
                     currentPeriod.map((week, index) => (
-                        //<div style="display: inline-block; border: 1px solid #ccc;">
-                        <div style={{
+                        <div key={index} style={{
                             display: "flex",
                             position: "relative",
                             height: "100%",
@@ -148,6 +145,7 @@ function Events(props: EventsProps) {
                             {
                                 week.map((day, index) => (
                                     <div
+                                        key={`${day.month}${day.date}`}
                                         style={{
                                             display: "inline-block",
                                             borderBottom: "1px solid lightgray",
@@ -158,22 +156,28 @@ function Events(props: EventsProps) {
                                         }}
                                         onClick={() => alert("Add event!")}
                                     >
-                                        { day.date }
+                                        <span
+                                            style={{
+                                                color: day.month == currentDate.getMonth() + 1 ? "black" : "lightgray",
+                                                marginLeft: "10px"
+                                            }}
+                                        >
+                                            { day.date }
+                                        </span>
                                     </div>
                                 ))
                             }
                             {
                                 events
-                                    // тут в выборке нужно будет добавить еще и месяц с годом
-                                    .filter(x => x.startAt.getDate() >= week[0].date && x.startAt.getDate() <= week[6].date
-                                        || x.finishAt.getDate() >= week[0].date && x.finishAt.getDate() <= week[6].date)
+                                    .filter(x => getNumberOfCommonDays(x, week[0], week[6]) > 0)
                                     .map((x, index) => (
                                         <div
+                                            key={index}
                                             style={{
                                                 position: "absolute",
                                                 marginTop: 30 + index * 30,
                                                 marginLeft: (x.startAt.getDate() - week[0].date >= 0 ? x.startAt.getDate() - week[0].date : 0) * cellWidth,
-                                                width: getEventWidth(week[0].date, x.startAt.getDate(), x.finishAt.getDate(), week[6].date),
+                                                width: getEventWidth(getNumberOfCommonDays(x, week[0], week[6])),
                                                 height: "25px",
                                                 background: "rgb(3, 155, 229)",
                                                 cursor: "pointer",

@@ -177,7 +177,8 @@ function Events(props: EventsProps) {
                                                 height: "25px",
                                                 background: "rgb(3, 155, 229)",
                                                 cursor: "pointer",
-                                                boxShadow: "0px 1px 2px 0px rgba(60,64,67,0.3),0px 1px 3px 1px rgba(60,64,67,0.15)"
+                                                boxShadow: "0px 1px 1px 0px rgba(60,64,67,0.3)",
+                                                borderRadius: "3px"
                                             }}
                                             className="cell-dev"
                                             onClick={() => alert('Edit event!')}

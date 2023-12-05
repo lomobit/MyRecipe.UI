@@ -13,3 +13,7 @@
 .managePeriodButtons {
     float: right;
 }
+
+.cell-div:hover {
+    filter: brightness(50%);
+}

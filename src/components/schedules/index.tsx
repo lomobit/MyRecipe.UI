@@ -52,6 +52,32 @@ function Events(props: EventsProps) {
     const cellWidth = 107;
     const eventWidth = 100;
 
+    const getEventWidth = (startWeekDate: number, startDate: number, finishDate: number, finishWeekDate: number) => {
+        let result = 0;
+
+        if (startDate < startWeekDate && finishWeekDate < finishDate)
+        {
+            result = 7;
+        }
+
+        else if (startDate < startWeekDate)
+        {
+            result = finishDate - startWeekDate;
+        }
+
+        else if (finishWeekDate < finishDate || finishDate < startDate)
+        {
+            result = finishWeekDate - startDate;
+        }
+
+        else
+        {
+            result = finishDate - startDate;
+        }
+
+        return (cellWidth * (result)) + eventWidth;
+    }
+
     return (
         <Fragment>
             <h1>События</h1>
@@ -113,37 +139,59 @@ function Events(props: EventsProps) {
                             position: "relative",
                             height: "100%",
                             minHeight: "40px",
-                            borderTop: "1px solid gray",
-                            borderLeft: "1px solid gray",
+                            borderTop: "1px solid lightgray",
+                            borderLeft: "1px solid lightgray",
                             textAlign: "justify",
                             justifyContent: "space-between",
                             textAlignLast: "justify"
                         }}>
                             {
                                 week.map((day, index) => (
-                                    <div style={{
-                                        display: "inline-block",
-                                        borderBottom: "1px solid gray",
-                                        borderRight: "1px solid gray",
-                                        width: "100%",
-                                        textAlign: "center"
-                                    }}>
+                                    <div
+                                        style={{
+                                            display: "inline-block",
+                                            borderBottom: "1px solid lightgray",
+                                            borderRight: "1px solid lightgray",
+                                            width: "100%",
+                                            textAlign: "center",
+                                            cursor: "pointer",
+                                        }}
+                                        onClick={() => alert("Add event!")}
+                                    >
                                         { day.date }
                                     </div>
                                 ))
                             }
                             {
-                                events.filter(x => x.startAt.getDate() >= week[0].date || x.finishAt.getDate() <= week[6].date).map((x, index) => (
-                                    <div style={{
-                                        position: "absolute",
-                                        marginTop: 30 + index * 20,
-                                        marginLeft: index * cellWidth,
-                                        width: eventWidth,
-                                        height: "10px",
-                                        background: "rgb(3, 155, 229)"
-                                    }}>
-
-                                    </div>
+                                events
+                                    // тут в выборке нужно будет добавить еще и месяц с годом
+                                    .filter(x => x.startAt.getDate() >= week[0].date && x.startAt.getDate() <= week[6].date
+                                        || x.finishAt.getDate() >= week[0].date && x.finishAt.getDate() <= week[6].date)
+                                    .map((x, index) => (
+                                        <div
+                                            style={{
+                                                position: "absolute",
+                                                marginTop: 30 + index * 30,
+                                                marginLeft: (x.startAt.getDate() - week[0].date >= 0 ? x.startAt.getDate() - week[0].date : 0) * cellWidth,
+                                                width: getEventWidth(week[0].date, x.startAt.getDate(), x.finishAt.getDate(), week[6].date),
+                                                height: "25px",
+                                                background: "rgb(3, 155, 229)",
+                                                cursor: "pointer",
+                                                boxShadow: "0px 1px 2px 0px rgba(60,64,67,0.3),0px 1px 3px 1px rgba(60,64,67,0.15)"
+                                            }}
+                                            className="cell-dev"
+                                            onClick={() => alert('Edit event!')}
+                                        >
+                                            <span style={{
+                                                marginLeft: 10,
+                                                color: "rgb(255,255,255)",
+                                                fontWeight: "bolder",
+                                                fontSize: "small",
+                                                cursor: "pointer"
+                                            }}>
+                                                {x.name}
+                                            </span>
+                                        </div>
                                 ))
                             }
                         </div>

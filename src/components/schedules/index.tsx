@@ -25,6 +25,12 @@ const Events = () => {
             color: "red"
         },
         {
+            name: "Поход в горы",
+            startAt: new Date(2023, 10, 30),
+            finishAt: new Date(2023, 11, 2),
+            color: "rgb(107,199,98)"
+        },
+        {
             name: "Сплав2",
             startAt: new Date(2023, 11, 4),
             finishAt: new Date(2023, 11, 6),
@@ -50,7 +56,8 @@ const Events = () => {
         {
             name: "Сплав6",
             startAt: new Date(2023, 11, 8),
-            finishAt: new Date(2023, 11, 20)
+            finishAt: new Date(2023, 11, 20),
+            color: "rgb(191,201,19)"
         },
     ];
 
@@ -58,8 +65,6 @@ const Events = () => {
     const eventWidth = 100;
 
     const getNumberOfCommonDays = (event: any, firstItem: any, lastItem: any) => {
-        debugger;
-
         let start1 = event.startAt;
         let end1 = event.finishAt;
         let start2 = new Date(2023, firstItem.month - 1, firstItem.date);
@@ -204,10 +209,12 @@ const Events = () => {
                                         >
                                             <span style={{
                                                 marginLeft: 10,
+                                                marginRight: 10,
                                                 color: "rgb(255,255,255)",
                                                 fontWeight: "bolder",
                                                 fontSize: "small",
-                                                cursor: "pointer"
+                                                cursor: "pointer",
+                                                display: "inline-block"
                                             }}>
                                                 {x.name}
                                             </span>
@@ -218,8 +225,6 @@ const Events = () => {
                     ))
                 }
             </div>
-
-
         </Fragment>
     );
 }

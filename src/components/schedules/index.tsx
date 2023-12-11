@@ -72,117 +72,27 @@ const russianGetDay = (num: number) => {
 }
 
 const getCurrentMonth = (month: number, year: number) => {
-    let firstDayOfMonth = new Date(year, month, 1);
-    let firstDay = russianGetDay(firstDayOfMonth.getDay());
-
-    let lastDayOfPreviousMonth = new Date(year, month, 0);
+    let firstDayOfMonthIndex = russianGetDay(new Date(year, month, 1).getDay());
 
     let result: CalendarDay[][] = [];
     let tempWeek: CalendarDay[] = [];
 
-    // первая неделя
-    for (let i = 0; i < firstDay; i++) {
-        let tempObj: CalendarDay = {
-            date: lastDayOfPreviousMonth.getDate() - russianGetDay(lastDayOfPreviousMonth.getDay()) + i,
-            month: lastDayOfPreviousMonth.getMonth(),
-            year: lastDayOfPreviousMonth.getFullYear()
-        };
-        tempWeek.push(tempObj);
+    for (let i = 1; i < 43; i++) {
+        let tempDate = new Date(year, month, i - firstDayOfMonthIndex);
+        tempWeek.push({
+            date: tempDate.getDate(),
+            month: tempDate.getMonth(),
+            year: tempDate.getFullYear()
+        });
     }
 
-    for (let i = firstDay; i < 7; i++) {
-        let tempObj: CalendarDay = {
-            date: firstDayOfMonth.getDate() - firstDay + i,
-            month: firstDayOfMonth.getMonth(),
-            year: firstDayOfMonth.getFullYear()
-        };
-        tempWeek.push(tempObj);
-    }
-
-    result.push(tempWeek);
-    tempWeek = [];
-
-    // 3 недели посередине
-    for (let i = 0; i < 3; i++) {
-        for (let j = result[i][6].date + 1; j < result[i][6].date + 8; j++) {
-            let tempObj: CalendarDay = {
-                date: j,
-                month: firstDayOfMonth.getMonth(),
-                year: firstDayOfMonth.getFullYear()
-            };
-            tempWeek.push(tempObj);
+    for (let i = 0; i < 6; i++) {
+        let temp = [];
+        for (let j = 0; j < 7; j++) {
+            temp.push(tempWeek[i * 7 + j]);
         }
-        result.push(tempWeek);
-        tempWeek = [];
+        result.push(temp);
     }
-
-    // предпоследняя неделя
-    let numberOfDaysInTheMonth = new Date(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth() + 1, 0).getDate();
-    let maxDate = result[3][6].date + 7;
-
-    if (maxDate > numberOfDaysInTheMonth)
-    {
-        maxDate = numberOfDaysInTheMonth;
-    }
-
-    for (let i = result[3][6].date + 1; i <= maxDate; i++) {
-        let tempObj: CalendarDay = {
-            date: i,
-            month: firstDayOfMonth.getMonth(),
-            year: firstDayOfMonth.getFullYear()
-        };
-        tempWeek.push(tempObj);
-    }
-
-    let lastIndex = 8 - tempWeek.length;
-    for (let i = 1; i < lastIndex; i++) {
-        let t = new Date(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth() + 1, 1);
-
-        let tempObj: CalendarDay = {
-            date: i,
-            month: t.getMonth(),
-            year: t.getFullYear()
-        };
-        tempWeek.push(tempObj);
-    }
-
-    result.push(tempWeek);
-    tempWeek = []
-
-    // последняя неделя
-
-    numberOfDaysInTheMonth = new Date(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth() + 1, 0).getDate();
-    maxDate = result[4][6].date + 7;
-
-    if (maxDate > numberOfDaysInTheMonth)
-    {
-        maxDate = numberOfDaysInTheMonth;
-    }
-
-    for (let i = result[4][6].date + 1; i <= maxDate; i++) {
-        let tempObj: CalendarDay = {
-            date: i,
-            month: result[4][6].month,
-            year: result[4][6].year
-        };
-        tempWeek.push(tempObj);
-    }
-
-    lastIndex = 8 - tempWeek.length;
-    for (let i = 1; i < lastIndex; i++) {
-        let t = new Date(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth() + 1, 1);
-
-        let tempObj: CalendarDay = {
-            date: i,
-            month: t.getMonth(),
-            year: t.getFullYear()
-        };
-        tempWeek.push(tempObj);
-    }
-
-    console.log(result);
-
-    result.push(tempWeek);
 
     return result;
 }

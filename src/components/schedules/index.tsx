@@ -77,13 +77,15 @@ const getCurrentMonth = (month: number, year: number) => {
     * 6 - пятница
     * */
     const firstDayCooficient = 2;
+    const daysInTheWeek = 7;
+    const weeksToShow = 6;
 
     let firstDayOfMonthIndex = new Date(year, month, 1).getDay();
 
     let result: CalendarDay[][] = [];
     let tempWeek: CalendarDay[] = [];
 
-    for (let i = 0 + firstDayCooficient; i < 42 + firstDayCooficient; i++) {
+    for (let i = 0 + firstDayCooficient; i < daysInTheWeek * weeksToShow + firstDayCooficient; i++) {
         let tempDate = new Date(year, month, i - firstDayOfMonthIndex);
         tempWeek.push({
             date: tempDate.getDate(),
@@ -92,10 +94,10 @@ const getCurrentMonth = (month: number, year: number) => {
         });
     }
 
-    for (let i = 0; i < 6; i++) {
+    for (let i = 0; i < weeksToShow; i++) {
         let temp = [];
-        for (let j = 0; j < 7; j++) {
-            temp.push(tempWeek[i * 7 + j]);
+        for (let j = 0; j < daysInTheWeek; j++) {
+            temp.push(tempWeek[i * daysInTheWeek + j]);
         }
         result.push(temp);
     }

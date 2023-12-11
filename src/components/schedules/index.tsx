@@ -1,65 +1,157 @@
 import './index.css';
-import {Fragment, useState} from "react";
+import {Fragment, useEffect, useState} from "react";
 import {Button, FormControl, IconButton, MenuItem, Select, Stack} from '@mui/material';
 import * as React from "react";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';import AddIcon from "@mui/icons-material/Add";
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
+const monthNames = new Map<number, string>([
+    [0, "Январь"],
+    [1, "Февраль"],
+    [2, "Март"],
+    [3, "Апрель"],
+    [4, "Май"],
+    [5, "Июнь"],
+    [6, "Июль"],
+    [7, "Август"],
+    [8, "Сентябрь"],
+    [9, "Октябрь"],
+    [10, "Ноябрь"],
+    [11, "Декабрь"],
+]);
+
+const events = [
+    {
+        name: "Сплав1",
+        startAt: new Date(2023, 10, 26),
+        finishAt: new Date(2023, 10, 28),
+        color: "red"
+    },
+    {
+        name: "Поход в горы",
+        startAt: new Date(2023, 10, 30),
+        finishAt: new Date(2023, 11, 2),
+        color: "rgb(107,199,98)"
+    },
+    {
+        name: "Сплав2",
+        startAt: new Date(2023, 11, 4),
+        finishAt: new Date(2023, 11, 6),
+        color: "rgb(94,66,141)"
+    },
+    {
+        name: "Сплав3",
+        startAt: new Date(2023, 11, 5),
+        finishAt: new Date(2023, 11, 7)
+    },
+    {
+        name: "Сплав4",
+        startAt: new Date(2023, 11, 23),
+        finishAt: new Date(2023, 11, 26),
+        color: "violet"
+    },
+    {
+        name: "Сплав5",
+        startAt: new Date(2023, 11, 30),
+        finishAt: new Date(2024, 0, 2),
+        color: "green"
+    },
+    {
+        name: "Сплав6",
+        startAt: new Date(2023, 11, 8),
+        finishAt: new Date(2023, 11, 20),
+        color: "rgb(191,201,19)"
+    },
+];
+
+const getCurrentMonth = (month: number, year: number) => {
+    const timeOfOneDay = 1000*60*60*24;
+
+    let firstDayOfMonth = new Date(year, month, 1);
+    let firstDay = firstDayOfMonth.getDay(); // 0 is Sunday
+
+    let lastDayOfPreviousMonth = new Date(firstDayOfMonth.getTime() - timeOfOneDay);
+
+    let result: CalendarDay[][] = [];
+    let tempWeek: CalendarDay[] = [];
+
+    // первая неделя
+    for (let i = 0; i < firstDay; i++) {
+        let tempObj: CalendarDay = {
+            date: lastDayOfPreviousMonth.getDate() - lastDayOfPreviousMonth.getDay() + i,
+            month: lastDayOfPreviousMonth.getMonth(),
+            year: lastDayOfPreviousMonth.getFullYear()
+        };
+        tempWeek.push(tempObj);
+    }
+
+    for (let i = firstDay; i < 7; i++) {
+        let tempObj: CalendarDay = {
+            date: firstDayOfMonth.getDate() - firstDay + i,
+            month: firstDayOfMonth.getMonth(),
+            year: firstDayOfMonth.getFullYear()
+        };
+        tempWeek.push(tempObj);
+    }
+
+    result.push(tempWeek);
+    tempWeek = [];
+
+    // 3 недели посередине
+    for (let i = 0; i < 3; i++) {
+        for (let j = result[i][6].date + 1; j < result[i][6].date + 8; j++) {
+            let tempObj: CalendarDay = {
+                date: j,
+                month: firstDayOfMonth.getMonth(),
+                year: firstDayOfMonth.getFullYear()
+            };
+            tempWeek.push(tempObj);
+        }
+        result.push(tempWeek);
+        tempWeek = [];
+    }
+
+    // последняя неделя
+    let numberOfDaysInTheMonth = new Date(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth() + 1, 0).getDate()
+    for (let i = result[3][6].date + 1; i < numberOfDaysInTheMonth; i++) {
+        let tempObj: CalendarDay = {
+            date: i,
+            month: firstDayOfMonth.getMonth(),
+            year: firstDayOfMonth.getFullYear()
+        };
+        tempWeek.push(tempObj);
+    }
+
+    let lastIndex = 8 - tempWeek.length;
+    for (let i = 1; i < lastIndex; i++) {
+        let tempObj: CalendarDay = {
+            date: i,
+            month: firstDayOfMonth.getMonth() + 1,
+            year: firstDayOfMonth.getFullYear()
+        };
+        tempWeek.push(tempObj);
+    }
+
+    result.push(tempWeek);
+    tempWeek = [];
+
+    return result;
+}
+
+const today = new Date();
+const todayMonth = getCurrentMonth(today.getMonth(), today.getFullYear());
+
+declare interface CalendarDay {
+    date: number;
+    month: number;
+    year: number;
+}
 
 const Events = () => {
-    const [currentDate, setCurrentDate] = useState<Date>(new Date());
 
-    const currentPeriod = [
-        [{ month: 11, date: 27 }, { month: 11, date: 28 }, { month: 11, date: 29 }, { month: 11, date: 30 }, { month: 12, date: 1 }, { month: 12, date: 2 }, { month: 12, date: 3 } ],
-        [{ month: 12, date: 4 }, { month: 12, date: 5 }, { month: 12, date: 6 }, { month: 12, date: 7 }, { month: 12, date: 8 }, { month: 12, date: 9 }, { month: 12, date: 10 }],
-        [{ month: 12, date: 11 }, { month: 12, date: 12 }, { month: 12, date: 13 }, { month: 12, date: 14 }, { month: 12, date: 15 }, { month: 12, date: 16 }, { month: 12, date: 17 }],
-        [{ month: 12, date: 18 }, { month: 12, date: 19 }, { month: 12, date: 20 }, { month: 12, date: 21 }, { month: 12, date: 22 }, { month: 12, date: 23 }, { month: 12, date: 24 }],
-        [{ month: 12, date: 25 }, { month: 12, date: 26 }, { month: 12, date: 27 }, { month: 12, date: 28 }, { month: 12, date: 29 }, { month: 12, date: 30 }, { month: 12, date: 31 }]
-    ];
-
-    const events = [
-        {
-            name: "Сплав1",
-            startAt: new Date(2023, 10, 26),
-            finishAt: new Date(2023, 10, 28),
-            color: "red"
-        },
-        {
-            name: "Поход в горы",
-            startAt: new Date(2023, 10, 30),
-            finishAt: new Date(2023, 11, 2),
-            color: "rgb(107,199,98)"
-        },
-        {
-            name: "Сплав2",
-            startAt: new Date(2023, 11, 4),
-            finishAt: new Date(2023, 11, 6),
-            color: "rgb(94,66,141)"
-        },
-        {
-            name: "Сплав3",
-            startAt: new Date(2023, 11, 5),
-            finishAt: new Date(2023, 11, 7)
-        },
-        {
-            name: "Сплав4",
-            startAt: new Date(2023, 11, 23),
-            finishAt: new Date(2023, 11, 26),
-            color: "violet"
-        },
-        {
-            name: "Сплав5",
-            startAt: new Date(2023, 11, 30),
-            finishAt: new Date(2024, 0, 2),
-            color: "green"
-        },
-        {
-            name: "Сплав6",
-            startAt: new Date(2023, 11, 8),
-            finishAt: new Date(2023, 11, 20),
-            color: "rgb(191,201,19)"
-        },
-    ];
+    const [selectedMonth, setSelectedMonth] = useState<number>(today.getMonth());
+    const [selectedYear, setSelectedYear] = useState<number>(today.getFullYear());
+    const [currentMonth, setCurrentMonth] = useState<Array<Array<CalendarDay>>>(todayMonth);
 
     const cellWidth = 107;
     const eventWidth = 100;
@@ -85,6 +177,46 @@ const Events = () => {
         return (cellWidth * (cellsCount)) + eventWidth;
     }
 
+    const onPreviousDatePeriodClick = () => {
+        let nextMonth = selectedMonth - 1;
+        let nextYear = selectedYear;
+        if (nextMonth < 0)
+        {
+            nextMonth = 11;
+            nextYear -= 1;
+        }
+
+        setSelectedMonth(nextMonth);
+        setSelectedYear(nextYear);
+
+        setCurrentMonth(getCurrentMonth(nextMonth, nextYear));
+    }
+
+    const onNextDatePeriodClick = () => {
+        let nextMonth = selectedMonth + 1;
+        let nextYear = selectedYear;
+        if (nextMonth > 11)
+        {
+            nextMonth = 0;
+            nextYear += 1;
+        }
+
+        setSelectedMonth(nextMonth);
+        setSelectedYear(nextYear);
+
+        setCurrentMonth(getCurrentMonth(nextMonth, nextYear));
+    }
+
+    const onGotoTodayClick = () => {
+        let nextMonth = today.getMonth();
+        let nextYear = today.getFullYear();
+
+        setSelectedMonth(nextMonth);
+        setSelectedYear(nextYear);
+
+        setCurrentMonth(getCurrentMonth(nextMonth, nextYear));
+    }
+
     return (
         <Fragment>
             <h1>События</h1>
@@ -94,14 +226,14 @@ const Events = () => {
                     <Button
                         variant="outlined"
                         color="primary"
-                        onClick={() => alert("Вернулся на сегодлняшний день в календаре")}
+                        onClick={onGotoTodayClick}
                     >
                         Сегодня
                     </Button>
                     <IconButton
                         aria-label="previousDatePeriod"
                         color="default"
-                        onClick={() => alert('test2')}
+                        onClick={onPreviousDatePeriodClick}
                     >
                         <ArrowBackIosNewIcon
                             fontSize='small'/>
@@ -109,14 +241,15 @@ const Events = () => {
                     <IconButton
                         aria-label="nextDatePeriod"
                         color="default"
-                        onClick={() => alert('test3')}
+                        onClick={onNextDatePeriodClick}
                     >
                         <ArrowForwardIosIcon
                             fontSize='small' />
                     </IconButton>
                     <h2 style={{ color: "dimgray" }}>
-                        {"Декабрь"} {2024}
+                        {monthNames.get(selectedMonth)} {selectedYear}
                     </h2>
+
 
                 </Stack>
                 <Stack direction="row-reverse" spacing={1} className="managePeriodButtons">
@@ -139,7 +272,8 @@ const Events = () => {
 
             <div className="mainCalendarGrid" style={{height: "120px", marginTop: "20px"}}>
                 {
-                    currentPeriod.map((week, index) => (
+                    //currentPeriod.map((week, index) => (
+                    currentMonth.map((week, index) => (
                         <div key={index} style={{
                             display: "flex",
                             position: "relative",
@@ -167,9 +301,9 @@ const Events = () => {
                                     >
                                         <span
                                             style={{
-                                                color: day.month == currentDate.getMonth() + 1 && day.date == currentDate.getDate()
+                                                color: day.month == today.getMonth() && day.date == today.getDate()
                                                     ? "white"
-                                                    : day.month == currentDate.getMonth() + 1
+                                                    : day.month == selectedMonth
                                                         ? "black"
                                                         : "lightgray",
                                                 marginLeft: "10px",
@@ -177,7 +311,7 @@ const Events = () => {
                                                 paddingRight: day.date < 10 ? 7 : 4,
                                                 paddingBottom: 1,
                                                 borderRadius: "50%",
-                                                backgroundColor: day.month == currentDate.getMonth() + 1 && day.date == currentDate.getDate()
+                                                backgroundColor: day.month == today.getMonth() && day.date == today.getDate()
                                                     ? "rgb(25,103,210)"
                                                     : ""
                                             }}

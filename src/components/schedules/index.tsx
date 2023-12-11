@@ -21,62 +21,57 @@ const monthNames = new Map<number, string>([
 ]);
 
 const events = [
-    {
-        name: "Сплав1",
-        startAt: new Date(2023, 10, 26),
-        finishAt: new Date(2023, 10, 28),
-        color: "red"
-    },
-    {
-        name: "Поход в горы",
-        startAt: new Date(2023, 10, 30),
-        finishAt: new Date(2023, 11, 2),
-        color: "rgb(107,199,98)"
-    },
-    {
-        name: "Сплав2",
-        startAt: new Date(2023, 11, 4),
-        finishAt: new Date(2023, 11, 6),
-        color: "rgb(94,66,141)"
-    },
-    {
-        name: "Сплав3",
-        startAt: new Date(2023, 11, 5),
-        finishAt: new Date(2023, 11, 7)
-    },
-    {
-        name: "Сплав4",
-        startAt: new Date(2023, 11, 23),
-        finishAt: new Date(2023, 11, 26),
-        color: "violet"
-    },
+    // {
+    //     name: "Сплав1",
+    //     startAt: new Date(2023, 10, 26),
+    //     finishAt: new Date(2023, 10, 28),
+    //     color: "red"
+    // },
+    // {
+    //     name: "Поход в горы",
+    //     startAt: new Date(2023, 10, 30),
+    //     finishAt: new Date(2023, 11, 2),
+    //     color: "rgb(107,199,98)"
+    // },
+    // {
+    //     name: "Сплав2",
+    //     startAt: new Date(2023, 11, 4),
+    //     finishAt: new Date(2023, 11, 6),
+    //     color: "rgb(94,66,141)"
+    // },
+    // {
+    //     name: "Сплав3",
+    //     startAt: new Date(2023, 11, 5),
+    //     finishAt: new Date(2023, 11, 7)
+    // },
+    // {
+    //     name: "Сплав4",
+    //     startAt: new Date(2023, 11, 23),
+    //     finishAt: new Date(2023, 11, 26),
+    //     color: "violet"
+    // },
     {
         name: "Сплав5",
         startAt: new Date(2023, 11, 30),
         finishAt: new Date(2024, 0, 2),
         color: "green"
     },
-    {
-        name: "Сплав6",
-        startAt: new Date(2023, 11, 8),
-        finishAt: new Date(2023, 11, 20),
-        color: "rgb(191,201,19)"
-    },
+    // {
+    //     name: "Сплав6",
+    //     startAt: new Date(2023, 11, 8),
+    //     finishAt: new Date(2023, 11, 20),
+    //     color: "rgb(191,201,19)"
+    // },
 ];
 
 const russianGetDay = (num: number) => {
     if (num === 6) return 0;
+    if (num === 0) return 6;
 
-    if (num > 0 && num < 7) {
-        return num - 1;
-    }
-
-    return Math.abs(num % 7) - 1;
+    return num - 1;
 }
 
 const getCurrentMonth = (month: number, year: number) => {
-    debugger;
-
     let firstDayOfMonth = new Date(year, month, 1);
     let firstDay = russianGetDay(firstDayOfMonth.getDay());
 
@@ -84,8 +79,6 @@ const getCurrentMonth = (month: number, year: number) => {
 
     let result: CalendarDay[][] = [];
     let tempWeek: CalendarDay[] = [];
-
-    debugger;
 
     // первая неделя
     for (let i = 0; i < firstDay; i++) {
@@ -143,16 +136,51 @@ const getCurrentMonth = (month: number, year: number) => {
 
     let lastIndex = 8 - tempWeek.length;
     for (let i = 1; i < lastIndex; i++) {
+        let t = new Date(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth() + 1, 1);
+
         let tempObj: CalendarDay = {
             date: i,
-            month: firstDayOfMonth.getMonth() + 1,
-            year: firstDayOfMonth.getFullYear()
+            month: t.getMonth(),
+            year: t.getFullYear()
         };
         tempWeek.push(tempObj);
     }
 
+    result.push(tempWeek);
+    tempWeek = []
+
     // последняя неделя
 
+    numberOfDaysInTheMonth = new Date(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth() + 1, 0).getDate();
+    maxDate = result[4][6].date + 7;
+
+    if (maxDate > numberOfDaysInTheMonth)
+    {
+        maxDate = numberOfDaysInTheMonth;
+    }
+
+    for (let i = result[4][6].date + 1; i <= maxDate; i++) {
+        let tempObj: CalendarDay = {
+            date: i,
+            month: result[4][6].month,
+            year: result[4][6].year
+        };
+        tempWeek.push(tempObj);
+    }
+
+    lastIndex = 8 - tempWeek.length;
+    for (let i = 1; i < lastIndex; i++) {
+        let t = new Date(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth() + 1, 1);
+
+        let tempObj: CalendarDay = {
+            date: i,
+            month: t.getMonth(),
+            year: t.getFullYear()
+        };
+        tempWeek.push(tempObj);
+    }
+
+    console.log(result);
 
     result.push(tempWeek);
 

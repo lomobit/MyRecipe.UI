@@ -64,21 +64,33 @@ const events = [
     },
 ];
 
+const russianGetDay = (num: number) => {
+    if (num === 6) return 0;
+
+    if (num > 0 && num < 7) {
+        return num - 1;
+    }
+
+    return Math.abs(num % 7) - 1;
+}
+
 const getCurrentMonth = (month: number, year: number) => {
-    const timeOfOneDay = 1000*60*60*24;
+    debugger;
 
     let firstDayOfMonth = new Date(year, month, 1);
-    let firstDay = firstDayOfMonth.getDay(); // 0 is Sunday
+    let firstDay = russianGetDay(firstDayOfMonth.getDay());
 
-    let lastDayOfPreviousMonth = new Date(firstDayOfMonth.getTime() - timeOfOneDay);
+    let lastDayOfPreviousMonth = new Date(year, month, 0);
 
     let result: CalendarDay[][] = [];
     let tempWeek: CalendarDay[] = [];
 
+    debugger;
+
     // первая неделя
     for (let i = 0; i < firstDay; i++) {
         let tempObj: CalendarDay = {
-            date: lastDayOfPreviousMonth.getDate() - lastDayOfPreviousMonth.getDay() + i,
+            date: lastDayOfPreviousMonth.getDate() - russianGetDay(lastDayOfPreviousMonth.getDay()) + i,
             month: lastDayOfPreviousMonth.getMonth(),
             year: lastDayOfPreviousMonth.getFullYear()
         };
@@ -111,9 +123,16 @@ const getCurrentMonth = (month: number, year: number) => {
         tempWeek = [];
     }
 
-    // последняя неделя
-    let numberOfDaysInTheMonth = new Date(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth() + 1, 0).getDate()
-    for (let i = result[3][6].date + 1; i < numberOfDaysInTheMonth; i++) {
+    // предпоследняя неделя
+    let numberOfDaysInTheMonth = new Date(firstDayOfMonth.getFullYear(), firstDayOfMonth.getMonth() + 1, 0).getDate();
+    let maxDate = result[3][6].date + 7;
+
+    if (maxDate > numberOfDaysInTheMonth)
+    {
+        maxDate = numberOfDaysInTheMonth;
+    }
+
+    for (let i = result[3][6].date + 1; i <= maxDate; i++) {
         let tempObj: CalendarDay = {
             date: i,
             month: firstDayOfMonth.getMonth(),
@@ -132,8 +151,10 @@ const getCurrentMonth = (month: number, year: number) => {
         tempWeek.push(tempObj);
     }
 
+    // последняя неделя
+
+
     result.push(tempWeek);
-    tempWeek = [];
 
     return result;
 }
@@ -159,8 +180,8 @@ const Events = () => {
     const getNumberOfCommonDays = (event: any, firstItem: any, lastItem: any) => {
         let start1 = event.startAt;
         let end1 = event.finishAt;
-        let start2 = new Date(2023, firstItem.month - 1, firstItem.date);
-        let end2 = new Date(2023, lastItem.month - 1, lastItem.date);
+        let start2 = new Date(firstItem.year, firstItem.month, firstItem.date);
+        let end2 = new Date(lastItem.year, lastItem.month, lastItem.date);
 
         if (end1 < start2 || end2 < start1) {
             return 0;
@@ -170,11 +191,11 @@ const Events = () => {
         const commonEnd = end1 < end2 ? end1 : end2;
         const commonDays = Math.ceil((commonEnd.getTime() - commonStart.getTime()) / (1000 * 60 * 60 * 24));
 
-        return commonDays;
+        return commonDays + 1;
     }
 
     const getEventWidth = (cellsCount: number) => {
-        return (cellWidth * (cellsCount)) + eventWidth;
+        return (cellWidth * (cellsCount - 1)) + eventWidth;
     }
 
     const onPreviousDatePeriodClick = () => {
@@ -272,7 +293,6 @@ const Events = () => {
 
             <div className="mainCalendarGrid" style={{height: "120px", marginTop: "20px"}}>
                 {
-                    //currentPeriod.map((week, index) => (
                     currentMonth.map((week, index) => (
                         <div key={index} style={{
                             display: "flex",

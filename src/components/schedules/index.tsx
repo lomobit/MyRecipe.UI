@@ -1,5 +1,5 @@
 import './index.css';
-import {Fragment, useEffect, useState} from "react";
+import {Fragment, useState} from "react";
 import {Button, FormControl, IconButton, MenuItem, Select, Stack} from '@mui/material';
 import * as React from "react";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -21,47 +21,47 @@ const monthNames = new Map<number, string>([
 ]);
 
 const events = [
-    // {
-    //     name: "Сплав1",
-    //     startAt: new Date(2023, 10, 26),
-    //     finishAt: new Date(2023, 10, 28),
-    //     color: "red"
-    // },
-    // {
-    //     name: "Поход в горы",
-    //     startAt: new Date(2023, 10, 30),
-    //     finishAt: new Date(2023, 11, 2),
-    //     color: "rgb(107,199,98)"
-    // },
-    // {
-    //     name: "Сплав2",
-    //     startAt: new Date(2023, 11, 4),
-    //     finishAt: new Date(2023, 11, 6),
-    //     color: "rgb(94,66,141)"
-    // },
-    // {
-    //     name: "Сплав3",
-    //     startAt: new Date(2023, 11, 5),
-    //     finishAt: new Date(2023, 11, 7)
-    // },
-    // {
-    //     name: "Сплав4",
-    //     startAt: new Date(2023, 11, 23),
-    //     finishAt: new Date(2023, 11, 26),
-    //     color: "violet"
-    // },
+    {
+        name: "Сплав1",
+        startAt: new Date(2023, 10, 26),
+        finishAt: new Date(2023, 10, 28),
+        color: "red"
+    },
+    {
+        name: "Поход в горы",
+        startAt: new Date(2023, 10, 30),
+        finishAt: new Date(2023, 11, 2),
+        color: "rgb(107,199,98)"
+    },
+    {
+        name: "Сплав2",
+        startAt: new Date(2023, 11, 4),
+        finishAt: new Date(2023, 11, 6),
+        color: "rgb(94,66,141)"
+    },
+    {
+        name: "Сплав3",
+        startAt: new Date(2023, 11, 5),
+        finishAt: new Date(2023, 11, 7)
+    },
+    {
+        name: "Сплав4",
+        startAt: new Date(2023, 11, 23),
+        finishAt: new Date(2023, 11, 26),
+        color: "violet"
+    },
     {
         name: "Сплав5",
         startAt: new Date(2023, 11, 30),
         finishAt: new Date(2024, 0, 2),
         color: "green"
     },
-    // {
-    //     name: "Сплав6",
-    //     startAt: new Date(2023, 11, 8),
-    //     finishAt: new Date(2023, 11, 20),
-    //     color: "rgb(191,201,19)"
-    // },
+    {
+        name: "Сплав6",
+        startAt: new Date(2023, 11, 9),
+        finishAt: new Date(2023, 11, 15),
+        color: "rgb(191,201,19)"
+    },
 ];
 
 const russianGetDay = (num: number) => {
@@ -72,12 +72,25 @@ const russianGetDay = (num: number) => {
 }
 
 const getCurrentMonth = (month: number, year: number) => {
-    let firstDayOfMonthIndex = russianGetDay(new Date(year, month, 1).getDay());
+    /*
+    * Данная константа определяет первый день недели в календаре
+    *
+    * 0 - суббота
+    * 1 - воскресенье
+    * 2 - понедельник
+    * 3 - вторник
+    * 4 - среда
+    * 5 - четверг
+    * 6 - пятница
+    * */
+    const firstDayCooficient = 2;
+
+    let firstDayOfMonthIndex = new Date(year, month, 1).getDay();
 
     let result: CalendarDay[][] = [];
     let tempWeek: CalendarDay[] = [];
 
-    for (let i = 1; i < 43; i++) {
+    for (let i = 0 + firstDayCooficient; i < 42 + firstDayCooficient; i++) {
         let tempDate = new Date(year, month, i - firstDayOfMonthIndex);
         tempWeek.push({
             date: tempDate.getDate(),
@@ -176,6 +189,15 @@ const Events = () => {
         setCurrentMonth(getCurrentMonth(nextMonth, nextYear));
     }
 
+    const getMarginLeftForEvent = (startAt: Date, startWeek: CalendarDay) => {
+        debugger;
+        let startWeekDate = new Date(startWeek.year, startWeek.month, startWeek.date);
+
+        if (startWeekDate >= startAt) return 0;
+
+        return (new Date(startAt.getTime() - startWeekDate.getTime()).getDate() - 1) * cellWidth;
+    }
+
     return (
         <Fragment>
             <h1>События</h1>
@@ -259,9 +281,9 @@ const Events = () => {
                                     >
                                         <span
                                             style={{
-                                                color: day.month == today.getMonth() && day.date == today.getDate()
+                                                color: day.year === today.getFullYear() && day.month === today.getMonth() && day.date === today.getDate()
                                                     ? "white"
-                                                    : day.month == selectedMonth
+                                                    : day.month === selectedMonth
                                                         ? "black"
                                                         : "lightgray",
                                                 marginLeft: "10px",
@@ -269,7 +291,7 @@ const Events = () => {
                                                 paddingRight: day.date < 10 ? 7 : 4,
                                                 paddingBottom: 1,
                                                 borderRadius: "50%",
-                                                backgroundColor: day.month == today.getMonth() && day.date == today.getDate()
+                                                backgroundColor: day.year === today.getFullYear() && day.month === today.getMonth() && day.date === today.getDate()
                                                     ? "rgb(25,103,210)"
                                                     : ""
                                             }}
@@ -288,7 +310,7 @@ const Events = () => {
                                             style={{
                                                 position: "absolute",
                                                 marginTop: 30 + index * 30,
-                                                marginLeft: (x.startAt.getDate() - week[0].date >= 0 ? x.startAt.getDate() - week[0].date : 0) * cellWidth,
+                                                marginLeft: getMarginLeftForEvent(x.startAt, week[0]),
                                                 width: getEventWidth(getNumberOfCommonDays(x, week[0], week[6])),
                                                 height: "25px",
                                                 background: x.color ? x.color : "rgb(3, 155, 229)",

@@ -64,13 +64,6 @@ const events = [
     },
 ];
 
-const russianGetDay = (num: number) => {
-    if (num === 6) return 0;
-    if (num === 0) return 6;
-
-    return num - 1;
-}
-
 const getCurrentMonth = (month: number, year: number) => {
     /*
     * Данная константа определяет первый день недели в календаре

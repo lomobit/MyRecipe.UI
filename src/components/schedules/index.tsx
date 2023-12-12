@@ -46,6 +46,11 @@ const events = [
     },
     {
         name: "Сплав4",
+        startAt: new Date(2023, 11, 21),
+        finishAt: new Date(2023, 11, 23),
+    },
+    {
+        name: "Сплав4",
         startAt: new Date(2023, 11, 23),
         finishAt: new Date(2023, 11, 26),
         color: "violet"
@@ -55,6 +60,11 @@ const events = [
         startAt: new Date(2023, 11, 30),
         finishAt: new Date(2024, 0, 2),
         color: "green"
+    },
+    {
+        name: "Вижай",
+        startAt: new Date(2023, 11, 26),
+        finishAt: new Date(2023, 11, 30)
     },
     {
         name: "Сплав6",
@@ -112,6 +122,17 @@ declare interface CalendarDay {
     date: number;
     month: number;
     year: number;
+}
+
+declare interface CalendarEvent {
+    name: string;
+    startAt: Date;
+    finishAt: Date;
+    color?: string;
+}
+
+declare interface CalendarEventModel extends CalendarEvent {
+    topMarginIndex: number;
 }
 
 const Events = () => {
@@ -191,6 +212,41 @@ const Events = () => {
         if (startWeekDate >= startAt) return 0;
 
         return (new Date(startAt.getTime() - startWeekDate.getTime()).getDate() - 1) * cellWidth;
+    }
+
+    const getMarginTop = (index: number) => {
+        return index * 30;
+    }
+
+    const sortByStartDate = (a: CalendarEvent, b: CalendarEvent) => {
+        return a.startAt.getTime() - b.startAt.getTime();
+    }
+
+    const getOrderedEvents = (events: Array<CalendarEvent>, week: Array<CalendarDay>) => {
+        const maxEventsPerDay = 3;
+
+        let filteredEvents = events
+            .filter(x => getNumberOfCommonDays(x, week[0], week[6]) > 0)
+            .sort(sortByStartDate);
+        let result: Array<CalendarEventModel> = [];
+
+        for (let i = 1; i <= maxEventsPerDay; i++) {
+            let currentEndDate = new Date(-8640000000000000);
+            for (let j = 0; j < filteredEvents.length; j++) {
+                if (filteredEvents[j].startAt > currentEndDate) {
+                    result.push({
+                        ...filteredEvents[j],
+                        topMarginIndex: i,
+                    });
+
+                    currentEndDate = filteredEvents[j].finishAt;
+                    filteredEvents.splice(j, 1);
+                    j--;
+                }
+            }
+        }
+
+        return result;
     }
 
     return (
@@ -296,14 +352,13 @@ const Events = () => {
                                 ))
                             }
                             {
-                                events
-                                    .filter(x => getNumberOfCommonDays(x, week[0], week[6]) > 0)
+                                getOrderedEvents(events, week)
                                     .map((x, index) => (
                                         <div
                                             key={index}
                                             style={{
                                                 position: "absolute",
-                                                marginTop: 30 + index * 30,
+                                                marginTop: getMarginTop(x.topMarginIndex),
                                                 marginLeft: getMarginLeftForEvent(x.startAt, week[0]),
                                                 width: getEventWidth(getNumberOfCommonDays(x, week[0], week[6])),
                                                 height: "25px",

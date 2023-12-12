@@ -1,4 +1,4 @@
-import {Dialog, DialogTitle} from "@mui/material";
+import {Dialog, DialogTitle, DialogContent, TextField, Button, DialogActions} from "@mui/material";
 
 export declare interface EventsDialogProps {
     openDialog: boolean;
@@ -21,6 +21,36 @@ const EventsDialog = (props: EventsDialogProps) => {
             <DialogTitle>
                 {props.eventName === undefined ? 'Добавить событие' : `Изменить событие "${props.eventName}"`}
             </DialogTitle>
+
+            <DialogContent>
+                <TextField
+                    autoFocus
+                    margin="dense"
+                    id="Name"
+                    label="Название"
+                    value={props.eventName}
+                    variant="outlined"
+                    fullWidth
+                    required
+                    //onChange={onChangeDishName}
+                    //error={isDishNameValidationError}
+                    //helperText={isDishNameValidationError && "Не заполнено название блюда"}
+                />
+            </DialogContent>
+
+            <DialogActions>
+                <Button
+                    onClick={() => props.setOpenDialog(false)}
+                >
+                    Отмена
+                </Button>
+                <Button
+                    variant="contained"
+                    onClick={() => props.setOpenDialog(false)}
+                >
+                    {props.eventName === undefined ? 'Добавить' : 'Изменить'}
+                </Button>
+            </DialogActions>
         </Dialog>
     );
 }

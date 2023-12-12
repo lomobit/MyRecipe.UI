@@ -240,7 +240,6 @@ const Events = () => {
                         >
                             <MenuItem value={1} disabled>Неделя</MenuItem>
                             <MenuItem value={2}>Месяц</MenuItem>
-                            <MenuItem value={3} disabled>Год</MenuItem>
                         </Select>
                     </FormControl>
                 </Stack>

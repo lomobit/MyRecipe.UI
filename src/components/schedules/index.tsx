@@ -95,8 +95,8 @@ const getCurrentMonth = (month: number, year: number) => {
     let result: CalendarDay[][] = [];
     let tempWeek: CalendarDay[] = [];
 
-    for (let i = 0 + firstDayCooficient; i < daysPerWeek * weeksToShow + firstDayCooficient; i++) {
-        let tempDate = new Date(year, month, i - firstDayOfMonthIndex);
+    for (let i = 0; i < daysPerWeek * weeksToShow; i++) {
+        let tempDate = new Date(year, month, i + firstDayCooficient - firstDayOfMonthIndex);
         tempWeek.push({
             date: tempDate.getDate(),
             month: tempDate.getMonth(),

@@ -5,6 +5,7 @@ import * as React from "react";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Calendar from "./calendar";
+import EventsDialog from "./eventDialog";
 
 const monthNames = new Map<number, string>([
     [0, "Январь"],
@@ -81,6 +82,9 @@ const Events = () => {
     const [selectedMonth, setSelectedMonth] = useState<number>(today.getMonth());
     const [selectedYear, setSelectedYear] = useState<number>(today.getFullYear());
 
+    const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
+    const [openEventName, setOpenEventName] = useState<string | undefined>(undefined);
+
 
     const onPreviousDatePeriodClick = () => {
         let nextMonth = selectedMonth - 1;
@@ -114,6 +118,16 @@ const Events = () => {
 
         setSelectedMonth(nextMonth);
         setSelectedYear(nextYear);
+    }
+
+    const onAddEvent = () => {
+        setOpenEventName(undefined);
+        setIsDialogOpen(true);
+    }
+
+    const onEditEvent = (name: string) => {
+        setOpenEventName(name);
+        setIsDialogOpen(true);
     }
 
     return (
@@ -168,12 +182,21 @@ const Events = () => {
                 </Stack>
             </div>
 
+            <EventsDialog
+                openDialog={isDialogOpen}
+                setOpenDialog={setIsDialogOpen}
+                onSave={() => alert("Сохранение события...")}
+                eventName={openEventName}
+            />
+
             <Calendar
                 events={events}
                 selectedMonth={selectedMonth}
                 selectedYear={selectedYear}
+                onAddEvent={onAddEvent}
+                onEditEvent={onEditEvent}
             />
-            
+
         </Fragment>
     );
 }

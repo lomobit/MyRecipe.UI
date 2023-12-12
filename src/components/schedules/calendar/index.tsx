@@ -61,7 +61,10 @@ const getCurrentMonth = (month: number, year: number) => {
 export declare interface CalendarProps {
     events: Array<CalendarEvent>,
     selectedMonth: number,
-    selectedYear: number
+    selectedYear: number,
+
+    onAddEvent: () => void,
+    onEditEvent: (name: string) => void,
 }
 
 const Calendar = (props: CalendarProps) => {
@@ -69,14 +72,6 @@ const Calendar = (props: CalendarProps) => {
 
     const cellWidth = 107;
     const eventWidth = 100;
-
-    const onAddEvent = () => {
-        alert("Add event!");
-    }
-
-    const onEditEvent = () => {
-        alert('Edit event!');
-    }
 
     const getNumberOfCommonDays = (event: CalendarEvent, week: Array<CalendarDay>) => {
         let start1 = event.startAt;
@@ -168,7 +163,7 @@ const Calendar = (props: CalendarProps) => {
                                         textAlign: "center",
                                         cursor: "pointer",
                                     }}
-                                    onClick={onAddEvent}
+                                    onClick={props.onAddEvent}
                                 >
                                     <span
                                         style={{
@@ -209,7 +204,7 @@ const Calendar = (props: CalendarProps) => {
                                             borderRadius: "3px"
                                         }}
                                         className="cell-dev"
-                                        onClick={onEditEvent}
+                                        onClick={() => props.onEditEvent(x.name)}
                                     >
                                         <span style={{
                                             marginLeft: 10,

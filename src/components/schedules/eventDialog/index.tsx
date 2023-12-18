@@ -11,6 +11,7 @@ export declare interface EventsDialogProps {
 }
 
 // TODO: Посмотреть в сторону @preact (https://preactjs.com/guide/v10/getting-started) для оптимизации ререндера компонентов
+//   Пример использования: https://youtu.be/SO8lBVWF2Y8?si=IKGKMM5ez4z43SVG
 const EventsDialog = (props: EventsDialogProps) => {
     return (
         <Dialog

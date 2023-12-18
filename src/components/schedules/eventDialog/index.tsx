@@ -10,6 +10,7 @@ export declare interface EventsDialogProps {
     eventName?: string;
 }
 
+// TODO: Посмотреть в сторону @preact (https://preactjs.com/guide/v10/getting-started) для оптимизации ререндера компонентов
 const EventsDialog = (props: EventsDialogProps) => {
     return (
         <Dialog

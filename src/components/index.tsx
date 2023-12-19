@@ -6,7 +6,7 @@ import Ingredients from './ingredients';
 import Settings from './settings';
 import NotFoundPage from './notFound';
 import './index.css';
-import Events from "./schedules";
+import Events from "./events";
 
 function MyRecipeApp() {
     return (

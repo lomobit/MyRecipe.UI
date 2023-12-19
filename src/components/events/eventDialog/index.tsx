@@ -194,7 +194,7 @@ const EventsDialog = (props: EventsDialogProps) => {
                                 <TextField
                                     {...params}
                                     label="Блюда *"
-                                    placeholder="Dishes"
+                                    placeholder="Блюда"
                                 />
                             )}
                         />

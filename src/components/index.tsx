@@ -12,16 +12,16 @@ function MyRecipeApp() {
     return (
         <BrowserRouter>
             <div className="myRecipeApp">
-                <div className="menuContent">
-                    <MainMenu />
-                </div>
+                {/*<div className="menuContent">*/}
+                {/*    <MainMenu />*/}
+                {/*</div>*/}
                 <div className="pageContent">
                     <Routes>
                         <Route path="/" element={<Home />} />
-                        <Route path="/events" element={<Events />} />
-                        <Route path="/dishes" element={<Dishes />} />
-                        <Route path="/ingredients" element={<Ingredients />} />
-                        <Route path="/settings" element={<Settings />} />
+                        {/*<Route path="/events" element={<Events />} />*/}
+                        {/*<Route path="/dishes" element={<Dishes />} />*/}
+                        {/*<Route path="/ingredients" element={<Ingredients />} />*/}
+                        {/*<Route path="/settings" element={<Settings />} />*/}
                         <Route path="*" element={<NotFoundPage />} />
                     </Routes>
                 </div>
